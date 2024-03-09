@@ -1,0 +1,59 @@
+@page "/Applications"
+<div class="top-row top-row-manager manager-top-bar">
+    <a class="top-bar-link" href="/manager" target="_blank">Мои заявки</a>
+    <a class="top-bar-link current-page" href="/applications" target="_blank">Все заявки</a>
+</div>
+<div class="applications">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Содержание заказа</th>
+            <th>Дата заказа</th>
+            <th>Пожелания</th>
+            <th>Имя клиента</th>
+            <th>Адрес</th>
+            <th>Телефон</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in applicationsList)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Services</td>
+                <td>@item.OrderDate</td>
+                <td>@item.Wishes</td>
+                <td>@item.ClientName</td>
+                <td>@item.Address</td>
+                <td>@item.Phone</td>
+                <td>
+                    <button type="button">Взять в работу</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@code {
+
+    private List<TableItem> applicationsList = new List<TableItem>
+    {
+        new TableItem { Id = 1, Services = "Меню золотая устрица", OrderDate = "23.05.24", Wishes = "мне нужна помощь с сервировкой стола", ClientName = "Иван Петро", Address = "Улица шапокляк 10", Phone = "+7965896646" },
+        new TableItem { Id = 2, Services = "Меню вкус Италии", OrderDate = "24.05.24", Wishes = "Привозите после 17 00", ClientName = "Максим Федоров", Address = "Ул. Ленина 150", Phone = "+7965894534" },
+        new TableItem { Id = 3, Services = "Меню морской ёж", OrderDate = "24.05.24", Wishes = "привозите утром", ClientName = "Олег Виссарионович", Address = "Ул. Горького 12", Phone = "+785455443" },
+    };
+
+    private class TableItem
+    {
+        public int Id { get; set; }
+        public string Services { get; set; }
+        public string OrderDate { get; set; }
+        public string Wishes { get; set; }
+        public string ClientName { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+    }
+
+}
