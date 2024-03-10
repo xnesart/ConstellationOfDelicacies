@@ -56,12 +56,11 @@ h1:focus {
     /*display: flex;*/
     border-radius: 5px;
 }
-/*.application-buttons-block{*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*}*/
-/*.application-textblock{*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    padding-left: 0.3rem;*/
-/*}*/
+.main-background-image{
+    background-image: url('Resources/front-view-chef-holding-delciious-food-plate.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh; 
+    width: 100%; 
+}
