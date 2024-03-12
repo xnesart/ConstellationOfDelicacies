@@ -164,6 +164,20 @@ public class ManagerMock:IManager.IManager
         return model;
     }
 
+    public void UpdateChiefById(int id, WorkerOutputModel model)
+    {
+        foreach (var chief in _chiefs)
+        {
+            if (chief.Id == id)
+            {
+                chief.Name = model.Name;
+                chief.Phone = model.Phone;
+                chief.Mail = model.Mail;
+                break;
+            }
+        }
+    }
+
     public void RemoveChief(int id)
     {
         foreach (var chief in _chiefs)
