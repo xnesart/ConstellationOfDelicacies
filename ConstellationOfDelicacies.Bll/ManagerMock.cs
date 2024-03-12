@@ -150,6 +150,20 @@ public class ManagerMock:IManager.IManager
         return _chiefs;
     }
 
+    public WorkerOutputModel GetChiefById(int id)
+    {
+        WorkerOutputModel model = new WorkerOutputModel();
+        foreach (var chief in _chiefs)
+        {
+            if (chief.Id == id)
+            {
+                return chief;
+            }
+        }
+
+        return model;
+    }
+
     public void RemoveChief(int id)
     {
         foreach (var chief in _chiefs)

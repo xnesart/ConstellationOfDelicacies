@@ -20,7 +20,7 @@
                 <p class="chief-name">Имя: @chief.Name</p>
                 <p class="chief-phone">Телефон: @chief.Phone</p>
                 <p class="chief-mail">Почта: @chief.Mail</p>
-                <button type="button" class="btn btn-primary">Редактировать</button>
+                <a href="./chiefs/@chief.Id" class="chief-edit-link">Редактировать</a>
                 <button @onclick="() => RemoveChief(chief.Id)" class="btn btn-primary" type="button">Удалить</button>
             </div>
             // </a>
