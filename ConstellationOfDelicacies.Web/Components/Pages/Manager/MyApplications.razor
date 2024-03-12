@@ -1,4 +1,5 @@
 @page "/ApplicationComponent"
+@using ConstellationOfDelicacies.Bll.IManager
 
 <div class="col-12 application-component">
     <table class="table">
@@ -28,7 +29,16 @@
                     <td>@item.Address</td>
                     <td>@item.Phone</td>
                     <td>
-                        <button class="btn btn-primary" type="button">Назначить повара</button>
+                        <select class="form-select" aria-label="Выбрать повара">
+                          @* <option selected>Откройте это меню выбора</option> *@
+                          @* <option value="1">Один</option> *@
+                          @* <option value="2">Два</option> *@
+                          @* <option value="3">Три</option> *@
+                          @foreach (var chief in _chiefs)
+                          {
+                              <option value="@chief.Id">@chief.Name</option>
+                          }
+                        </select>
                     </td>
                     <td>
                         <button class="btn btn-primary" type="button">Назначить официанта</button>
@@ -44,7 +54,14 @@
 
 @code {
     private List<Application> applicationsList;
+    private List<ChiefOutputModel> _chiefs;
+    IManager manager = new ManagerMock();
 
+
+    public MyApplications()
+    {
+        _chiefs = manager.GetAllChiefs();
+    }
     protected override void OnInitialized()
     {
         applicationsList = new List<Application>
