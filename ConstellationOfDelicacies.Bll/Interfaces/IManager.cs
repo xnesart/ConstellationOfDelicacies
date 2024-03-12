@@ -4,6 +4,7 @@ namespace ConstellationOfDelicacies.Bll.IManager;
 
 public interface IManager
 {
-    public ChiefOutputModel AddChief(int id);
-    public List<ChiefOutputModel> GetAllChiefs();
+    public WorkerOutputModel AddChief(int id);
+    public List<WorkerOutputModel> GetAllChiefs();
+    public List<WorkerOutputModel> GetAllWaiters();
 }

@@ -1,6 +1,6 @@
 namespace ConstellationOfDelicacies.Bll.Models;
 
-public class ChiefOutputModel
+public class WorkerOutputModel
 {
     public int Id { get; set; }
     public string Name { get; set; }

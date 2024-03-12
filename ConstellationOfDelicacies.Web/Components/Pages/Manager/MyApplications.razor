@@ -4,64 +4,68 @@
 <div class="col-12 application-component">
     <table class="table">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Содержание заказа</th>
-                <th>Дата заказа</th>
-                <th>Пожелания</th>
-                <th>Имя клиента</th>
-                <th>Адрес</th>
-                <th>Телефон</th>
-                <th>Повар</th>
-                <th>Официант</th>
-                <th>Позвонить</th>
-            </tr>
+        <tr>
+            <th>ID</th>
+            <th>Содержание заказа</th>
+            <th>Дата заказа</th>
+            <th>Пожелания</th>
+            <th>Имя клиента</th>
+            <th>Адрес</th>
+            <th>Телефон</th>
+            <th>Повар</th>
+            <th>Официант</th>
+            <th>Позвонить</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in applicationsList)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Services</td>
-                    <td>@item.OrderDate</td>
-                    <td>@item.Wishes</td>
-                    <td>@item.ClientName</td>
-                    <td>@item.Address</td>
-                    <td>@item.Phone</td>
-                    <td>
-                        <select class="form-select" aria-label="Выбрать повара">
-                          @* <option selected>Откройте это меню выбора</option> *@
-                          @* <option value="1">Один</option> *@
-                          @* <option value="2">Два</option> *@
-                          @* <option value="3">Три</option> *@
-                          @foreach (var chief in _chiefs)
-                          {
-                              <option value="@chief.Id">@chief.Name</option>
-                          }
-                        </select>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary" type="button">Назначить официанта</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary" type="button">Позвонить</button>
-                    </td>
-                </tr>
-            }
+        @foreach (var item in applicationsList)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Services</td>
+                <td>@item.OrderDate</td>
+                <td>@item.Wishes</td>
+                <td>@item.ClientName</td>
+                <td>@item.Address</td>
+                <td>@item.Phone</td>
+                <td>
+                    <select class="form-select" aria-label="Выбрать повара">
+                        @foreach (var chief in _chiefs)
+                        {
+                            <option value="@chief.Id">@chief.Name</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <select class="form-select" aria-label="Выбрать официанта">
+                        @foreach (var waiter in _waiters)
+                        {
+                            <option value="@waiter.Id">@waiter.Name</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <button class="btn btn-primary" type="button">Позвонить</button>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>
 
 @code {
     private List<Application> applicationsList;
-    private List<ChiefOutputModel> _chiefs;
+    private List<WorkerOutputModel> _chiefs;
+    private List<WorkerOutputModel> _waiters;
     IManager manager = new ManagerMock();
 
 
     public MyApplications()
     {
         _chiefs = manager.GetAllChiefs();
+        _waiters = manager.GetAllWaiters();
     }
+
     protected override void OnInitialized()
     {
         applicationsList = new List<Application>
@@ -99,4 +103,5 @@
         public string Address { get; set; }
         public string Phone { get; set; }
     }
+
 }
