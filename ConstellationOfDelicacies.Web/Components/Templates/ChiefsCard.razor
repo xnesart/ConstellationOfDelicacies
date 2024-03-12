@@ -1,0 +1,14 @@
+@page "/chiefscard"
+<a href="./chiefs/@worker.Id">
+<div class="chiefs-card">
+    <p>Айди повара @worker.Id</p>
+    <p>Имя повара @worker.Name</p>
+    <p>Телефон @worker.Phone</p>
+    <p>Почта @worker.Mail</p>
+</div>
+</a>
+
+@code {
+    [Parameter]
+    public WorkerOutputModel worker { get; set; }
+}
