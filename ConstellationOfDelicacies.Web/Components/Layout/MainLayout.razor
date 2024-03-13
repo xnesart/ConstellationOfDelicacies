@@ -1,17 +1,25 @@
-﻿@inherits LayoutComponentBase
+﻿@using ConstellationOfDelicacies.Web.Components.Layout.NavMenus
+@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
+    
 
     <main>
+        
+        @* <div>
+            <NavMenu />
+        </div>*@
         <div class="main-background-image">
-            <article class="content px-4">
-                @Body
-            </article>
-        </div>
+            <div class="main-background-color">
+                <div class="page-navmenu page-item">
+                    <NavMenuUser />
+                </div>
+                <article class="content px-4 page-item">
+                    @Body
+                </article>
+            </div>
+        </div> 
     </main>
 </div>
 

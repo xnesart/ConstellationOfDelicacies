@@ -4,6 +4,10 @@
     flex-direction: column;
 }
 
+.page-navmenu {
+    padding: 15px 15px 0px 15px;
+}
+
 main {
     flex: 1;
 }
