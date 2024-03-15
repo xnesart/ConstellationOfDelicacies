@@ -167,6 +167,19 @@ public class ManagerMock:IManager.IManager
         }
 
         return model;
+    }  
+    public WorkerOutputModel GetWaiterById(int id)
+    {
+        WorkerOutputModel model = new WorkerOutputModel();
+        foreach (var waiter in _waiters)
+        {
+            if (waiter.Id == id)
+            {
+                return waiter;
+            }
+        }
+
+        return model;
     }
 
     public void UpdateChiefById(int id, WorkerOutputModel model)
@@ -178,6 +191,19 @@ public class ManagerMock:IManager.IManager
                 chief.Name = model.Name;
                 chief.Phone = model.Phone;
                 chief.Mail = model.Mail;
+                break;
+            }
+        }
+    }   
+    public void UpdateWaiterById(int id, WorkerOutputModel model)
+    {
+        foreach (var waiter in _waiters)
+        {
+            if (waiter.Id == id)
+            {
+                waiter.Name = model.Name;
+                waiter.Phone = model.Phone;
+                waiter.Mail = model.Mail;
                 break;
             }
         }
@@ -206,6 +232,4 @@ public class ManagerMock:IManager.IManager
             }
         }
     }
-
-
 }
