@@ -5,23 +5,19 @@
 }
 
 .chiefs-field {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 400px 400px;
+    gap: 20px;
     overflow: auto;
-    width: 1200px; /* Задайте нужную ширину контейнера */
+    width: 1200px;
     height: 700px;
 }
 
 .chiefs-card {
-    padding: 0.7rem;
+    padding: 20px;
     background-color: whitesmoke;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
-    margin: 30px;
-    width: 90vw;
-
 }
 .chiefs-card p {
     text-decoration: none;
@@ -32,7 +28,7 @@
     color: black;
 }
 .chief-edit-link{
-    color: #fff;
+    color: #fff!important;
     background-color: #0d6efd;
     border-color: #0d6efd;
     display: inline-block;
@@ -49,12 +45,11 @@
     font-size: 1rem;
     border-radius: .25rem;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
-    
 }
 .chief-edit-link:hover{
     color: #fff;
     background-color: #0b5ed7;
-    border-color: #0a58ca
+    border-color: #0a58ca;
 }
 .chiefs-edit-container{
     display: flex;
@@ -95,4 +90,8 @@
     font-size: 1rem;
     border-radius: .25rem;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+.add-chiefs-link{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

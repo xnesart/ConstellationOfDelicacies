@@ -23,8 +23,7 @@
 
 @code {
 
-    [Parameter] 
-    public int Id { get; set; }
+    [Parameter] public int Id { get; set; }
     private string _name;
     private string _phone;
     private string _mail;
@@ -35,7 +34,7 @@
     {
         _manager = new ManagerMock();
     }
-    
+
     protected override void OnInitialized()
     {
         var chief = _manager.GetChiefById(Id);
@@ -59,7 +58,7 @@
     {
         _mail = e.Value.ToString();
     }
-    
+
     public void UpdateChief()
     {
         _chief.Name = _name;
