@@ -150,6 +150,11 @@ public class ManagerMock:IManager.IManager
         return _chiefs;
     }
 
+    public List<WorkerOutputModel> GetAllWaiters()
+    {
+        return _waiters;
+    }
+    
     public WorkerOutputModel GetChiefById(int id)
     {
         WorkerOutputModel model = new WorkerOutputModel();
@@ -158,6 +163,19 @@ public class ManagerMock:IManager.IManager
             if (chief.Id == id)
             {
                 return chief;
+            }
+        }
+
+        return model;
+    }  
+    public WorkerOutputModel GetWaiterById(int id)
+    {
+        WorkerOutputModel model = new WorkerOutputModel();
+        foreach (var waiter in _waiters)
+        {
+            if (waiter.Id == id)
+            {
+                return waiter;
             }
         }
 
@@ -176,6 +194,19 @@ public class ManagerMock:IManager.IManager
                 break;
             }
         }
+    }   
+    public void UpdateWaiterById(int id, WorkerOutputModel model)
+    {
+        foreach (var waiter in _waiters)
+        {
+            if (waiter.Id == id)
+            {
+                waiter.Name = model.Name;
+                waiter.Phone = model.Phone;
+                waiter.Mail = model.Mail;
+                break;
+            }
+        }
     }
 
     public void RemoveChief(int id)
@@ -190,8 +221,15 @@ public class ManagerMock:IManager.IManager
         }
     }
 
-    public List<WorkerOutputModel> GetAllWaiters()
+    public void RemoveWaiter(int id)
     {
-        return _waiters;
+        foreach (var waiter in _waiters)
+        {
+            if (waiter.Id == id)
+            {
+                _waiters.Remove(waiter);
+                break;
+            }
+        }
     }
 }

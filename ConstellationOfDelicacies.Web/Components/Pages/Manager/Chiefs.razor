@@ -6,7 +6,7 @@
     <a class="top-bar-link" href="/manager" target="_blank">Мои заявки</a>
     <a class="top-bar-link" href="/applications" target="_blank">Все заявки</a>
     <a class="top-bar-link current-page" href="/chiefs" target="_blank">Редактировать поваров</a>
-    <a class="top-bar-link" href="/applications" target="_blank">Редактировать официантов</a>
+    <a class="top-bar-link" href="/waiters" target="_blank">Редактировать официантов</a>
 </div>
 
 <div class="chiefs-container">
@@ -14,7 +14,6 @@
 
         @foreach (var chief in _chiefs)
         {
-            @* <a href="./chiefs/@chief.Id"> *@
             <div class="chiefs-card">
                 <p class="chief-id">Id: @chief.Id</p>
                 <p class="chief-name">Имя: @chief.Name</p>
@@ -23,18 +22,13 @@
                 <a href="./chiefs/@chief.Id" class="chief-edit-link">Редактировать</a>
                 <button @onclick="() => RemoveChief(chief.Id)" class="btn btn-primary" type="button">Удалить</button>
             </div>
-            // </a>
         }
     </div>
 </div>
 
-<h3>Chiefs</h3>
-
 @code {
-    private List<Application> applicationsList;
     private List<WorkerOutputModel> _chiefs;
     IManager manager = new ManagerMock();
-
 
     public Chiefs()
     {
@@ -50,10 +44,6 @@
     {
         manager.RemoveChief(id);
         _chiefs = manager.GetAllChiefs();
-    }
-
-    private class Application
-    {
     }
 
 }

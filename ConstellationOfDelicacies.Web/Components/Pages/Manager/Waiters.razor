@@ -1,0 +1,49 @@
+@page "/waiters"
+@rendermode InteractiveServer
+@using ConstellationOfDelicacies.Bll.IManager
+
+<div class="top-row top-row-manager manager-top-bar">
+    <a class="top-bar-link" href="/manager" target="_blank">Мои заявки</a>
+    <a class="top-bar-link" href="/applications" target="_blank">Все заявки</a>
+    <a class="top-bar-link" href="/chiefs" target="_blank">Редактировать поваров</a>
+    <a class="top-bar-link current-page" href="/waiters" target="_blank">Редактировать официантов</a>
+</div>
+
+<div class="waiters-container">
+    <div class="waiters-field">
+
+        @foreach (var waiter in _waiters)
+        {
+            <div class="waiters-card">
+                <p class="waiters-id">Id: @waiter.Id</p>
+                <p class="waiters-name">Имя: @waiter.Name</p>
+                <p class="waiters-phone">Телефон: @waiter.Phone</p>
+                <p class="waiters-mail">Почта: @waiter.Mail</p>
+                <a href="./waiters/@waiter.Id" class="waiter-edit-link">Редактировать</a>
+                <button @onclick="() => RemoveWaiter(waiter.Id)" class="btn btn-primary" type="button">Удалить</button>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<WorkerOutputModel> _waiters;
+    IManager _manager = new ManagerMock();
+
+    public Waiters()
+    {
+        _waiters = _manager.GetAllWaiters();
+    }
+
+    protected override void OnInitialized()
+    {
+        _waiters = _manager.GetAllWaiters();
+    }
+
+    private void RemoveWaiter(int id)
+    {
+        _manager.RemoveWaiter(id);
+        _waiters = _manager.GetAllWaiters();
+    }
+
+}

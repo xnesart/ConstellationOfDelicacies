@@ -1,10 +1,10 @@
-.chiefs-container {
+.waiters-container {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
 }
 
-.chiefs-field {
+.waiters-field {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -14,7 +14,7 @@
     height: 700px;
 }
 
-.chiefs-card {
+.waiters-card {
     padding: 0.7rem;
     background-color: whitesmoke;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
@@ -23,15 +23,15 @@
     width: 90vw;
 
 }
-.chiefs-card p {
+.waiters-card p {
     text-decoration: none;
     color: black;
 }
-.chiefs-card a {
+.waiters-card a {
     text-decoration: none;
     color: black;
 }
-.chief-edit-link{
+.waiters-edit-link{
     color: #fff;
     background-color: #0d6efd;
     border-color: #0d6efd;
@@ -49,14 +49,14 @@
     font-size: 1rem;
     border-radius: .25rem;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
-    
+
 }
-.chief-edit-link:hover{
+.waiters-edit-link:hover{
     color: #fff;
     background-color: #0b5ed7;
     border-color: #0a58ca
 }
-.chiefs-edit-container{
+.waiters-edit-container{
     display: flex;
     flex-direction: column;
     /*justify-content: center;*/
@@ -68,14 +68,14 @@
     border-radius: 5px;
     padding: 30px;
 }
-.chiefs-edit-container input{
+.waiters-edit-container input{
     max-width: 50%;
 }
-.chief-edit-save-button{
+.waiters-edit-save-button{
     margin-top: 30px;
     max-width: 50%;
 }
-.chiefs-edit-back-button{
+.waiters-edit-back-button{
     margin-top: 15px;
     color: #fff;
     background-color: #0d6efd;
