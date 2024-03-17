@@ -3,30 +3,37 @@
 @rendermode InteractiveServer
 
 <h3>Добавить повара</h3>
-<div class="registration-form">
-    <form class="row g-3">
-        <div class="col-md-12">
-            <label class="form-label">ФИО</label>
-            <input class="form-control" placeholder="Введите ФИО" id="chief-name" value="@_name" @oninput="AddName">
-        </div>
-        <div class="col-md-12">
-            <label class="form-label">Электроная почта</label>
-            <input class="form-control" placeholder="Электронная почта" id="chief-mail" value="@_mail" @oninput="AddMail">
-        </div>
-        <div class="col-md-12">
-            <label class="form-label">Номер телефона</label>
-            <input class="form-control" placeholder="Номер телефона" id="chief-phone" value="@_phone" @oninput="AddPhone">
-        </div>
-        @* <div class="col-md-12"> *@
-        @*      <label class="form-label">Должность</label> *@
-        @*      <input class="form-control" placeholder="Должность"> *@
-        @* </div> *@
-        <div class="col-12">
-            <button class="btn btn-primary" @onclick="AddChiefs">Добавить</button>
-            <a href="/chiefs" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
-        </div>
-    </form>
-</div>
+    <div class="registration-form">
+        <form class="row g-3">
+            <div class="col-md-12">
+                <label class="form-label">ФИО</label>
+                <input class="form-control" placeholder="Введите ФИО">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Электроная почта</label>
+            <input class="form-control" placeholder="Электронная почта">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Номер телефона</label>
+                <input class="form-control" placeholder="Номер телефона">
+            </div>
+            <div class="col-md-12">
+                 <label class="form-label">Должность</label>
+            <select>
+                <option>Повар</option>
+                <option>Повар кондитер</option>
+                <option>Повар холодного цеха</option>
+                <option>Повар горячего цеха</option>
+                <option>Су-шеф</option>
+                <option>Шеф повар</option>
+            </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+                <a href="/chiefs" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
+            </div>
+        </form>
+    </div>
 
 @code {
     private List<WorkerOutputModel> _chiefs;
