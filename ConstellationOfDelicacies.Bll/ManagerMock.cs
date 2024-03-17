@@ -132,9 +132,8 @@ public class ManagerMock:IManager.IManager
                 Phone = "895435433244"
             }
         };
-
     }
-    public WorkerOutputModel AddChief(int id)
+    public WorkerOutputModel AddChiefById(int id)
     {
         return new WorkerOutputModel
         {
@@ -143,8 +142,25 @@ public class ManagerMock:IManager.IManager
             RoleId = 2,
             SubRoleId = 1,
         };
+    }  
+    public void AddChief(WorkerOutputModel model)
+    {
+        _chiefs.Add(model);
     }
 
+    public int GetChiefsLastId()
+    {
+        int result = 0;
+        foreach (var chief in _chiefs)
+        {
+            if (chief.Id > result)
+            {
+                result = chief.Id;
+            }
+        }
+
+        return result;
+    }
     public List<WorkerOutputModel> GetAllChiefs()
     {
         return _chiefs;

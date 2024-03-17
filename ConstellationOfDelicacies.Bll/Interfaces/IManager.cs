@@ -4,8 +4,10 @@ namespace ConstellationOfDelicacies.Bll.IManager;
 
 public interface IManager
 {
-    public WorkerOutputModel AddChief(int id);
+    public WorkerOutputModel AddChiefById(int id);
+    public void AddChief(WorkerOutputModel model);
     public List<WorkerOutputModel> GetAllChiefs();
+    public int GetChiefsLastId();
     public List<WorkerOutputModel> GetAllWaiters();
     public WorkerOutputModel GetChiefById(int id);
     public WorkerOutputModel GetWaiterById(int id);
