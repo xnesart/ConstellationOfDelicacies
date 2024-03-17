@@ -30,4 +30,10 @@ public class Context:DbContext
         string connectionString = Options.ConnectionString;
         optionsBuilder.UseSqlServer(connectionString);
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<WorkerProfilesDto>()
+            .HasNoKey();
+    }
 }
