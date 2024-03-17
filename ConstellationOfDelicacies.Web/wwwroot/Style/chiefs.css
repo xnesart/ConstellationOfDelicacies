@@ -1,0 +1,98 @@
+.chiefs-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.chiefs-field {
+    display: grid;
+    grid-template-columns: 400px 400px;
+    grid-template-rows: 250px 250px;
+    gap: 20px;
+    overflow: auto;
+    width: 1200px;
+    height: 700px;
+}
+
+.chiefs-card {
+    padding: 20px;
+    background-color: whitesmoke;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+.chiefs-card p {
+    text-decoration: none;
+    color: black;
+}
+.chiefs-card a {
+    text-decoration: none;
+    color: black;
+}
+.chief-edit-link{
+    color: #fff!important;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+.chief-edit-link:hover{
+    color: #fff;
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+.chiefs-edit-container{
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*width: 500px;*/
+    /*height: 400px;*/
+    background-color: whitesmoke;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    padding: 30px;
+}
+.chiefs-edit-container input{
+    max-width: 50%;
+}
+.chief-edit-save-button{
+    margin-top: 30px;
+    max-width: 50%;
+}
+.chiefs-edit-back-button{
+    margin-top: 15px;
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    max-width: 50%;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out
+}
+.add-chiefs-link{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

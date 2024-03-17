@@ -1,7 +1,11 @@
-@page "/Applications"
+@page "/applications"
+@rendermode InteractiveServer
+
 <div class="top-row top-row-manager manager-top-bar">
-    <a class="top-bar-link" href="/manager" target="_blank">Мои заявки</a>
-    <a class="top-bar-link current-page" href="/applications" target="_blank">Все заявки</a>
+    <a class="top-bar-link" href="/manager">Мои заявки</a>
+    <a class="top-bar-link current-page" href="/applications">Все заявки</a>
+    <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
+    <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
 </div>
 <div class="applications">
     <table class="table">
@@ -28,7 +32,7 @@
                 <td>@item.Address</td>
                 <td>@item.Phone</td>
                 <td>
-                    <button type="button">Взять в работу</button>
+                    <button class="btn btn-primary" type="button">Взять в работу</button>
                 </td>
             </tr>
         }

@@ -1,0 +1,39 @@
+﻿@page "/waiter"
+
+<h3>Добавить официанта</h3>
+
+    <div class="registration-form">
+        <form class="row g-3">
+            <div class="col-md-12">
+                <label class="form-label">ФИО</label>
+                <input class="form-control" placeholder="Введите ФИО">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Электроная почта</label>
+            <input class="form-control" placeholder="Электронная почта">
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Номер телефона</label>
+                <input class="form-control" placeholder="Номер телефона">
+            </div>
+            <div class="col-md-12">
+                 <label class="form-label">Должность</label>
+            <select>
+                 <option>Официант-новичок</option>
+                 <option>Официант 3й категории</option>
+                 <option>Официант 2й категории</option>
+                 <option>Официант 1й категории</option>
+                 <option>Старший официант</option>
+                 <option>Сомелье</option>
+            </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+                <a href="/waiters" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
+            </div>
+        </form>
+    </div>
+
+@code {
+
+}

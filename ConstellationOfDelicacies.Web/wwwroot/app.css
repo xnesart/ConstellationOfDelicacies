@@ -52,12 +52,16 @@ h1:focus {
 
 .application-component{
     margin-top: 0.5rem;
-    background-color: bisque;
-    /*display: flex;*/
+    background-color: whitesmoke;
+    border-radius: 5px;
+}
+.applications{
+    background-color: whitesmoke;
     border-radius: 5px;
 }
 .main-background-image{
     background-image: url('Resources/front-view-chef-holding-delciious-food-plate.jpg');
+    background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

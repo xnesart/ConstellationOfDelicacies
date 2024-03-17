@@ -1,0 +1,72 @@
+@page "/waiters/{Id:int}"
+@rendermode InteractiveServer
+@using ConstellationOfDelicacies.Bll.IManager
+
+
+<div class="waiters-edit-container">
+    <div class="mb-6">
+        <label for="waiter-name" class="form-label">ФИО</label>
+        <input type="text" class="form-control" id="waiter-name" value="@_name" @oninput="UpdateName">
+    </div>
+    <div class="mb-6">
+        <label for="waiter-phone" class="form-label">Номер телефона</label>
+        <input type="text" class="form-control" id="waiter-phone" value="@_phone" @oninput="UpdatePhone">
+    </div>
+    <div class="mb-6">
+        <label for="waiter-mail" class="form-label">Адрес электронной почты</label>
+        <input type="email" class="form-control" id="waiter-mail" value="@_mail" @oninput="UpdateMail">
+    </div>
+    <button type="button" class="btn btn-primary chief-edit-save-button" @onclick="UpdateChief">Сохранить изменения</button>
+    <a href="/waiters" class="btn btn-primary waiters-edit-back-button">Вернуться назад</a>
+</div>
+
+
+@code {
+    
+    [Parameter] 
+    public int Id { get; set; }
+    private string _name;
+    private string _phone;
+    private string _mail;
+    private WorkerOutputModel _waiter;
+    private IManager _manager;
+
+    public WaitersCardForEdit()
+    {
+        _manager = new ManagerMock();
+    }
+    
+    protected override void OnInitialized()
+    {
+        var waiter = _manager.GetWaiterById(Id);
+        _waiter = waiter;
+        _name = waiter.Name;
+        _phone = waiter.Phone;
+        _mail = waiter.Mail;
+    }
+
+    public void UpdateName(ChangeEventArgs e)
+    {
+        _name = e.Value.ToString();
+    }
+
+    public void UpdatePhone(ChangeEventArgs e)
+    {
+        _phone = e.Value.ToString();
+    }
+
+    public void UpdateMail(ChangeEventArgs e)
+    {
+        _mail = e.Value.ToString();
+    }
+    
+    public void UpdateChief()
+    {
+        _waiter.Name = _name;
+        _waiter.Phone = _phone;
+        _waiter.Mail = _mail;
+        _manager.UpdateWaiterById(_waiter.Id, _waiter);
+        Console.WriteLine(_waiter.Name);
+    }
+
+}

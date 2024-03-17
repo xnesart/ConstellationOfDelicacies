@@ -1,0 +1,82 @@
+@page "/chief"
+@using ConstellationOfDelicacies.Bll.IManager
+@rendermode InteractiveServer
+
+<h3>Добавить повара</h3>
+<div class="registration-form">
+    <form class="row g-3">
+        <div class="col-md-12">
+            <label class="form-label">ФИО</label>
+            <input class="form-control" placeholder="Введите ФИО" id="chief-name" value="@_name" @oninput="AddName">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Электроная почта</label>
+            <input class="form-control" placeholder="Электронная почта" id="chief-mail" value="@_mail" @oninput="AddMail">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Номер телефона</label>
+            <input class="form-control" placeholder="Номер телефона" id="chief-phone" value="@_phone" @oninput="AddPhone">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Должность</label>
+            <select>
+                <option>Повар</option>
+                <option>Повар кондитер</option>
+                <option>Повар холодного цеха</option>
+                <option>Повар горячего цеха</option>
+                <option>Су-шеф</option>
+                <option>Шеф повар</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary" onclick="@AddChiefs">Добавить</button>
+            <a href="/chiefs" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
+        </div>
+    </form>
+</div>
+
+@code {
+    private List<WorkerOutputModel> _chiefs;
+    private WorkerOutputModel _chief;
+    IManager manager;
+    private string _name;
+    private string _phone;
+    private string _mail;
+
+
+    private void AddName(ChangeEventArgs e)
+    {
+        _name = e.Value.ToString();
+    }
+
+    private void AddPhone(ChangeEventArgs e)
+    {
+        _phone = e.Value.ToString();
+    }
+
+    private void AddMail(ChangeEventArgs e)
+    {
+        _mail = e.Value.ToString();
+    }
+
+    public AddChief()
+    {
+        manager = new ManagerMock();
+        _chiefs = manager.GetAllChiefs();
+    }
+
+    private void AddChiefs()
+    {
+        int lastChiefId = manager.GetChiefsLastId();
+        lastChiefId++;
+
+        WorkerOutputModel model = new WorkerOutputModel
+        {
+            Id = lastChiefId,
+            Name = _name,
+            Phone = _phone,
+            Mail = _mail
+        };
+        manager.AddChief(model);
+    }
+}
