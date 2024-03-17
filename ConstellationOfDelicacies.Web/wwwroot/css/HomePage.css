@@ -1,14 +1,21 @@
-﻿.banner {
-    display: block;
+﻿.home-page-client {
+    display: grid;
+    margin-top: 30px;
+    padding: 0;
+    width: 100%;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    width: 70%;
-    
+    width: auto;   
 }
 
 .banner-img {
-    width: 100%;
+    width: 1000px;
     border-radius: 10px;
 }
 
@@ -21,4 +28,55 @@
     border-radius: 16px;
     bottom: 10%;
     left: 80%;
+}
+
+.home-page-menu {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.menu-title-text {
+    font-size: 48px;
+
+}
+
+.menu-cards {
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 1000px;
+}
+
+.menu-card {
+    background-color: gray;
+    margin-left: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    padding: 10px;
+    width: 170px;
+}
+
+.menu-img {
+    width: 80px;
+}
+
+.menu-title {
+    text-align: center;
+}
+
+.menu-about {
+    text-align: left;
+}
+
+.menu-price {
+    text-align: right;
+    margin: 0;
 }

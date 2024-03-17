@@ -1,11 +1,24 @@
 ﻿@page "/home"
+@using ConstellationOfDelicacies.Web.Components.Templates
+
+
 
 <PageTitle>Созвездие Деликатесов</PageTitle>
 
-<div class="home-page">
+<div class="home-page-client">
     <div class="banner">
         <img class="banner-img" src="/Resources/banners/banner1.png" alt="Баннер с едой"/>
-        <button class="banner-button">Сделать заказ</button>
+        <button class="banner-button">Сделать заказ</button> 
+    </div>
+
+    <div class="home-page-menu">
+        <h2 class="menu-title-text">Наше меню:</h2>
+        <div class="menu-cards">
+            <MenuCard />
+            <MenuCard />
+            <MenuCard />
+            <MenuCard />
+        </div>
     </div>
 </div>
 
