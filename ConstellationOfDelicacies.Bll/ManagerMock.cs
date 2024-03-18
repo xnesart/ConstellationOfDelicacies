@@ -254,4 +254,23 @@ public class ManagerMock:IManager.IManager
     {
         Context context = new Context();
     }
+
+    public void AddWaiter(WorkerOutputModel model)
+    {
+        _waiters.Add(model);
+    }
+
+    public int GetWaitersLastId()
+    {
+        int result = 0;
+        foreach (var waiter in _waiters)
+        {
+            if (waiter.Id > result)
+            {
+                result = waiter.Id;
+            }
+        }
+
+        return result;
+    }
 }
