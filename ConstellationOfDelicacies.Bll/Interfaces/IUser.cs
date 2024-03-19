@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ConstellationOfDelicacies.Bll.Models;
 
-namespace ConstellationOfDelicacies.Bll.Interfaces
+
+namespace ConstellationOfDelicacies.Bll.IUser;
+
+public interface IUser
 {
-    public interface IUser
-    {
-    }
+    public void AddUserOrder(OrderInputModel order);
 }
+
