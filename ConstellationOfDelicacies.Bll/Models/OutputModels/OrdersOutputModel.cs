@@ -1,6 +1,6 @@
-namespace ConstellationOfDelicacies.Dal.Dtos;
+namespace ConstellationOfDelicacies.Bll.Models;
 
-public class OrdersDto
+public class OrdersOutputModel
 {
     public int Id { get; set; }
     public DateTime OrderDate { get; set; }
