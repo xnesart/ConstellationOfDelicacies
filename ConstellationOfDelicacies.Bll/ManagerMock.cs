@@ -1,5 +1,6 @@
 using ConstellationOfDelicacies.Bll.IManager;
 using ConstellationOfDelicacies.Bll.Models;
+using ConstellationOfDelicacies.Dal;
 
 namespace ConstellationOfDelicacies.Bll;
 
@@ -247,5 +248,10 @@ public class ManagerMock:IManager.IManager
                 break;
             }
         }
+    }
+
+    public void GetDatabase()
+    {
+        Context context = new Context();
     }
 }
