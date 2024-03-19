@@ -250,8 +250,8 @@ public class ManagerMock:IManager.IManager
         }
     }
 
-    public void GetDatabase()
-    {
-        Context context = new Context();
-    }
+    // public void GetDatabase()
+    // {
+    //     Context context = new Context();
+    // }
 }

@@ -1,5 +1,6 @@
 using AutoMapper;
 using ConstellationOfDelicacies.Bll.Models;
+using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal.Dtos;
 
 namespace ConstellationOfDelicacies.Bll.Mapping;
@@ -15,5 +16,7 @@ public class MappingProfile:Profile
         CreateMap<TasksDto,TasksOutputModel>();
         CreateMap<TaskStatusesDto,TaskStatusesOutputModel>();
         CreateMap<UsersDto,UsersOutputModel>();
+        
+        CreateMap<UsersInputModel,UsersDto>();
     }
 }
