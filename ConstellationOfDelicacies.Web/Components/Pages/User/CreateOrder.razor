@@ -8,7 +8,8 @@
         <form class="row g-3">
             <div class="col-md-12">
                 <label for="date-time" class="form-label">Выберите дату и время:</label>
-                <input type="datetime-local" class="form-control" id="date-time" name="date-time"/>
+                <input type="datetime-local" class="form-control" id="date-time" name="date-time" min="@DateTime.Today.AddDays(7).ToString("s")" />
+                <p class="order-form-note">*Заказы принимаются не позднее, чем за неделю</p>
             </div>
 
             <div class="col-md-12">
