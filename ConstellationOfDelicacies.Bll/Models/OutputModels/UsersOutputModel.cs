@@ -1,11 +1,11 @@
-namespace ConstellationOfDelicacies.Dal.Dtos;
+namespace ConstellationOfDelicacies.Bll.Models;
 
-public class UsersDto
+public class UsersOutputModel
 {
     public int Id { get; set; }
-    public List<ProfilesDto> Profiles { get; set; }
-    public List<TasksDto> Task { get; set; }
-    public RolesDto Role { get; set; }
+    public List<ProfilesOutputModel> Profiles { get; set; }
+    public List<TasksOutputModel> Task { get; set; }
+    public RolesOutputModel Role { get; set; }
     public string FirstName { get; set; }
     public string SecondName { get; set; }
     public string LastName { get; set; }

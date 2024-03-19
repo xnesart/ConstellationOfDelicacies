@@ -19,21 +19,15 @@ public class Context:DbContext
     public DbSet<TasksDto> Tasks { get; set; }
     public DbSet<TaskStatusesDto> TaskStatuses { get; set; }
     public DbSet<UsersDto> Users { get; set; }
-    public DbSet<WorkerProfilesDto> WorkerProfiles { get; set; }
     
     public Context()
     {
+        //Database.EnsureDeletedAsync();
         Database.EnsureCreated();
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string connectionString = Options.ConnectionString;
         optionsBuilder.UseSqlServer(connectionString);
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<WorkerProfilesDto>()
-            .HasNoKey();
     }
 }
