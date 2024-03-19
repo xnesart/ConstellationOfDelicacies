@@ -1,5 +1,6 @@
 ﻿@page "/waiter"
 @using ConstellationOfDelicacies.Bll.IManager
+@rendermode InteractiveServer
 
 <h3>Добавить официанта</h3>
 
@@ -19,8 +20,8 @@
             </div>
             <div class="col-md-12">
                  <label class="form-label">Должность</label>
-            <select>
-                @foreach(var p in Enum.GetNames<Post>())
+            <select @onchange="AddRole">
+                @foreach(var p in Enum.GetNames<SubRoleId>())
                 {
                     <option value="@p">@p</option>             
                 }
@@ -40,6 +41,7 @@
     private string _name;
     private string _phone;
     private string _mail;
+    private int _subRoleId;
 
     private void AddName(ChangeEventArgs a)
     {
@@ -56,7 +58,15 @@
         _mail = a.Value.ToString();
     }
 
-    private enum Post
+    private void AddRole(ChangeEventArgs a)
+    {
+        if (Enum.TryParse(typeof(SubRoleId), a.Value.ToString(), out var subRoleId))
+        {
+            _subRoleId = (int)subRoleId;
+        }
+    }
+
+    private enum SubRoleId
     {
         WaiterNew = 1,
         WaiterThree,
@@ -69,7 +79,7 @@
     public AddWaiter()
     {
         manager = new ManagerMock();
-        _waiters = manager.GetAllChiefs();
+        _waiters = manager.GetAllWaiters();
     }
 
     private void AddWaiters()
@@ -82,8 +92,8 @@
                 Id = lastWaiterId,
                 Name = _name,
                 Phone = _phone,
-                Mail = _mail
-
+                Mail = _mail,
+                SubRoleId = _subRoleId
             };
         manager.AddWaiter(model);
     }
