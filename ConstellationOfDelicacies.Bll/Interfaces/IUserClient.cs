@@ -9,4 +9,5 @@ public interface IUserClient
     public void RemoveUser(int id);
     public void UpdateUser(UsersInputModel model);
     public List<UsersOutputModel> GetAllUsers();
+    public List<UsersOutputModel> GetAllChiefs();
 }

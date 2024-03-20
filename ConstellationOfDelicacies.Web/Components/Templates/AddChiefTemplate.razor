@@ -31,12 +31,12 @@
         <div class="col-md-12">
             <label class="form-label">Должность</label>
             <select @onchange="AddRole">
-                <option>Повар</option>
-                <option>Повар кондитер</option>
-                <option>Повар холодного цеха</option>
-                <option>Повар горячего цеха</option>
-                <option>Су-шеф</option>
-                <option>Шеф повар</option>
+                <option value="Повар">Повар</option>
+                <option value="Повар кондитер">Повар кондитер</option>
+                <option value="Повар холодного цеха">Повар холодного цеха</option>
+                <option value="Повар горячего цеха">Повар горячего цеха</option>
+                <option value="Су-шеф">Су-шеф</option>
+                <option value="Шеф повар">Шеф повар</option>
             </select>
         </div>
         <div class="col-12">
@@ -55,7 +55,7 @@
     private string _lastName;
     private string _phone;
     private string _mail;
-    private int _subRoleId;
+    private string _subRole;
 
     
     private void AddName(ChangeEventArgs e)
@@ -89,21 +89,19 @@
     
     private void AddRole(ChangeEventArgs a)
     {
-        if (Enum.TryParse(typeof(SubRoleId), a.Value.ToString(), out var subRoleId))
-        {
-            _subRoleId = (int)subRoleId;
-        }
+        _subRole = a.Value.ToString();
+
     }
 
-    private enum SubRoleId
-    {
-        WaiterNew = 1,
-        WaiterThree,
-        WaiterTwo,
-        WaiterOne,
-        WaiterHigt,
-        Sommelier
-    }
+    // private enum SubRoleId
+    // {
+    //     WaiterNew = 1,
+    //     WaiterThree,
+    //     WaiterTwo,
+    //     WaiterOne,
+    //     WaiterHigt,
+    //     Sommelier
+    // }
 
     private void AddChief()
     {
@@ -120,7 +118,9 @@
         // manager.AddChief(model);
         RoleClient roleClient = new RoleClient();
         var roles = roleClient.GetAllRoles();
-        var role = roles.FirstOrDefault(r => r.Id == _subRoleId);
+        var role = roles.FirstOrDefault(r => r.Title == _subRole);
+        RolesOutputModel tmpRole = new RolesOutputModel();
+        tmpRole.Title = role.Title;
         UsersInputModel model = new UsersInputModel
         {
             FirstName = _firstName,
@@ -128,7 +128,7 @@
             LastName = _lastName,
             Phone = _phone,
             Mail = _mail,
-            // Role = role
+            Role = tmpRole
         };
         
         IUserClient userClient = new UserClient();
