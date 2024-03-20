@@ -1,39 +1,76 @@
 ﻿@page "/order"
+
+@using ConstellationOfDelicacies.Bll.IOrderClient
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using Microsoft.AspNetCore.Components.Forms
+
+@rendermode InteractiveServer
+
 <PageTitle>Сделать Заказ</PageTitle>
 
 <div class="order-container">
     <h3>Оформление заказа</h3>
 
+   
     <div class="order-form">
-        <form class="row g-3">
+        
+        <EditForm class="row g-3" Model="@Model" OnValidSubmit="@AddOrder">
+            <DataAnnotationsValidator />
+            
             <div class="col-md-12">
-                <label for="date-time" class="form-label">Выберите дату и время:</label>
-                <input type="datetime-local" class="form-control" id="date-time" name="date-time" min="@DateTime.Today.AddDays(7).ToString("s")" />
-                <p class="order-form-note">*Заказы принимаются не позднее, чем за неделю</p>
+                <label for="order-date" class="form-label">Выберите дату:</label>
+                <DateInput TValue="DateOnly" @bind-Value="Model.OrderDateOnly" EnableMinMax="true" 
+                           Min="@_minDate" Max="@_maxDate" id="order-date" class="form-control" />
             </div>
-
             <div class="col-md-12">
-                <label for="numOfPersons" class="form-label">Введите количество персон:</label>
-                <input type="number" class="form-control" id="numOfPersons" name="numOfPersons" min="0" />
+                <label for="order-time" class="form-label">Выберите время:</label>
+                <TimeInput TValue="TimeOnly" @bind-Value="Model.OrderTimeOnly" EnableMinMax="true" 
+                           Min="@_minTime" Max="@_maxTime" id="order-time" class="form-control" />
             </div>
-
             <div class="col-md-12">
-                <label for="address" class="form-label">Введите адрес:</label>
-                <input type="text" class="form-control" id="address" name="address" maxlength="255" />
+                <label for="order-num-of-per" class="form-label">Введите количество персон:</label>
+                <InputNumber class="form-control" @bind-Value="Model.NumberOfPersons" id="order-num-of-per" />
             </div>
-
             <div class="col-md-12">
-                <label for="comment" class="form-label">Ваши пожелания:</label>
-                <input type="text" class="form-control" id="comment" name="comment" maxlength="255" />
+                <label for="order-address" class="form-label">Введите адрес:</label>
+                <InputText class="form-control" @bind-Value="Model.Address" id="order-address" />
             </div>
-
+            <div class="col-md-12">
+                <label for="order-comment" class="form-label">Ваши пожелания:</label>
+                <InputText class="form-control" type="text" @bind-Value="Model.Comment" id="order-comment" />
+            </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Заказать</button>
             </div>
-        </form>
+        </EditForm>
     </div>
 </div>
 
 @code {
+    [SupplyParameterFromForm]
+    public OrderInputModel Model { get; set; }
+
+    IOrderClient user;
+    private DateOnly _minDate;
+    private DateOnly _maxDate;
+    private TimeOnly _minTime = new TimeOnly(6, 0);
+    private TimeOnly _maxTime = new TimeOnly(23, 0);
+
+    public CreateOrder()
+    {
+        Model = new OrderInputModel();
+        user = new UserMock();
+
+        _minDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
+        _maxDate = _minDate.AddMonths(3);
+    }
+
+    public void AddOrder()
+    {
+        Model.OrderDate = Model.OrderDateOnly.ToDateTime(Model.OrderTimeOnly);
+        Model.UserId = 77;
+        user.AddUserOrder(Model);
+
+    }
 
 }

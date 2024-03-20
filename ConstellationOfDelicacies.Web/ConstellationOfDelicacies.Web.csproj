@@ -11,6 +11,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Blazor.Bootstrap" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\ConstellationOfDelicacies.Bll\ConstellationOfDelicacies.Bll.csproj" />
     </ItemGroup>
 
