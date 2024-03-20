@@ -1,0 +1,137 @@
+@page "/chief"
+@using ConstellationOfDelicacies.Bll.IManager
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Dal
+@rendermode InteractiveServer
+
+<h3>Добавить повара</h3>
+<div class="registration-form">
+    <form class="row g-3">
+        <div class="col-md-12">
+            <label class="form-label">Имя</label>
+            <input class="form-control" placeholder="Введите имя" id="chief-name" value="@_firstName" @oninput="AddName">
+        </div>   
+        <div class="col-md-12">
+            <label class="form-label">Фамилия</label>
+            <input class="form-control" placeholder="Введите фамилию" id="chief-secondName" value="@_secondName" @oninput="AddSecondName">
+        </div> 
+        <div class="col-md-12">
+            <label class="form-label">Отчество</label>
+            <input class="form-control" placeholder="Введите отчество" id="chief-lastName" value="@_lastName" @oninput="AddLastName">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Электроная почта</label>
+            <input class="form-control" placeholder="Электронная почта" id="chief-mail" value="@_mail" @oninput="AddMail">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Номер телефона</label>
+            <input class="form-control" placeholder="Номер телефона" id="chief-phone" value="@_phone" @oninput="AddPhone">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Должность</label>
+            <select @onchange="AddRole">
+                <option>Повар</option>
+                <option>Повар кондитер</option>
+                <option>Повар холодного цеха</option>
+                <option>Повар горячего цеха</option>
+                <option>Су-шеф</option>
+                <option>Шеф повар</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary" onclick="@AddChief">Добавить</button>
+            <a href="/chiefs" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
+        </div>
+    </form>
+</div>
+
+@code {
+    private List<WorkerOutputModel> _chiefs;
+    private WorkerOutputModel _chief;
+    IManager manager;
+    private string _firstName;
+    private string _secondName;
+    private string _lastName;
+    private string _phone;
+    private string _mail;
+    private int _subRoleId;
+
+    
+    private void AddName(ChangeEventArgs e)
+    {
+        _firstName = e.Value.ToString();
+    }  
+    private void AddSecondName(ChangeEventArgs e)
+    {
+        _secondName = e.Value.ToString();
+    }  
+    private void AddLastName(ChangeEventArgs e)
+    {
+        _lastName = e.Value.ToString();
+    }
+
+    private void AddPhone(ChangeEventArgs e)
+    {
+        _phone = e.Value.ToString();
+    }
+
+    private void AddMail(ChangeEventArgs e)
+    {
+        _mail = e.Value.ToString();
+    }
+
+    public AddChiefTemplate()
+    {
+        manager = new ManagerMock();
+        _chiefs = manager.GetAllChiefs();
+    }
+    
+    private void AddRole(ChangeEventArgs a)
+    {
+        if (Enum.TryParse(typeof(SubRoleId), a.Value.ToString(), out var subRoleId))
+        {
+            _subRoleId = (int)subRoleId;
+        }
+    }
+
+    private enum SubRoleId
+    {
+        WaiterNew = 1,
+        WaiterThree,
+        WaiterTwo,
+        WaiterOne,
+        WaiterHigt,
+        Sommelier
+    }
+
+    private void AddChief()
+    {
+        // int lastChiefId = manager.GetChiefsLastId();
+        // lastChiefId++;
+        //
+        // WorkerOutputModel model = new WorkerOutputModel
+        // {
+        //     Id = lastChiefId,
+        //     Name = _firstName,
+        //     Phone = _phone,
+        //     Mail = _mail
+        // };
+        // manager.AddChief(model);
+        RoleClient roleClient = new RoleClient();
+        var roles = roleClient.GetAllRoles();
+        var role = roles.FirstOrDefault(r => r.Id == _subRoleId);
+        UsersInputModel model = new UsersInputModel
+        {
+            FirstName = _firstName,
+            SecondName = _secondName,
+            LastName = _lastName,
+            Phone = _phone,
+            Mail = _mail,
+            // Role = role
+        };
+        
+        IUserClient userClient = new UserClient();
+        userClient.AddUser(model);
+    }
+}
