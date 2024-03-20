@@ -22,7 +22,6 @@ namespace ConstellationOfDelicacies.Bll.Models
         [StringLength(255)]
         public string? Address { get; set; }
 
-        [Required]
         [Range(1, 1000)]
         public int NumberOfPersons { get; set; }
 
