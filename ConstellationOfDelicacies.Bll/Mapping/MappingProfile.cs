@@ -9,6 +9,7 @@ public class MappingProfile:Profile
 {
     public MappingProfile()
     {
+        // OutputModels
         CreateMap<OrdersDto,OrdersOutputModel>();
         CreateMap<ProfilesDto,ProfilesOutputModel>();
         CreateMap<RolesDto,RolesOutputModel>();
@@ -17,6 +18,8 @@ public class MappingProfile:Profile
         CreateMap<TaskStatusesDto,TaskStatusesOutputModel>();
         CreateMap<UsersDto,UsersOutputModel>();
         
+        // InputModels
         CreateMap<UsersInputModel,UsersDto>();
+        CreateMap<RolesOutputModel,RolesDto>();
     }
 }
