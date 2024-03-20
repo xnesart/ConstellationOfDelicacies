@@ -1,7 +1,7 @@
 ﻿@page "/order"
 
-@using ConstellationOfDelicacies.Bll.IUser
-@using ConstellationOfDelicacies.Bll.Models
+@using ConstellationOfDelicacies.Bll.IOrderClient
+@using ConstellationOfDelicacies.Bll.Models.InputModels
 @using Microsoft.AspNetCore.Components.Forms
 
 @rendermode InteractiveServer
@@ -50,7 +50,7 @@
     [SupplyParameterFromForm]
     public OrderInputModel Model { get; set; }
 
-    IUser user;
+    IOrderClient user;
     private DateOnly _minDate;
     private DateOnly _maxDate;
     private TimeOnly _minTime = new TimeOnly(6, 0);

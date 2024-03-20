@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ConstellationOfDelicacies.Bll.Models
+namespace ConstellationOfDelicacies.Bll.Models.InputModels
 {
     public class OrderInputModel
     {

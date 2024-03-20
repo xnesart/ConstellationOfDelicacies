@@ -1,13 +1,8 @@
-﻿using ConstellationOfDelicacies.Bll.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ConstellationOfDelicacies.Bll.Models.InputModels;
 
 namespace ConstellationOfDelicacies.Bll
 {
-    public class UserMock: IUser.IUser
+    public class UserMock: IOrderClient.IOrderClient
     {
         private List<OrderInputModel> _orders; 
 
