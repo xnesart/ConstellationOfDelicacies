@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ConstellationOfDelicacies.Bll.Models
 {
@@ -12,10 +8,22 @@ namespace ConstellationOfDelicacies.Bll.Models
 
         public DateTime OrderDate { get; set; }
 
+        [Required]
+        public DateOnly OrderDateOnly { get; set; }
+
+        [Required]
+        public TimeOnly OrderTimeOnly { get; set; }
+
+        [Required]
+        [StringLength(255)]
         public string? Comment { get; set; }
 
+        [Required]
+        [StringLength(255)]
         public string? Address { get; set; }
 
+        [Required]
+        [Range(1, 1000)]
         public int NumberOfPersons { get; set; }
 
     }
