@@ -1,0 +1,147 @@
+@page "/chief"
+@using ConstellationOfDelicacies.Bll.IManager
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Dal
+@rendermode InteractiveServer
+
+<h3>Добавить повара</h3>
+<div class="registration-form">
+    <form class="row g-3">
+        <div class="col-md-12">
+            <label class="form-label">Имя</label>
+            <input class="form-control" placeholder="Введите имя" id="chief-name" value="@_firstName" @oninput="AddName">
+        </div>   
+        <div class="col-md-12">
+            <label class="form-label">Фамилия</label>
+            <input class="form-control" placeholder="Введите фамилию" id="chief-secondName" value="@_secondName" @oninput="AddSecondName">
+        </div> 
+        <div class="col-md-12">
+            <label class="form-label">Отчество</label>
+            <input class="form-control" placeholder="Введите отчество" id="chief-lastName" value="@_lastName" @oninput="AddLastName">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Электроная почта</label>
+            <input class="form-control" placeholder="Электронная почта" id="chief-mail" value="@_mail" @oninput="AddMail">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Номер телефона</label>
+            <input class="form-control" placeholder="Номер телефона" id="chief-phone" value="@_phone" @oninput="AddPhone">
+        </div>      
+        <div class="col-md-12">
+            <label class="form-label">Новый пароль для повара</label>
+            <input class="form-control" placeholder="пароль" id="chief-password" value="@_password" @oninput="AddPassword">
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Должность</label>
+            <select @onchange="AddRole">
+                <option value="Повар">Повар</option>
+                <option value="Повар кондитер">Повар кондитер</option>
+                <option value="Повар холодного цеха">Повар холодного цеха</option>
+                <option value="Повар горячего цеха">Повар горячего цеха</option>
+                <option value="Су-шеф">Су-шеф</option>
+                <option value="Шеф повар">Шеф повар</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary" onclick="@AddChief">Добавить</button>
+            <a href="/chiefs" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
+        </div>
+    </form>
+</div>
+
+@code {
+    private List<WorkerOutputModel> _chiefs;
+    private WorkerOutputModel _chief;
+    IManager manager;
+    private string _firstName;
+    private string _secondName;
+    private string _lastName;
+    private string _phone;
+    private string _mail;
+    private string _subRole;
+    private string _password;
+
+    
+    private void AddName(ChangeEventArgs e)
+    {
+        _firstName = e.Value.ToString();
+    }  
+    private void AddSecondName(ChangeEventArgs e)
+    {
+        _secondName = e.Value.ToString();
+    }  
+    private void AddLastName(ChangeEventArgs e)
+    {
+        _lastName = e.Value.ToString();
+    }
+
+    private void AddPhone(ChangeEventArgs e)
+    {
+        _phone = e.Value.ToString();
+    }
+
+    private void AddMail(ChangeEventArgs e)
+    {
+        _mail = e.Value.ToString();
+    } 
+    private void AddPassword(ChangeEventArgs e)
+    {
+        _password = e.Value.ToString();
+    }
+
+    public AddChiefTemplate()
+    {
+        manager = new ManagerMock();
+        _chiefs = manager.GetAllChiefs();
+    }
+    
+    private void AddRole(ChangeEventArgs a)
+    {
+        _subRole = a.Value.ToString();
+
+    }
+
+    // private enum SubRoleId
+    // {
+    //     WaiterNew = 1,
+    //     WaiterThree,
+    //     WaiterTwo,
+    //     WaiterOne,
+    //     WaiterHigt,
+    //     Sommelier
+    // }
+
+    private void AddChief()
+    {
+        // int lastChiefId = manager.GetChiefsLastId();
+        // lastChiefId++;
+        //
+        // WorkerOutputModel model = new WorkerOutputModel
+        // {
+        //     Id = lastChiefId,
+        //     Name = _firstName,
+        //     Phone = _phone,
+        //     Mail = _mail
+        // };
+        // manager.AddChief(model);
+        RoleClient roleClient = new RoleClient();
+        var roles = roleClient.GetAllRoles();
+        var role = roles.FirstOrDefault(r => r.Title == _subRole);
+        RolesOutputModel tmpRole = new RolesOutputModel();
+        tmpRole.Title = role.Title;
+        UsersInputModel model = new UsersInputModel
+        {
+            FirstName = _firstName,
+            SecondName = _secondName,
+            LastName = _lastName,
+            Phone = _phone,
+            Mail = _mail,
+            Role = tmpRole,
+            Password = _password
+        };
+        
+        IUserClient userClient = new UserClient();
+        userClient.AddUser(model);
+    }
+}

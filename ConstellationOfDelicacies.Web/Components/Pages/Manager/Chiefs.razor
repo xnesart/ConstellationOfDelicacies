@@ -1,6 +1,7 @@
 @page "/chiefs"
 @rendermode InteractiveServer
 @using ConstellationOfDelicacies.Bll.IManager
+@using ConstellationOfDelicacies.Bll.Clients
 
 <div class="top-row top-row-manager manager-top-bar">
     <a class="top-bar-link" href="/manager">Мои заявки</a>
@@ -18,7 +19,7 @@
         {
             <div class="chiefs-card">
                 <p class="chief-id">Id: @chief.Id</p>
-                <p class="chief-name">Имя: @chief.Name</p>
+                <p class="chief-name">Имя: @chief.FirstName</p>
                 <p class="chief-phone">Телефон: @chief.Phone</p>
                 <p class="chief-mail">Почта: @chief.Mail</p>
                 <a href="./chiefs/@chief.Id" class="chief-edit-link">Редактировать</a>
@@ -29,24 +30,26 @@
 </div>
 
 @code {
-    private List<WorkerOutputModel> _chiefs;
+    private List<UsersOutputModel> _chiefs;
+    private UserClient _client;
     IManager manager = new ManagerMock();
 
     public Chiefs()
     {
-        manager.GetDatabase();
-        _chiefs = manager.GetAllChiefs();
+        _client = new UserClient();
+        // _chiefs = manager.GetAllChiefs();
+        _chiefs = _client.GetAllChiefs();
     }
 
     protected override void OnInitialized()
     {
-        _chiefs = manager.GetAllChiefs();
+        _chiefs = _client.GetAllChiefs();
     }
 
     private void RemoveChief(int id)
     {
         manager.RemoveChief(id);
-        _chiefs = manager.GetAllChiefs();
+        _chiefs = _client.GetAllChiefs();
     }
 
 }
