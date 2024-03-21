@@ -21,11 +21,13 @@
                 <label for="order-date" class="form-label">Выберите дату:</label>
                 <DateInput TValue="DateOnly" @bind-Value="Model.OrderDateOnly" EnableMinMax="true" 
                            Min="@_minDate" Max="@_maxDate" id="order-date" class="form-control" />
+                <p class="order-form-note">*Заказы принимаются не менее чем за неделю и не более чем на три месяца вперед</p>
             </div>
             <div class="col-md-12">
                 <label for="order-time" class="form-label">Выберите время:</label>
                 <TimeInput TValue="TimeOnly" @bind-Value="Model.OrderTimeOnly" EnableMinMax="true" 
                            Min="@_minTime" Max="@_maxTime" id="order-time" class="form-control" />
+                <p class="order-form-note">*Время работсы с 6:00 до 24:00. Последний заказ возможен в 23:00</p>
             </div>
             <div class="col-md-12">
                 <label for="order-num-of-per" class="form-label">Введите количество персон:</label>
@@ -33,11 +35,13 @@
             </div>
             <div class="col-md-12">
                 <label for="order-address" class="form-label">Введите адрес:</label>
-                <InputText class="form-control" @bind-Value="Model.Address" id="order-address" />
+                <InputText class="form-control" @bind-Value="Model.Address" id="order-address" 
+                           placeholder="Адрес"/>
             </div>
             <div class="col-md-12">
                 <label for="order-comment" class="form-label">Ваши пожелания:</label>
-                <InputText class="form-control" type="text" @bind-Value="Model.Comment" id="order-comment" />
+                <InputText class="form-control" type="text" @bind-Value="Model.Comment" id="order-comment" 
+                           placeholder="Пожелания"/>
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Заказать</button>
