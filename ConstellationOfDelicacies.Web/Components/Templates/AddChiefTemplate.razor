@@ -46,7 +46,7 @@
         </div>
         <div class="col-md-12">
             <label for="chief-profile" class="form-label">Должность</label>
-            <select @onchange="AddProfile" id="chief-profile">
+            <select class="form-control" @onchange="AddProfile" id="chief-profile">
                 <option value="Повар">Повар</option>
                 <option value="Повар кондитер">Повар кондитер</option>
                 <option value="Повар холодного цеха">Повар холодного цеха</option>
@@ -63,8 +63,10 @@
 </div>
 
 @code {
+    [SupplyParameterFromForm]
+    private UsersInputModel _chief { get; set; }
+
     private List<WorkerOutputModel> _chiefs;
-    private UsersInputModel _chief;
     IManager manager;
     private string _subRole;
 
@@ -100,7 +102,7 @@
         RolesOutputModel tmpRole = new RolesOutputModel();
         tmpRole.Title = role.Title;
 
-        _chief.Role = tmpRole; //это то;е к туду
+        _chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
 
         IUserClient userClient = new UserClient();
         userClient.AddUser(_chief);
