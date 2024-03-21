@@ -7,34 +7,46 @@
 
 <h3>Добавить повара</h3>
 <div class="registration-form">
-    <form class="row g-3">
+
+    <EditForm class="row g-3" Model="@_chief" OnValidSubmit="@AddChief">
+        <DataAnnotationsValidator />
+
         <div class="col-md-12">
-            <label class="form-label">Имя</label>
-            <input class="form-control" placeholder="Введите имя" id="chief-name" value="@_firstName" @oninput="AddName">
-        </div>   
-        <div class="col-md-12">
-            <label class="form-label">Фамилия</label>
-            <input class="form-control" placeholder="Введите фамилию" id="chief-secondName" value="@_secondName" @oninput="AddSecondName">
-        </div> 
-        <div class="col-md-12">
-            <label class="form-label">Отчество</label>
-            <input class="form-control" placeholder="Введите отчество" id="chief-lastName" value="@_lastName" @oninput="AddLastName">
+            <label for="chief-firstname" class="form-label">Введите имя:</label>
+            <InputText class="form-control" @bind-Value="@_chief.FirstName" id="chief-firstname" 
+                       placeholder="Имя"/>
         </div>
         <div class="col-md-12">
-            <label class="form-label">Электроная почта</label>
-            <input class="form-control" placeholder="Электронная почта" id="chief-mail" value="@_mail" @oninput="AddMail">
+            <label for="chief-lastname" class="form-label">Введите фамилию:</label>
+            <InputText class="form-control" @bind-Value="@_chief.LastName" id="chief-lastname" 
+                       placeholder="Фамилия" />
         </div>
         <div class="col-md-12">
-            <label class="form-label">Номер телефона</label>
-            <input class="form-control" placeholder="Номер телефона" id="chief-phone" value="@_phone" @oninput="AddPhone">
-        </div>      
-        <div class="col-md-12">
-            <label class="form-label">Новый пароль для повара</label>
-            <input class="form-control" placeholder="пароль" id="chief-password" value="@_password" @oninput="AddPassword">
+            <label for="chief-middlename" class="form-label">Введите отчество:</label>
+            <InputText class="form-control" @bind-Value="@_chief.MiddleName" id="chief-middlename"
+                       placeholder="Отчество" />
+            <p class="order-form-note">*Если отсутствует, оставьте поле пустым</p>
         </div>
         <div class="col-md-12">
-            <label class="form-label">Должность</label>
-            <select @onchange="AddRole">
+            <label for="chief-mail" class="form-label">Введите электронную почту:</label>
+            <InputText type="email" class="form-control" @bind-Value="@_chief.Mail" id="chief-mail"
+                       placeholder="E-mail" />
+        </div>
+        <div class="col-md-12">
+            <label for="chief-phone" class="form-label">Введите номер телефона:</label>
+            <InputText type="tel" class="form-control" @bind-Value="@_chief.Phone" id="chief-phone"
+                       placeholder="Номер телефона" pattern="8[0-9]{10}"/>
+            <p class="order-form-note">*В формате: 81112223333</p>
+        </div>
+        <div class="col-md-12">
+            <label for="chief-password" class="form-label">Введите новый пароль:</label>
+            <InputText class="form-control" @bind-Value="@_chief.Password" id="chief-password"
+                       placeholder="Пароль" />
+            <p class="order-form-note">*Минимум 4 символа</p>
+        </div>
+        <div class="col-md-12">
+            <label for="chief-profile" class="form-label">Должность</label>
+            <select @onchange="AddProfile" id="chief-profile">
                 <option value="Повар">Повар</option>
                 <option value="Повар кондитер">Повар кондитер</option>
                 <option value="Повар холодного цеха">Повар холодного цеха</option>
@@ -44,59 +56,26 @@
             </select>
         </div>
         <div class="col-12">
-            <button type="submit" class="btn btn-primary" onclick="@AddChief">Добавить</button>
+            <button type="submit" class="btn btn-primary">Добавить</button>
             <a href="/chiefs" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
         </div>
-    </form>
+    </EditForm>
 </div>
 
 @code {
     private List<WorkerOutputModel> _chiefs;
-    private WorkerOutputModel _chief;
+    private UsersInputModel _chief;
     IManager manager;
-    private string _firstName;
-    private string _secondName;
-    private string _lastName;
-    private string _phone;
-    private string _mail;
     private string _subRole;
-    private string _password;
-
-    
-    private void AddName(ChangeEventArgs e)
-    {
-        _firstName = e.Value.ToString();
-    }  
-    private void AddSecondName(ChangeEventArgs e)
-    {
-        _secondName = e.Value.ToString();
-    }  
-    private void AddLastName(ChangeEventArgs e)
-    {
-        _lastName = e.Value.ToString();
-    }
-
-    private void AddPhone(ChangeEventArgs e)
-    {
-        _phone = e.Value.ToString();
-    }
-
-    private void AddMail(ChangeEventArgs e)
-    {
-        _mail = e.Value.ToString();
-    } 
-    private void AddPassword(ChangeEventArgs e)
-    {
-        _password = e.Value.ToString();
-    }
 
     public AddChiefTemplate()
     {
         manager = new ManagerMock();
         _chiefs = manager.GetAllChiefs();
+        _chief = new UsersInputModel();
     }
-    
-    private void AddRole(ChangeEventArgs a)
+
+    private void AddProfile(ChangeEventArgs a)
     {
         _subRole = a.Value.ToString();
 
@@ -114,34 +93,16 @@
 
     private void AddChief()
     {
-        // int lastChiefId = manager.GetChiefsLastId();
-        // lastChiefId++;
-        //
-        // WorkerOutputModel model = new WorkerOutputModel
-        // {
-        //     Id = lastChiefId,
-        //     Name = _firstName,
-        //     Phone = _phone,
-        //     Mail = _mail
-        // };
-        // manager.AddChief(model);
+        //TODO: тут роль "Сотрудник", а профиль "Повар-Кондитер"
         RoleClient roleClient = new RoleClient();
         var roles = roleClient.GetAllRoles();
         var role = roles.FirstOrDefault(r => r.Title == _subRole);
         RolesOutputModel tmpRole = new RolesOutputModel();
         tmpRole.Title = role.Title;
-        UsersInputModel model = new UsersInputModel
-        {
-            FirstName = _firstName,
-            SecondName = _secondName,
-            LastName = _lastName,
-            Phone = _phone,
-            Mail = _mail,
-            Role = tmpRole,
-            Password = _password
-        };
-        
+
+        _chief.Role = tmpRole; //это то;е к туду
+
         IUserClient userClient = new UserClient();
-        userClient.AddUser(model);
+        userClient.AddUser(_chief);
     }
 }
