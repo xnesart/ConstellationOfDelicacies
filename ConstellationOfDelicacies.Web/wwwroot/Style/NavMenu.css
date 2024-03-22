@@ -12,6 +12,12 @@
     flex: 1;
     display: flex;
     justify-content: flex-start;
+    
+}
+
+.navmenu-logo-img {
+    height: 50px;
+    margin-left: 10px;
 }
 
 .navmenu-links {
