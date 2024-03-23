@@ -102,7 +102,7 @@
         RolesOutputModel tmpRole = new RolesOutputModel();
         tmpRole.Title = role.Title;
 
-        _chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
+        //_chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
 
         IUserClient userClient = new UserClient();
         userClient.AddUser(_chief);

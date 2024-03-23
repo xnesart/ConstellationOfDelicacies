@@ -20,6 +20,7 @@
             <div class="chiefs-card">
                 <p class="chief-id">Id: @chief.Id</p>
                 <p class="chief-name">Имя: @chief.FirstName</p>
+                <p class="chief-middleName">Имя: @chief.MiddleName</p>
                 <p class="chief-phone">Телефон: @chief.Phone</p>
                 <p class="chief-mail">Почта: @chief.Mail</p>
                 <a href="./chiefs/@chief.Id" class="chief-edit-link">Редактировать</a>
@@ -38,12 +39,12 @@
     {
         _client = new UserClient();
         // _chiefs = manager.GetAllChiefs();
-        _chiefs = _client.GetAllChiefs();
+        _chiefs = _client.GetAllChiefsByProfiles();
     }
 
     protected override void OnInitialized()
     {
-        _chiefs = _client.GetAllChiefs();
+        _chiefs = _client.GetAllChiefsByProfiles();
     }
 
     private void RemoveChief(int id)

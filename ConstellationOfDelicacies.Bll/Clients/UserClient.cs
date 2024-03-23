@@ -5,6 +5,7 @@ using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
+using ConstellationOfDelicacies.Dal.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConstellationOfDelicacies.Bll.Clients;
@@ -25,7 +26,9 @@ public class UserClient : IUserClient
     {
         using (var context = new Context())
         {
+            var role = context.Roles.Where(r => r.Title == model.Role.Title).Single();
             var dto = _mapper.Map<UsersDto>(model);
+            dto.Role = role;
             context.Users.Add(dto);
             context.SaveChanges();
         }
@@ -34,6 +37,10 @@ public class UserClient : IUserClient
     public void RemoveUser(int id)
     {
         //var users = GetAllUsers();
+        //тест
+        UserRepository repository = new UserRepository();
+        repository.GetAllUsers();
+        
         var userToRemove = _storage.Storage.Users.FirstOrDefault(u => u.Id == id);
         if (userToRemove != null)
         {
@@ -76,5 +83,29 @@ public class UserClient : IUserClient
 
 
         return result;
+    }
+
+    public List<UsersOutputModel> GetAllChiefsByProfiles()
+    {
+        List<UsersOutputModel> result = new List<UsersOutputModel>();
+        var r = _storage.Storage.Users.Include(u => u.Profiles).ToList();
+        
+        var users = _storage.Storage.Users
+            .Include(u => u.Profiles)
+            .Where(u => u.Profiles.Any(p => p.Specialization.Id == 1))
+            .ToList();
+        List<UsersOutputModel> usersModels = _mapper.Map<List<UsersOutputModel>>(users);
+
+        // List<ProfilesDto> profiles = _storage.Storage.Profiles.Where(p=>p.Id == 1).Include(u => u.Users).ToList();
+        // List<ProfilesDto> profiles = _storage.Storage.Profiles.Include(u => u.Users).ToList();
+        // foreach (var profile in profiles)
+        // {
+        //     var user = profile.Users.SingleOrDefault();
+        //     var tmp =_mapper.Map<UsersOutputModel>(user);
+        //     result.Add(tmp);
+        // }
+
+
+        return usersModels;
     }
 }
