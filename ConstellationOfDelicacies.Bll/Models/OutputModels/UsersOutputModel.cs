@@ -11,6 +11,4 @@ public class UsersOutputModel
     public string LastName { get; set; }
     public string Phone { get; set; }
     public string Mail { get; set; }
-    public string Password { get; set; }
-    public bool IsDeleted { get; set; }
 }

@@ -26,9 +26,9 @@ public class UserClient : IUserClient
     {
         using (var context = new Context())
         {
-            var role = context.Roles.Where(r => r.Title == model.Role.Title).Single();
+            //var role = context.Roles.Where(r => r.Title == model.Role.Title).Single();
             var dto = _mapper.Map<UsersDto>(model);
-            dto.Role = role;
+            //dto.Role = role;
             context.Users.Add(dto);
             context.SaveChanges();
         }

@@ -14,13 +14,13 @@
 
 <div class="chiefs-container">
     <div class="chiefs-field">
-
         @foreach (var chief in _chiefs)
         {
             <div class="chiefs-card">
                 <p class="chief-id">Id: @chief.Id</p>
                 <p class="chief-name">Имя: @chief.FirstName</p>
-                <p class="chief-middleName">Имя: @chief.MiddleName</p>
+                <p class="chief-middleName">Фамилия: @chief.MiddleName</p>
+                <p class="chief-lastName">Отчество: @chief.LastName</p>
                 <p class="chief-phone">Телефон: @chief.Phone</p>
                 <p class="chief-mail">Почта: @chief.Mail</p>
                 <a href="./chiefs/@chief.Id" class="chief-edit-link">Редактировать</a>
@@ -51,6 +51,10 @@
     {
         manager.RemoveChief(id);
         _chiefs = _client.GetAllChiefs();
+    }
+
+    private void GetProfiles(int id)
+    {
     }
 
 }
