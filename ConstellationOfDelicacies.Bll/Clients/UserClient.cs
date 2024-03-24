@@ -40,7 +40,7 @@ public class UserClient : IUserClient
         //тест
         UserRepository repository = new UserRepository();
         repository.GetAllUsers();
-        
+
         var userToRemove = _storage.Storage.Users.FirstOrDefault(u => u.Id == id);
         if (userToRemove != null)
         {
@@ -65,7 +65,7 @@ public class UserClient : IUserClient
     public List<UsersOutputModel> GetAllChiefs()
     {
         List<UsersOutputModel> result = new List<UsersOutputModel>();
-        var users = _storage.Storage.Users.Include(u=>u.Role).ToList();
+        var users = _storage.Storage.Users.Include(u => u.Role).ToList();
         List<UsersOutputModel> usersModels = _mapper.Map<List<UsersOutputModel>>(users);
         if (usersModels != null)
         {
@@ -87,9 +87,9 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetAllChiefsByProfiles()
     {
-        List<UsersOutputModel> result = new List<UsersOutputModel>();
-        var r = _storage.Storage.Users.Include(u => u.Profiles).ToList();
-        
+        // List<UsersOutputModel> result = new List<UsersOutputModel>();
+        // var r = _storage.Storage.Users.Include(u => u.Profiles).ToList();
+
         var users = _storage.Storage.Users
             .Include(u => u.Profiles)
             .Where(u => u.Profiles.Any(p => p.Specialization.Id == 1))
@@ -107,5 +107,14 @@ public class UserClient : IUserClient
 
 
         return usersModels;
+    }
+
+    public UsersOutputModel GetUserByEmail(string mail)
+    {
+        var users = _storage.Storage.Users.ToList();
+        var usersOutput = _mapper.Map<List<UsersOutputModel>>(users).ToList();
+        var user = usersOutput.Where(u => u.Mail == mail).Single();
+
+        return user;
     }
 }

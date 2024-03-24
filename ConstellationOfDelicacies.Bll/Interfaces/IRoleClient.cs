@@ -5,7 +5,7 @@ namespace ConstellationOfDelicacies.Bll.Interfaces;
 
 public interface IRoleClient
 {
-    public void AddRole();
+    public void AddRole(string title);
     public void RemoveRole();
     public List<RolesOutputModel> GetAllRoles();
 }
