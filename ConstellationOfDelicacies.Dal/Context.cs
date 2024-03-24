@@ -22,7 +22,7 @@ public class Context:DbContext
     
     public Context()
     {
-         // Database.EnsureDeletedAsync();
+        //Database.EnsureDeletedAsync();
         Database.EnsureCreated();
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

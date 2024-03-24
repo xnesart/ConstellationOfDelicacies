@@ -20,6 +20,7 @@ public class MappingProfile:Profile
         
         // InputModels
         CreateMap<UsersInputModel,UsersDto>();
-        CreateMap<RolesOutputModel,RolesDto>();
+        CreateMap<RolesInputModel,RolesDto>();
+        CreateMap<ProfilesInputModel,ProfilesDto>();
     }
 }

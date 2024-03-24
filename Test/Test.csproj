@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ConstellationOfDelicacies.Bll\ConstellationOfDelicacies.Bll.csproj" />
+    <ProjectReference Include="..\ConstellationOfDelicacies.Dal\ConstellationOfDelicacies.Dal.csproj" />
+  </ItemGroup>
+
 </Project>

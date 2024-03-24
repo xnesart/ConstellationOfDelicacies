@@ -5,6 +5,7 @@ using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
+using ConstellationOfDelicacies.Dal.IRepositories;
 using ConstellationOfDelicacies.Dal.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,26 +13,37 @@ namespace ConstellationOfDelicacies.Bll.Clients;
 
 public class UserClient : IUserClient
 {
-    private readonly SingletoneStorage _storage;
+    private readonly Context _storage;
     private readonly IMapper _mapper;
+    private UserRepository _userRepository;
 
     public UserClient()
     {
-        _storage = SingletoneStorage.GetStorage();
+        _userRepository = new UserRepository();
+        _storage = SingletoneStorage.GetStorage().Storage;
         IConfigurationProvider config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
         _mapper = new Mapper(config);
     }
 
     public void AddUser(UsersInputModel model)
     {
-        using (var context = new Context())
+        UsersDto userModel = _mapper.Map<UsersDto>(model);
+        userModel.IsDeleted = false;
+        foreach (ProfilesDto pr in userModel.Profiles.ToList())
         {
-            //var role = context.Roles.Where(r => r.Title == model.Role.Title).Single();
-            var dto = _mapper.Map<UsersDto>(model);
-            //dto.Role = role;
-            context.Users.Add(dto);
-            context.SaveChanges();
+            userModel.Profiles.Add(_storage.Profiles.Where(p => p.Id == pr.Id).Single());
+            userModel.Profiles.Remove(pr);
         }
+        _userRepository.AddUser(userModel);
+
+        //using (var context = new Context())
+        //{
+        //    //var role = context.Roles.Where(r => r.Title == model.Role.Title).Single();
+        //    var dto = _mapper.Map<UsersDto>(model);
+        //    //dto.Role = role;
+        //    context.Users.Add(dto);
+        //    context.SaveChanges();
+        //}
     }
 
     public void RemoveUser(int id)
@@ -41,11 +53,11 @@ public class UserClient : IUserClient
         UserRepository repository = new UserRepository();
         repository.GetAllUsers();
 
-        var userToRemove = _storage.Storage.Users.FirstOrDefault(u => u.Id == id);
+        var userToRemove = _storage.Users.FirstOrDefault(u => u.Id == id);
         if (userToRemove != null)
         {
-            _storage.Storage.Users.Remove(userToRemove);
-            _storage.Storage.SaveChanges();
+            _storage.Users.Remove(userToRemove);
+            _storage.SaveChanges();
         }
     }
 
@@ -56,7 +68,7 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetAllUsers()
     {
-        var users = _storage.Storage.Users.ToList();
+        var users = _storage.Users.ToList();
         var usersOutput = _mapper.Map<List<UsersOutputModel>>(users);
 
         return usersOutput;
@@ -65,7 +77,7 @@ public class UserClient : IUserClient
     public List<UsersOutputModel> GetAllChiefs()
     {
         List<UsersOutputModel> result = new List<UsersOutputModel>();
-        var users = _storage.Storage.Users.Include(u => u.Role).ToList();
+        var users = _storage.Users.Include(u => u.Role).ToList();
         List<UsersOutputModel> usersModels = _mapper.Map<List<UsersOutputModel>>(users);
         if (usersModels != null)
         {
@@ -90,7 +102,7 @@ public class UserClient : IUserClient
         // List<UsersOutputModel> result = new List<UsersOutputModel>();
         // var r = _storage.Storage.Users.Include(u => u.Profiles).ToList();
 
-        var users = _storage.Storage.Users
+        var users = _storage.Users
             .Include(u => u.Profiles)
             .Where(u => u.Profiles.Any(p => p.Specialization.Id == 1))
             .ToList();
@@ -111,7 +123,7 @@ public class UserClient : IUserClient
 
     public UsersOutputModel GetUserByEmail(string mail)
     {
-        var users = _storage.Storage.Users.ToList();
+        var users = _storage.Users.ToList();
         var usersOutput = _mapper.Map<List<UsersOutputModel>>(users).ToList();
         var user = usersOutput.Where(u => u.Mail == mail).Single();
 

@@ -7,7 +7,20 @@ namespace ConstellationOfDelicacies.Dal.Repositories;
 
 public class UserRepository:IUserRepository
 {
-   public List<UsersDto> GetAllUsers()
+    private Context _storage;
+
+    public UserRepository()
+    {
+        _storage = SingletoneStorage.GetStorage().Storage;
+    }
+
+    public void AddUser(UsersDto user)
+    {
+        _storage.Users.Add(user);
+        _storage.SaveChanges();
+    }
+
+    public List<UsersDto> GetAllUsers()
    {
       var users = SingletoneStorage.GetStorage().Storage.Users.Include(r => r.Role).ToList();
 
