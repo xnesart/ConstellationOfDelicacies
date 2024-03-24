@@ -2,6 +2,7 @@ using AutoMapper;
 using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
+using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
 
@@ -19,9 +20,16 @@ public class RoleClient:IRoleClient
         _mapper = new Mapper(config);
     }
 
-    public void AddRole()
+    public void AddRole(string title)
     {
-        throw new NotImplementedException();
+        RolesInputModel model = new RolesInputModel()
+        {
+            Title = title
+        };
+        
+        RolesDto dto=_mapper.Map<RolesDto>(model);
+        
+        _storage.Storage.Roles.Add(dto);
     }
 
     public void RemoveRole()

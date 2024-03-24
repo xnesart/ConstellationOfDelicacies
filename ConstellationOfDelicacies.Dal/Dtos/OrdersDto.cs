@@ -10,4 +10,5 @@ public class OrdersDto
     public string Address { get; set; }
     public int NumberOfPersons { get; set; }
     public decimal TotalPrice { get; set; }
+    public ICollection<TasksDto> Tasks { get; set; }
 }

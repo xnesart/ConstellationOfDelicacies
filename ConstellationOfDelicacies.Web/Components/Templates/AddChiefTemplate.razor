@@ -4,6 +4,7 @@
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Dal
 @rendermode InteractiveServer
+@inject NavigationManager NavigationManager
 
 <h3>Добавить повара</h3>
 <div class="registration-form">
@@ -69,6 +70,7 @@
     private List<WorkerOutputModel> _chiefs;
     IManager manager;
     private string _specialization;
+    private string _selectedProfile;
 
     public AddChiefTemplate()
     {
@@ -104,14 +106,26 @@
         
         //_chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
 
-        var specialization = GetSpecialization(_specialization);
+        var specialization = GetSpecializationByTitle(_specialization);
+        
+        ProfileClient profileClient = new ProfileClient();
+
+        var profiles = profileClient.GetProfiles();
+        // foreach (var profile in profiles)
+        // {
+        //     if (profile.Title == _selectedProfile)
+        //     {
+        //        _chief.Profiles.FirstOrDefault(p=>p.Ti == _selectedProfile)
+        //     }
+        // }
         
      
         IUserClient userClient = new UserClient();
-        userClient.AddUser(Chief);
+        userClient.AddUser(_chief);
+        NavigationManager.NavigateTo("/chiefs");
     }
 
-    public SpecializationsOutputModel  GetSpecialization(string specializationStr)
+    public SpecializationsOutputModel  GetSpecializationByTitle(string specializationStr)
     {
         SpecializationClient specializationClient = new SpecializationClient();
         var specializations = specializationClient.GetAllSpecializations();
