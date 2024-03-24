@@ -4,6 +4,8 @@ namespace ConstellationOfDelicacies.Bll.Models.InputModels
 {
     public class OrderInputModel
     {
+        public int Id { get; set; }
+
         public int UserId { get; set; }
 
         public DateTime OrderDate { get; set; }

@@ -68,7 +68,7 @@
 
     private List<WorkerOutputModel> _chiefs;
     IManager manager;
-    private string _subRole;
+    private string _specialization;
 
     public AddChiefTemplate()
     {
@@ -79,7 +79,7 @@
 
     private void AddProfile(ChangeEventArgs a)
     {
-        _subRole = a.Value.ToString();
+        _specialization = a.Value.ToString();
 
     }
 
@@ -96,15 +96,27 @@
     private void AddChief()
     {
         //TODO: тут роль "Сотрудник", а профиль "Повар-Кондитер"
-        RoleClient roleClient = new RoleClient();
-        var roles = roleClient.GetAllRoles();
-        var role = roles.FirstOrDefault(r => r.Title == _subRole);
-        RolesOutputModel tmpRole = new RolesOutputModel();
-        tmpRole.Title = role.Title;
+        
 
-        Chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
+        // tmpSpecialization.Title = specialization.Title;
+        
+        
+        
+        //_chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
 
+        var specialization = GetSpecialization(_specialization);
+        
+     
         IUserClient userClient = new UserClient();
         userClient.AddUser(Chief);
+    }
+
+    public SpecializationsOutputModel  GetSpecialization(string specializationStr)
+    {
+        SpecializationClient specializationClient = new SpecializationClient();
+        var specializations = specializationClient.GetAllSpecializations();
+        var foundSpecialization = specializations.FirstOrDefault(s => s.Profiles.Any(p => p.Title == specializationStr));
+
+        return foundSpecialization;
     }
 }
