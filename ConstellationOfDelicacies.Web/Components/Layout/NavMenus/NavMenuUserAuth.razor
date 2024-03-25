@@ -2,9 +2,7 @@
 
 <div class="navmenu">
     <div class="navmenu-logo">
-        <a href="/">
-            <img class="navmenu-logo-img" src="/Resources/logo.png" />
-        </a>
+        <a href="/"><img src="/Resources/logo.png"/></a>
     </div>
     <nav class="navmenu-links">
         <div class="navmenu-link">
@@ -17,16 +15,12 @@
             <NavLink Match="NavLinkMatch.All">Кофе-брейк</NavLink>
         </div>
     </nav>
-    <div class="navmenu-user"> 
-        <button class="navmenu-button" @onclick="Login">Войти</button>        
+    <div class="navmenu-user">
+        <img class="navmenu-icon" src="/Resources/icons/profile.svg" alt="Profile" />
+        <img class="navmenu-icon" src="/Resources/icons/menu.svg" alt="Menu" />
     </div>
 </div>
 
 @code {
-
-    //TODO: action
-    public void Login()
-    {
-        
-    }
+    
 }

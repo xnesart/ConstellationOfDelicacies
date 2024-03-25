@@ -9,39 +9,39 @@
 <h3>Добавить повара</h3>
 <div class="registration-form">
 
-    <EditForm class="row g-3" Model="@_chief" OnValidSubmit="@AddChief">
+    <EditForm class="row g-3" Model="@Chief" OnValidSubmit="@AddChief">
         <DataAnnotationsValidator />
 
         <div class="col-md-12">
             <label for="chief-firstname" class="form-label">Введите имя:</label>
-            <InputText class="form-control" @bind-Value="@_chief.FirstName" id="chief-firstname" 
+            <InputText class="form-control" @bind-Value="@Chief.FirstName" id="chief-firstname"
                        placeholder="Имя"/>
         </div>
         <div class="col-md-12">
             <label for="chief-lastname" class="form-label">Введите фамилию:</label>
-            <InputText class="form-control" @bind-Value="@_chief.LastName" id="chief-lastname" 
+            <InputText class="form-control" @bind-Value="@Chief.LastName" id="chief-lastname"
                        placeholder="Фамилия" />
         </div>
         <div class="col-md-12">
             <label for="chief-middlename" class="form-label">Введите отчество:</label>
-            <InputText class="form-control" @bind-Value="@_chief.MiddleName" id="chief-middlename"
+            <InputText class="form-control" @bind-Value="@Chief.MiddleName" id="chief-middlename"
                        placeholder="Отчество" />
             <p class="order-form-note">*Если отсутствует, оставьте поле пустым</p>
         </div>
         <div class="col-md-12">
             <label for="chief-mail" class="form-label">Введите электронную почту:</label>
-            <InputText type="email" class="form-control" @bind-Value="@_chief.Mail" id="chief-mail"
+            <InputText type="email" class="form-control" @bind-Value="@Chief.Mail" id="chief-mail"
                        placeholder="E-mail" />
         </div>
         <div class="col-md-12">
             <label for="chief-phone" class="form-label">Введите номер телефона:</label>
-            <InputText type="tel" class="form-control" @bind-Value="@_chief.Phone" id="chief-phone"
+            <InputText type="tel" class="form-control" @bind-Value="@Chief.Phone" id="chief-phone"
                        placeholder="Номер телефона" pattern="8[0-9]{10}"/>
             <p class="order-form-note">*В формате: 81112223333</p>
         </div>
         <div class="col-md-12">
             <label for="chief-password" class="form-label">Введите новый пароль:</label>
-            <InputText class="form-control" @bind-Value="@_chief.Password" id="chief-password"
+            <InputText class="form-control" @bind-Value="@Chief.Password" id="chief-password"
                        placeholder="Пароль" />
             <p class="order-form-note">*Минимум 4 символа</p>
         </div>
@@ -65,7 +65,7 @@
 
 @code {
     [SupplyParameterFromForm]
-    private UsersInputModel _chief { get; set; }
+    public UsersInputModel Chief { get; set; }
 
     private List<WorkerOutputModel> _chiefs;
     IManager manager;
@@ -76,7 +76,7 @@
     {
         manager = new ManagerMock();
         _chiefs = manager.GetAllChiefs();
-        _chief = new UsersInputModel();
+        Chief = new UsersInputModel();
     }
 
     private void AddProfile(ChangeEventArgs a)
@@ -121,7 +121,7 @@
         
      
         IUserClient userClient = new UserClient();
-        userClient.AddUser(_chief);
+        userClient.AddUser(Chief);
         NavigationManager.NavigateTo("/chiefs");
     }
 

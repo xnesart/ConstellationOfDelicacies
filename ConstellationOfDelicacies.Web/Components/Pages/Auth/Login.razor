@@ -1,0 +1,61 @@
+﻿@page "/login"
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject NavigationManager navManager
+
+
+<div class="login-form">
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
+        <div class="col-md-12">
+            <label for="login-mail" class="form-label">Введите электронную почту:</label>
+            <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail" 
+                       @bind-Value="Model.Email"/>
+        </div>
+        <div class="col-md-12">
+            <label for="login-pass" class="form-label">Введите пароль:</label>
+            <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
+                       @bind-Value="Model.Password" />
+        </div>
+        <div class="col-md-12"lass="col-12">
+            <button type="submit" class="btn btn-primary">Войти</button>
+            <a href="/chiefs" class="btn btn-primary">Отмена</a>
+            <a href="/registration">Зарегистрироваться</a>
+        </div>
+        
+    </EditForm> 
+</div>
+
+
+@code {
+    [SupplyParameterFromForm]
+    public LoginInputModel Model { get; set; }
+
+    [CascadingParameter]
+    public HttpContext httpContext { get; set; }
+
+    public Login()
+    {
+        Model = new LoginInputModel();
+    }
+
+    public async Task StartLogin()
+    {
+        //Идум в базку и достаем инфу по логину и паролю (из loginModel)
+
+        var claims = new List<Claim>()
+        {
+            new Claim("klaimeeeeee", Model.Email),
+            new Claim(ClaimTypes.Role, "User")
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var pr = new ClaimsPrincipal(identity);
+
+        await httpContext.SignInAsync(pr);
+
+        navManager.NavigateTo("./");
+        //navManager.NavigateTo("./Ch");
+    }
+}

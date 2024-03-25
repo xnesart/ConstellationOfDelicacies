@@ -7,9 +7,42 @@ namespace ConstellationOfDelicacies.Dal.Repositories;
 
 public class UserRepository:IUserRepository
 {
-   public List<UsersDto> GetAllUsers()
+    private Context _storage;
+
+    public UserRepository()
+    {
+        _storage = SingletoneStorage.GetStorage().Storage;
+    }
+
+    public void AddUser(UsersDto user)
+    {
+        user.Role = _storage.Roles.Where(r => r.Title == user.Role.Title).FirstOrDefault();
+        if (user.Profiles is not null)
+        {
+            foreach (ProfilesDto pr in user.Profiles.ToList())
+            {
+                user.Profiles.Add(_storage.Profiles.Where(p => p.Id == pr.Id).Single());
+                user.Profiles.Remove(pr);
+            }
+        }
+
+        _storage.Users.Add(user);
+        _storage.SaveChanges();
+    }
+
+    public void DeleteUser(int id)
+    {
+        var userToRemove = _storage.Users.FirstOrDefault(u => u.Id == id);
+        if (userToRemove != null)
+        {
+            userToRemove.IsDeleted = true;
+            _storage.SaveChanges();
+        }
+    }
+
+    public List<UsersDto> GetAllUsers()
    {
-      var users = SingletoneStorage.GetStorage().Storage.Users.Include(r => r.Role).ToList();
+      var users = _storage.Users.Include(r => r.Role).ToList();
 
       foreach (var user in users)
       {
@@ -19,4 +52,16 @@ public class UserRepository:IUserRepository
 
       return users;
    }
+
+    public List<UsersDto> GetUsersBySpecialization(int spId)
+    {
+        var users = _storage.Users.Where(u => u.Profiles.Any(p => p.Specialization.Id == spId)).ToList();
+        return users;
+    }
+
+    public List<UsersDto> GetUsersByProfile(int prId)
+    {
+        var users = _storage.Users.Where(u => u.Profiles.Any(p => p.Id == prId)).ToList();
+        return users;
+    }
 }
