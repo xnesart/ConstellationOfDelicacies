@@ -1,6 +1,6 @@
 @page "/waiters"
 @rendermode InteractiveServer
-@using ConstellationOfDelicacies.Bll.IManager
+@using ConstellationOfDelicacies.Bll.Clients
 
 <div class="top-row top-row-manager manager-top-bar">
     <a class="top-bar-link" href="/manager">Мои заявки</a>
@@ -15,36 +15,19 @@
 
         @foreach (var waiter in _waiters)
         {
-            <div class="waiters-card">
-                <p class="waiters-id">Id: @waiter.Id</p>
-                <p class="waiters-name">Имя: @waiter.Name</p>
-                <p class="waiters-phone">Телефон: @waiter.Phone</p>
-                <p class="waiters-mail">Почта: @waiter.Mail</p>
-                <a href="./waiters/@waiter.Id" class="waiter-edit-link">Редактировать</a>
-                <button @onclick="() => RemoveWaiter(waiter.Id)" class="btn btn-primary" type="button">Удалить</button>
-            </div>
+            <WorkerCardTemplate Worker="@waiter"/>
         }
     </div>
 </div>
 
 @code {
-    private List<WorkerOutputModel> _waiters;
-    IManager _manager = new ManagerMock();
+    private List<UsersOutputModel> _waiters;
+    private UserClient _client;
 
     public Waiters()
     {
-        _waiters = _manager.GetAllWaiters();
-    }
-
-    protected override void OnInitialized()
-    {
-        _waiters = _manager.GetAllWaiters();
-    }
-
-    private void RemoveWaiter(int id)
-    {
-        _manager.RemoveWaiter(id);
-        _waiters = _manager.GetAllWaiters();
+        _client = new UserClient();
+        _waiters = _client.GetAllWaiters();
     }
 
 }
