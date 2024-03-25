@@ -53,7 +53,7 @@
     private void RemoveChief(int id)
     {
         manager.RemoveChief(id);
-        _chiefs = _client.GetAllChiefs();
+        _chiefs = _client.GetUsersByProfile(1);
     }
 
     private void GetProfiles(int id)

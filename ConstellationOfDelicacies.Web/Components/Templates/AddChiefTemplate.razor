@@ -69,7 +69,7 @@
 
     private List<WorkerOutputModel> _chiefs;
     IManager manager;
-    private string _specialization;
+    private string _profile;
     private string _selectedProfile;
 
     public AddChiefTemplate()
@@ -81,7 +81,7 @@
 
     private void AddProfile(ChangeEventArgs a)
     {
-        _specialization = a.Value.ToString();
+        _profile = a.Value.ToString();
 
     }
 
@@ -106,20 +106,31 @@
         
         //_chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
 
-        var specialization = GetSpecializationByTitle(_specialization);
+        var specialization = GetSpecializationByTitle(_profile);
         
         ProfileClient profileClient = new ProfileClient();
 
         var profiles = profileClient.GetProfiles();
-        // foreach (var profile in profiles)
+        int profileId = 0;
+        foreach (var profile in profiles)
+        {
+            if (profile.Title == _selectedProfile)
+            {
+                profileId = profile.Id;
+            }
+        }
+
+        AddRoleToChief();
+        AddProfileToChief();
+
+
+        // Chief.Profiles = new List<ProfilesInputModel>()
         // {
-        //     if (profile.Title == _selectedProfile)
+        //     new ProfilesInputModel()
         //     {
-        //        _chief.Profiles.FirstOrDefault(p=>p.Ti == _selectedProfile)
+        //         Id = profileId
         //     }
-        // }
-        
-     
+        // };
         IUserClient userClient = new UserClient();
         userClient.AddUser(Chief);
         NavigationManager.NavigateTo("/chiefs");
@@ -132,5 +143,40 @@
         var foundSpecialization = specializations.FirstOrDefault(s => s.Profiles.Any(p => p.Title == specializationStr));
 
         return foundSpecialization;
+    }
+
+    public void AddRoleToChief()
+    {
+        RoleClient roleClient = new RoleClient();
+        var roles = roleClient.GetAllRoles();
+        var role= roles.FirstOrDefault(r => r.Title == "Worker");
+        RolesInputModel roleInput = new RolesInputModel
+        {
+            Title = role.Title
+        };
+        Chief.Role = roleInput;
+    }
+
+    public void AddProfileToChief()
+    {
+        ProfileClient profileClient = new ProfileClient();
+        var profiles = profileClient.GetProfiles();
+        var profile = profiles.FirstOrDefault(p => p.Title == _profile);
+       
+        SpecializationClient specializationClient = new SpecializationClient();
+        var specializations = specializationClient.GetAllSpecializations();
+        var specialization = specializations.FirstOrDefault(s => s.Title == "Повар");
+        SpecializationInputModel specializationInput = new SpecializationInputModel
+        {
+            Id = specialization.Id,
+            Title = specialization.Title
+        };
+        ProfilesInputModel profileInput = new ProfilesInputModel
+        {
+            Id = profile.Id,
+            Title = profile.Title,
+            Specialization = specializationInput
+        };
+        Chief.Profiles.Add(profileInput);
     }
 }
