@@ -1,5 +1,6 @@
 ﻿using ConstellationOfDelicacies.Bll;
 using ConstellationOfDelicacies.Bll.Clients;
+using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
@@ -11,31 +12,36 @@ Context context = SingletoneStorage.GetStorage().Storage;
 UserRepository userRepository = new UserRepository();
 UserClient userClient = new UserClient();
 
+List<UsersOutputModel> chiefs = userClient.GetAllChiefs();
+List<UsersOutputModel> chiefs1 = userClient.GetUsersByProfile(3);
+
+Console.WriteLine();
+
 //UsersDto usersDto = new UsersDto()
 //{
-//    Profiles = [context.Profiles.Where(pr => pr.Id == 2).Single(),
-//        context.Profiles.Where(pr => pr.Id == 4).Single()],
+//    Profiles = [context.Profiles.Where(pr => pr.Id == 1).Single()],
 //    Role = context.Roles.Where(r => r.Id == 2).Single(),
-//    FirstName = "ARtem",
-//    LastName = "Ahho",
-//    Mail = "fchhd@hdh.fg"
+//    FirstName = "Павел",
+//    LastName = "Браун",
+//    Mail = "brown@hdh.fg",
+//    Password = "1111"
 //};
 
 //userRepository.AddUser(usersDto);
 
-UsersInputModel usersInputModel = new UsersInputModel()
-{
-    Profiles = [ new ProfilesInputModel() { Id = 5 } ],
-    Role = new RolesInputModel() { Title = "Worker"},
-    FirstName = "Софья",
-    LastName = "Павлова",
-    Mail = "df111@gf.f",
-    Password = "khd1111b",
-    Phone = "89991112233"
-};
-userClient.AddUser(usersInputModel);
 
-context.SaveChanges();
+//UsersInputModel usersInputModel = new UsersInputModel()
+//{
+//    Profiles = [new ProfilesInputModel() { Id = 5 }],
+//    Role = new RolesInputModel() { Title = "Worker" },
+//    FirstName = "QQQ",
+//    LastName = "WWW",
+//    Mail = "qqq@gf.f",
+//    Password = "qqqwww"
+//};
+//userClient.AddUser(usersInputModel);
+
+//context.SaveChanges();
 
 //context.Roles.Add(new RolesDto() { Title = "Manager" } );
 //context.Roles.Add(new RolesDto() { Title = "Worker" });

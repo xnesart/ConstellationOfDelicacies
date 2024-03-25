@@ -8,4 +8,10 @@ public interface IUserRepository
 
     public void AddUser(UsersDto user);
 
+    public void DeleteUser(int id);
+
+    public List<UsersDto> GetUsersBySpecialization(int spId);
+
+    public List<UsersDto> GetUsersByProfile(int prId);
+
 }
