@@ -42,12 +42,12 @@
 
  
         // _chiefs = manager.GetAllChiefs();
-        _chiefs = _client.GetAllChiefsByProfiles();
+        _chiefs = _client.GetUsersByProfile(1);
     }
 
     protected override void OnInitialized()
     {
-        _chiefs = _client.GetAllChiefsByProfiles();
+        _chiefs = _client.GetUsersByProfile(1);
     }
 
     private void RemoveChief(int id)
