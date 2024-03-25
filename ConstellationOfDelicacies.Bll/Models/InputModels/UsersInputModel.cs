@@ -6,6 +6,8 @@ public class UsersInputModel
 {
     public ICollection<ProfilesInputModel>? Profiles { get; set; }
 
+    public int? ProfileId { get; set; }
+
     public RolesInputModel? Role { get; set; }
 
     [Required]

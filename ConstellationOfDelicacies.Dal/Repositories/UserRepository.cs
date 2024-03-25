@@ -1,6 +1,5 @@
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConstellationOfDelicacies.Dal.Repositories;
@@ -16,7 +15,7 @@ public class UserRepository:IUserRepository
 
     public void AddUser(UsersDto user)
     {
-        user.Role = _storage.Roles.Where(r => r.Title == user.Role.Title).FirstOrDefault();
+        user.Role = _storage.Roles.Where(r => r.Title == user.Role.Title).Single();
         if (user.Profiles is not null)
         {
             foreach (ProfilesDto pr in user.Profiles.ToList())
