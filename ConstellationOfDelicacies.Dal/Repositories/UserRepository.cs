@@ -61,7 +61,15 @@ public class UserRepository:IUserRepository
 
     public List<UsersDto> GetUsersByProfile(int prId)
     {
-        var users = _storage.Users.Where(u => u.Profiles.Any(p => p.Id == prId)).ToList();
+        List<UsersDto> users;
+        if (_storage.Users != null)
+        {
+             users = _storage.Users.Where(u => u.Profiles.Any(p => p.Id == prId)).ToList();
+        }
+        else
+        {
+             users = new List<UsersDto>();
+        }
         return users;
     }
 }
