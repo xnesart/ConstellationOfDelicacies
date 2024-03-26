@@ -16,9 +16,9 @@ public class UserRepository:IUserRepository
     public UsersDto SetUserDto(UsersDto user)
     {
         user.Role = _storage.Roles.Where(r => r.Title == user.Role.Title).Single();
-        if (user.Profiles is not null)
+        if (user.Profiles != null)
         {
-            foreach (ProfilesDto pr in user.Profiles.ToList())
+            foreach (var pr in user.Profiles.ToList())
             {
                 user.Profiles.Add(_storage.Profiles.Where(p => p.Id == pr.Id).Single());
                 user.Profiles.Remove(pr);
@@ -79,6 +79,7 @@ public class UserRepository:IUserRepository
         if (userToRemove != null)
         {
             userToRemove.IsDeleted = true;
+            _storage.Users.Update(userToRemove);
             _storage.SaveChanges();
         }
     }
