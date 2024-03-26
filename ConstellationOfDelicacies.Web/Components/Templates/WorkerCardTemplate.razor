@@ -1,6 +1,6 @@
 ﻿@using ConstellationOfDelicacies.Bll.Models
 @using ConstellationOfDelicacies.Bll.Clients
-
+@rendermode InteractiveServer
 
 <div class="chiefs-card">
     <p class="chief-id">Id: @Worker.Id</p>
@@ -19,14 +19,15 @@
     public UsersOutputModel Worker { get; set; }
 
     private UserClient _client;
-
+    
     public WorkerCardTemplate()
     {
         _client = new UserClient();
     }
-
+    
     private void RemoveWorker(int wId)
     {
         _client.RemoveUser(wId);
+        StateHasChanged();
     }
 }
