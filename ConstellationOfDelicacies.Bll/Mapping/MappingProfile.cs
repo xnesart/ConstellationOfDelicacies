@@ -22,6 +22,6 @@ public class MappingProfile:Profile
         CreateMap<UsersInputModel,UsersDto>();
         CreateMap<RolesInputModel,RolesDto>();
         CreateMap<ProfilesInputModel,ProfilesDto>();
-        CreateMap<TasksInputModel, TasksDto>();
+        CreateMap<TasksInputModel,TasksDto>();
     }
 }
