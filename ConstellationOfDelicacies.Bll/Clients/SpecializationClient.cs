@@ -9,12 +9,11 @@ namespace ConstellationOfDelicacies.Bll.Clients;
 
 public class SpecializationClient:ISpecializationClient
 {
-    private readonly SingletoneStorage _storage;
     private readonly IMapper _mapper;
     private SpecializationRepository _repository;
+
     public SpecializationClient()
     {
-        _storage = SingletoneStorage.GetStorage();
         IConfigurationProvider config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
         _mapper = new Mapper(config);
         _repository = new SpecializationRepository();
@@ -22,7 +21,7 @@ public class SpecializationClient:ISpecializationClient
 
     public List<SpecializationsOutputModel> GetAllSpecializations()
     {
-        var specializationsDtos = _storage.Storage.Specializations.ToList();
+        var specializationsDtos = _repository.GetAllSpecializations();
         var result = _mapper.Map<List<SpecializationsOutputModel>>(specializationsDtos);
         return result;
     }

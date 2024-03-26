@@ -22,5 +22,11 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             var result = _storage.Specializations.Where(s => s.Id == spId).Single();
             return result;
         }
+
+        public List<SpecializationsDto> GetAllSpecializations()
+        {
+            var result = _storage.Specializations.ToList();
+            return result;
+        }
     }
 }
