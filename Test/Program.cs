@@ -9,20 +9,28 @@ using System.Linq;
 
 Context context = SingletoneStorage.GetStorage().Storage;
 
-UserRepository user = new UserRepository();
+TaskClient taskClient = new TaskClient();
+OrderClient orderClient = new OrderClient();
 
-UsersDto a = new UsersDto()
+//OrderInputModel o = new OrderInputModel()
+//{
+//    OrderDate = DateTime.Now,
+//    Comment = "kvkhb",
+//    Address = "cvbnm,",
+//    NumberOfPersons = 1,
+//};
+
+//orderClient.AddUserOrder(o);
+
+
+TasksInputModel a = new TasksInputModel()
 {
-    Id = 2,
-    Role = new RolesDto() { Title = "Worker" },
-    FirstName = "Артем",
-    LastName = "Иванов",
-    Phone = "89991112233",
-    Mail = "artem@cod.g",
-    Profiles = new List<ProfilesDto>() { new ProfilesDto() { Id = 2 }, new ProfilesDto() { Id = 4 },
-        new ProfilesDto() { Id = 3 } }
+    Order = new OrderInputModel() { Id = 1 },
+    Title = "Пользователь",
+    Users = [new UsersInputModel { Id = 2 }],
+    Status = new TaskStatusesInputModel() { Id = 1 }
 };
 
-user.UpdateUser(a);
+taskClient.AddOrderTask(a);
 
 Console.WriteLine();

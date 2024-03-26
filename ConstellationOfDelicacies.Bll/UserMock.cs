@@ -1,8 +1,9 @@
-﻿using ConstellationOfDelicacies.Bll.Models.InputModels;
+﻿using ConstellationOfDelicacies.Bll.Clients;
+using ConstellationOfDelicacies.Bll.Models.InputModels;
 
 namespace ConstellationOfDelicacies.Bll
 {
-    public class UserMock: IOrderClient.IOrderClient
+    public class UserMock: IOrderClient
     {
         private List<OrderInputModel> _orders; 
 
@@ -32,6 +33,16 @@ namespace ConstellationOfDelicacies.Bll
         public void AddUserOrder(OrderInputModel order)
         {
             _orders.Add(order);
+        }
+
+        public void DeleteUserOrder(int orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateUserOrder(OrderInputModel order)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,7 +6,7 @@ public class TasksDto
 
     public OrdersDto Order { get; set; }
 
-    public ICollection<ProfilesDto> Profiles { get; set; }
+    public ICollection<ProfilesDto>? Profiles { get; set; }
 
     public string Title { get; set; }
 
