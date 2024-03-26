@@ -7,7 +7,7 @@ using ConstellationOfDelicacies.Dal.Repositories;
 
 namespace ConstellationOfDelicacies.Bll.Clients;
 
-public class SpecializationClient:ISpecializationClient
+public class SpecializationClient : ISpecializationClient
 {
     private readonly IMapper _mapper;
     private SpecializationRepository _repository;

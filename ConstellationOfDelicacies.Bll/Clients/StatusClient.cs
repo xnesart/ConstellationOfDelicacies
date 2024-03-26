@@ -5,7 +5,7 @@ using ConstellationOfDelicacies.Dal;
 
 namespace ConstellationOfDelicacies.Bll.Clients;
 
-public class StatusClient:IStatusClient
+public class StatusClient : IStatusClient
 {
     private readonly SingletoneStorage _storage;
     private readonly IMapper _mapper;
