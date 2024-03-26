@@ -54,7 +54,9 @@ public class UserRepository:IUserRepository
 
     public List<UsersDto> GetUsersBySpecialization(int spId)
     {
-        var users = _storage.Users.Where(u => u.Profiles.Any(p => p.Specialization.Id == spId)).ToList();
+        var users = _storage.Users
+            .Where(u => u.Profiles.Any(p => p.Specialization.Id == spId) && u.IsDeleted == false)
+            .ToList();
         return users;
     }
 
