@@ -9,10 +9,20 @@ using System.Linq;
 
 Context context = SingletoneStorage.GetStorage().Storage;
 
-ProfileRepository profileRepository = new ProfileRepository();
-ProfileClient profileClient = new ProfileClient();
-SpecializationClient specializationClient = new SpecializationClient();
+UserRepository user = new UserRepository();
 
-var a = specializationClient.GetSpTitleById(2);
+UsersDto a = new UsersDto()
+{
+    Id = 2,
+    Role = new RolesDto() { Title = "Worker" },
+    FirstName = "Артем",
+    LastName = "Иванов",
+    Phone = "89991112233",
+    Mail = "artem@cod.g",
+    Profiles = new List<ProfilesDto>() { new ProfilesDto() { Id = 2 }, new ProfilesDto() { Id = 4 },
+        new ProfilesDto() { Id = 3 } }
+};
+
+user.UpdateUser(a);
 
 Console.WriteLine();

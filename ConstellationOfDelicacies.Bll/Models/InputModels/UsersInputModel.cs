@@ -4,6 +4,8 @@ namespace ConstellationOfDelicacies.Bll.Models.InputModels;
 
 public class UsersInputModel
 {
+    public int? Id { get; set; }
+
     public ICollection<ProfilesInputModel>? Profiles { get; set; }
 
     public int? ProfileId { get; set; }

@@ -40,7 +40,16 @@ public class UserClient : IUserClient
 
     public void UpdateUser(UsersInputModel model)
     {
-        throw new NotImplementedException();
+        UsersDto userModel = _mapper.Map<UsersDto>(model);
+
+        _userRepository.UpdateUser(userModel);
+    }
+
+    public void UpdateUserPassword(UsersInputModel model)
+    {
+        UsersDto userModel = _mapper.Map<UsersDto>(model);
+
+        _userRepository.UpdateUserPassword(userModel);
     }
 
     public List<UsersOutputModel> GetAllUsers()
@@ -62,11 +71,6 @@ public class UserClient : IUserClient
         var result = _mapper.Map<List<UsersOutputModel>>(waiters);
 
         return result;
-    }
-
-    public List<UsersOutputModel> GetAllChiefsByProfiles()
-    {
-        throw new NotImplementedException();
     }
 
     public UsersOutputModel GetUserByEmail(string mail)

@@ -11,6 +11,8 @@ public interface IUserClient
 
     public void UpdateUser(UsersInputModel model);
 
+    public void UpdateUserPassword(UsersInputModel model);
+
     public List<UsersOutputModel> GetAllUsers();
 
     public List<UsersOutputModel> GetAllChiefs();
