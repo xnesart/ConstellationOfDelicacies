@@ -45,7 +45,9 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetAllUsers()
     {
-        throw new NotImplementedException();
+        var users = SingletoneStorage.GetStorage().Storage.Users.Include(u => u.Role).ToList();
+        var res = _mapper.Map<List<UsersOutputModel>>(users);
+        return res;
     }
 
     public List<UsersOutputModel> GetAllChiefs()
@@ -78,6 +80,19 @@ public class UserClient : IUserClient
     {
         List<UsersDto> users = _userRepository.GetUsersByProfile(prId);
         var result = _mapper.Map<List<UsersOutputModel>>(users);
+
+        return result;
+    }
+
+    public bool CheckLoginRights(LoginInputModel Model)
+    {
+        bool result = false;
+        var users = GetAllUsers();
+        var user = users.Where(u => u.Mail == Model.Email).SingleOrDefault();
+        if (user != null)
+        {
+            result = true;
+        }
 
         return result;
     }

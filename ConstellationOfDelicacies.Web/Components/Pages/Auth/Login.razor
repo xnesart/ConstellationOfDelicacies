@@ -1,8 +1,10 @@
 ﻿@page "/login"
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using System.Security.Claims
+@using ConstellationOfDelicacies.Bll.Clients
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Mvc
 @inject NavigationManager navManager
 
 
@@ -25,15 +27,23 @@
         </div>
         
     </EditForm> 
+     @if (_authenticationFailed)
+    {
+        <div class="alert alert-danger" role="alert">
+            Аутентификация не удалась. Проверьте свои учетные данные и повторите попытку.
+        </div>
+    }
 </div>
 
 
 @code {
     [SupplyParameterFromForm]
     public LoginInputModel Model { get; set; }
+    private string _redirect { get; set; }
 
     [CascadingParameter]
     public HttpContext httpContext { get; set; }
+    private bool _authenticationFailed = false;
 
     public Login()
     {
@@ -42,20 +52,61 @@
 
     public async Task StartLogin()
     {
-        //Идум в базку и достаем инфу по логину и паролю (из loginModel)
-
-        var claims = new List<Claim>()
+        
+        UserClient userClient = new UserClient();
+        if (userClient.CheckLoginRights(Model) == false)
         {
-            new Claim("klaimeeeeee", Model.Email),
-            new Claim(ClaimTypes.Role, "User")
-        };
+            Console.WriteLine("Аутентификация не удалась");
+            _authenticationFailed = true;
+            return;
+        }
+ 
+        RoleClient roleClient = new RoleClient();
+        var role = roleClient.GetRoleByEmail(Model.Email);
+        if (role != null && role.Title != null)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Email, Model.Email),
+                new Claim(ClaimTypes.Role, role.Title)
+            }; 
 
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var pr = new ClaimsPrincipal(identity);
+            SetRedirect(role);
+            
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var user = new ClaimsPrincipal(identity);
 
-        await httpContext.SignInAsync(pr);
+            await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
 
-        navManager.NavigateTo("./");
+            if (!string.IsNullOrEmpty(_redirect))
+            {
+                navManager.NavigateTo(_redirect);
+            }
+        }
+
         //navManager.NavigateTo("./Ch");
+    }
+
+    public void SetRedirect(RolesOutputModel role)
+    {
+        if (role != null && role.Title != null)
+        {
+            if (role.Title == "Manager")
+            {
+                _redirect = "/manager";
+            }
+            else if (role.Title == "Worker")
+            {
+                _redirect = "/";
+            }
+            else if (role.Title == "User")
+            {
+                _redirect = "/";
+            }
+            else
+            {
+                _authenticationFailed = true;
+            }
+        }
     }
 }
