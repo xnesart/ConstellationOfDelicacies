@@ -8,7 +8,7 @@ using ConstellationOfDelicacies.Dal.Dtos;
 
 namespace ConstellationOfDelicacies.Bll.Clients;
 
-public class RoleClient:IRoleClient
+public class RoleClient : IRoleClient
 {
     private readonly SingletoneStorage _storage;
     private readonly IMapper _mapper;

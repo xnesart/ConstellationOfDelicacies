@@ -3,25 +3,22 @@ using ConstellationOfDelicacies.Bll.IManager;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
-using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
-using ConstellationOfDelicacies.Dal.IRepositories;
 using ConstellationOfDelicacies.Dal.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace ConstellationOfDelicacies.Bll.Clients;
 
 public class UserClient : IUserClient
 {
     private readonly IMapper _mapper;
-    private UserRepository _userRepository;
+    private UserRepository _repository;
 
     private int _spChief = 1;
     private int _spWaiter = 2;
 
     public UserClient()
     {
-        _userRepository = new UserRepository();
+        _repository = new UserRepository();
         IConfigurationProvider config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
         _mapper = new Mapper(config);
     }
@@ -30,17 +27,26 @@ public class UserClient : IUserClient
     {
         UsersDto userModel = _mapper.Map<UsersDto>(model);
         
-        _userRepository.AddUser(userModel);
+        _repository.AddUser(userModel);
     }
 
     public void RemoveUser(int id)
     {
-        _userRepository.DeleteUser(id);
+        _repository.DeleteUser(id);
     }
 
     public void UpdateUser(UsersInputModel model)
     {
-        throw new NotImplementedException();
+        UsersDto userModel = _mapper.Map<UsersDto>(model);
+
+        _repository.UpdateUser(userModel);
+    }
+
+    public void UpdateUserPassword(UsersInputModel model)
+    {
+        UsersDto userModel = _mapper.Map<UsersDto>(model);
+
+        _repository.UpdateUserPassword(userModel);
     }
 
     public List<UsersOutputModel> GetAllUsers()
@@ -50,7 +56,7 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetAllChiefs()
     {
-        List<UsersDto> chiefs = _userRepository.GetUsersBySpecialization(_spChief);
+        List<UsersDto> chiefs = _repository.GetUsersBySpecialization(_spChief);
         var result = _mapper.Map<List<UsersOutputModel>>(chiefs);
 
         return result;
@@ -58,15 +64,10 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetAllWaiters()
     {
-        List<UsersDto> waiters = _userRepository.GetUsersBySpecialization(_spWaiter);
+        List<UsersDto> waiters = _repository.GetUsersBySpecialization(_spWaiter);
         var result = _mapper.Map<List<UsersOutputModel>>(waiters);
 
         return result;
-    }
-
-    public List<UsersOutputModel> GetAllChiefsByProfiles()
-    {
-        throw new NotImplementedException();
     }
 
     public UsersOutputModel GetUserByEmail(string mail)
@@ -76,7 +77,7 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetUsersByProfile(int prId)
     {
-        List<UsersDto> users = _userRepository.GetUsersByProfile(prId);
+        List<UsersDto> users = _repository.GetUsersByProfile(prId);
         var result = _mapper.Map<List<UsersOutputModel>>(users);
 
         return result;

@@ -8,6 +8,10 @@ public interface IUserRepository
 
     public void AddUser(UsersDto user);
 
+    public void UpdateUser(UsersDto user);
+
+    public void UpdateUserPassword(UsersDto user);
+
     public void DeleteUser(int id);
 
     public List<UsersDto> GetUsersBySpecialization(int spId);

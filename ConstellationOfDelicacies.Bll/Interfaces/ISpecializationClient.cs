@@ -7,4 +7,5 @@ public interface ISpecializationClient
     public string GetSpTitleById(int spId);
 
     public List<SpecializationsOutputModel> GetAllSpecializations();
+
 }
