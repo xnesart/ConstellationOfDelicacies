@@ -10,7 +10,7 @@
 <div class="registration-form">
 
     <EditForm class="row g-3" Model="@Chief" OnValidSubmit="@AddChief">
-        <DataAnnotationsValidator />
+        <DataAnnotationsValidator/>
 
         <div class="col-md-12">
             <label for="chief-firstname" class="form-label">Введите имя:</label>
@@ -20,18 +20,18 @@
         <div class="col-md-12">
             <label for="chief-lastname" class="form-label">Введите фамилию:</label>
             <InputText class="form-control" @bind-Value="@Chief.LastName" id="chief-lastname"
-                       placeholder="Фамилия" />
+                       placeholder="Фамилия"/>
         </div>
         <div class="col-md-12">
             <label for="chief-middlename" class="form-label">Введите отчество:</label>
             <InputText class="form-control" @bind-Value="@Chief.MiddleName" id="chief-middlename"
-                       placeholder="Отчество" />
+                       placeholder="Отчество"/>
             <p class="order-form-note">*Если отсутствует, оставьте поле пустым</p>
         </div>
         <div class="col-md-12">
             <label for="chief-mail" class="form-label">Введите электронную почту:</label>
             <InputText type="email" class="form-control" @bind-Value="@Chief.Mail" id="chief-mail"
-                       placeholder="E-mail" />
+                       placeholder="E-mail"/>
         </div>
         <div class="col-md-12">
             <label for="chief-phone" class="form-label">Введите номер телефона:</label>
@@ -42,7 +42,7 @@
         <div class="col-md-12">
             <label for="chief-password" class="form-label">Введите новый пароль:</label>
             <InputText class="form-control" @bind-Value="@Chief.Password" id="chief-password"
-                       placeholder="Пароль" />
+                       placeholder="Пароль"/>
             <p class="order-form-note">*Минимум 4 символа</p>
         </div>
         <div class="col-md-12">
@@ -64,8 +64,7 @@
 </div>
 
 @code {
-    [SupplyParameterFromForm]
-    public UsersInputModel Chief { get; set; }
+    [SupplyParameterFromForm] public UsersInputModel Chief { get; set; }
 
     private List<WorkerOutputModel> _chiefs;
     IManager manager;
@@ -82,7 +81,6 @@
     private void AddProfile(ChangeEventArgs a)
     {
         _profile = a.Value.ToString();
-
     }
 
     // private enum SubRoleId
@@ -98,16 +96,15 @@
     private void AddChief()
     {
         //TODO: тут роль "Сотрудник", а профиль "Повар-Кондитер"
-        
+
 
         // tmpSpecialization.Title = specialization.Title;
-        
-        
-        
+
+
         //_chief.Role = tmpRole; //это тоже к туду, тут профиль должен быть
 
         var specialization = GetSpecializationByTitle(_profile);
-        
+
         ProfileClient profileClient = new ProfileClient();
 
         var profiles = profileClient.GetProfiles();
@@ -136,7 +133,7 @@
         NavigationManager.NavigateTo("/chiefs");
     }
 
-    public SpecializationsOutputModel  GetSpecializationByTitle(string specializationStr)
+    public SpecializationsOutputModel GetSpecializationByTitle(string specializationStr)
     {
         SpecializationClient specializationClient = new SpecializationClient();
         var specializations = specializationClient.GetAllSpecializations();
@@ -149,7 +146,7 @@
     {
         RoleClient roleClient = new RoleClient();
         var roles = roleClient.GetAllRoles();
-        var role= roles.FirstOrDefault(r => r.Title == "Worker");
+        var role = roles.FirstOrDefault(r => r.Title == "Worker");
         RolesInputModel roleInput = new RolesInputModel
         {
             Title = role.Title
@@ -162,7 +159,7 @@
         ProfileClient profileClient = new ProfileClient();
         var profiles = profileClient.GetProfiles();
         var profile = profiles.FirstOrDefault(p => p.Title == _profile);
-       
+
         SpecializationClient specializationClient = new SpecializationClient();
         var specializations = specializationClient.GetAllSpecializations();
         var specialization = specializations.FirstOrDefault(s => s.Title == "Повар");
@@ -179,4 +176,5 @@
         };
         Chief.Profiles.Add(profileInput);
     }
+
 }

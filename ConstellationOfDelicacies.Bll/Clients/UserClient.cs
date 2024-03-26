@@ -88,7 +88,7 @@ public class UserClient : IUserClient
     {
         bool result = false;
         var users = GetAllUsers();
-        var user = users.Where(u => u.Mail == Model.Email).Single();
+        var user = users.Where(u => u.Mail == Model.Email).SingleOrDefault();
         if (user != null)
         {
             result = true;
