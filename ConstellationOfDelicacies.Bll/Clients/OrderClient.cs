@@ -21,7 +21,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
 
         public void AddUserOrder(OrderInputModel order)
         {
-            OrdersDto ordersDto = _mapper.Map<OrdersDto>(order);
+            var ordersDto = _mapper.Map<OrdersDto>(order);
             _repository.AddOrder(ordersDto);
         }
 
@@ -32,7 +32,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
 
         public void UpdateUserOrder(OrderInputModel order)
         {
-            OrdersDto ordersDto = _mapper.Map<OrdersDto>(order);
+            var ordersDto = _mapper.Map<OrdersDto>(order);
             _repository.UpdateOrder(ordersDto);
         }
     }

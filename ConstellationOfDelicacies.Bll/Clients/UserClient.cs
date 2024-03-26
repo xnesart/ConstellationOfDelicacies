@@ -25,9 +25,9 @@ public class UserClient : IUserClient
 
     public void AddUser(UsersInputModel model)
     {
-        UsersDto userModel = _mapper.Map<UsersDto>(model);
+        var usersDTo = _mapper.Map<UsersDto>(model);
         
-        _repository.AddUser(userModel);
+        _repository.AddUser(usersDTo);
     }
 
     public void RemoveUser(int id)
@@ -37,16 +37,16 @@ public class UserClient : IUserClient
 
     public void UpdateUser(UsersInputModel model)
     {
-        UsersDto userModel = _mapper.Map<UsersDto>(model);
+        var usersDto = _mapper.Map<UsersDto>(model);
 
-        _repository.UpdateUser(userModel);
+        _repository.UpdateUser(usersDto);
     }
 
     public void UpdateUserPassword(UsersInputModel model)
     {
-        UsersDto userModel = _mapper.Map<UsersDto>(model);
+        var usersDto = _mapper.Map<UsersDto>(model);
 
-        _repository.UpdateUserPassword(userModel);
+        _repository.UpdateUserPassword(usersDto);
     }
 
     public List<UsersOutputModel> GetAllUsers()
