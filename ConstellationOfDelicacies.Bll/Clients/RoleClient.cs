@@ -1,10 +1,13 @@
 using AutoMapper;
+using ConstellationOfDelicacies.Bll.IManager;
 using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace ConstellationOfDelicacies.Bll.Clients;
 
@@ -42,5 +45,25 @@ public class RoleClient : IRoleClient
         var roles =_storage.Storage.Roles.ToList();
         var rolesOutput = _mapper.Map<List<RolesOutputModel>>(roles);
         return rolesOutput;
+    }
+
+    public RolesOutputModel GetRoleByEmail(string mail)
+    {
+        IUserClient userClient = new UserClient();
+        var usersDto = _storage.Storage.Users.Include(u => u.Role).ToList();
+        var users = _mapper.Map<List<UsersOutputModel>>(usersDto);
+
+        RolesOutputModel role = new RolesOutputModel();
+        foreach (var user in users)
+        {
+            if (user.Mail == mail)
+            {
+                 role = user.Role;
+                 break;
+            }
+        }
+
+        return role;
+
     }
 }
