@@ -70,20 +70,21 @@
 
     protected override void OnInitialized()
     {
+        //создается модель с ролью воркер и пустым листом профайлов
         Model = new UsersInputModel();
         Model.Role = new RolesInputModel() { Title = "Worker" };
         Model.Profiles = new List<ProfilesInputModel>();
 
         ProfileClient profileClient = new ProfileClient();
-        _profiles = profileClient.GetProfiles(SpId);
+        _profiles = profileClient.GetProfiles(SpId); //получаем список профилей по специализации
 
         SpecializationClient spClient = new SpecializationClient();
-        _spTitle = spClient.GetSpTitleById(SpId);
+        _spTitle = spClient.GetSpTitleById(SpId); //получаем название специализации по айди
     }
 
     public void AddWorker()
     {
-        Model.Profiles!.Add(new ProfilesInputModel() { Id = Model.ProfileId });
+        Model.Profiles!.Add(new ProfilesInputModel() { Id = Model.ProfileId }); //добавляем в профиль модели
         UserClient userClient = new UserClient();
         userClient.AddUser(Model);
     }
