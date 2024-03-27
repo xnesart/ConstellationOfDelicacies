@@ -32,4 +32,16 @@
         _chiefs = _client.GetAllChiefs();
     }
 
+    protected override void OnInitialized()
+    {
+        //_chiefs = _client.GetUsersByProfile(1);
+    }
+
+    private void RemoveChief(int id)
+    {
+        IUserClient manager = new UserClient();
+        manager.RemoveUser(id);
+        _chiefs = _client.GetUsersByProfile(1);
+    }
+
 }

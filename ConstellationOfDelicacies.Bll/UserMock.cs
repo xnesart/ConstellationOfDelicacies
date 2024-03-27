@@ -3,7 +3,7 @@ using ConstellationOfDelicacies.Bll.Models.InputModels;
 
 namespace ConstellationOfDelicacies.Bll
 {
-    public class UserMock: IOrderClient
+    public class UserMock
     {
         private List<OrderInputModel> _orders; 
 
