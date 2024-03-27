@@ -19,7 +19,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public SpecializationsDto GetSpTitleById(int spId)
         {
-            var result = _storage.Specializations.Where(s => s.Id == spId).Single();
+            var result = _storage.Specializations.Where(s => s.Id == spId).SingleOrDefault();
             return result;
         }
 

@@ -28,7 +28,14 @@ public class SpecializationClient : ISpecializationClient
 
     public string GetSpTitleById(int spId)
     {
+        string title = "название не найдено";
         var sp = _repository.GetSpTitleById(spId);
-        return sp.Title;
+        if (sp != null)
+        {
+            title = sp.Title;
+
+        }
+
+        return title;
     }
 }

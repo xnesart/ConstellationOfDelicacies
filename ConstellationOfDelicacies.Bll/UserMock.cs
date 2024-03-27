@@ -1,4 +1,4 @@
-﻿//using ConstellationOfDelicacies.Bll.Clients;
+//using ConstellationOfDelicacies.Bll.Clients;
 //using ConstellationOfDelicacies.Bll.Models.InputModels;
 
 //namespace ConstellationOfDelicacies.Bll

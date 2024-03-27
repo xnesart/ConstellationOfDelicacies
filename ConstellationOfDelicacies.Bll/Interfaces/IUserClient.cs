@@ -20,4 +20,6 @@ public interface IUserClient
     public List<UsersOutputModel> GetAllWaiters();
 
     public List<UsersOutputModel> GetUsersByProfile(int prId);
+
+    public bool CheckLoginRights(LoginInputModel Model);
 }

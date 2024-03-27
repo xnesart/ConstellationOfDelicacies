@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 @rendermode InteractiveServer   
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Home</PageTitle>
 
@@ -10,12 +11,12 @@
 <a href="./login">login</a>
 <a href="./logout">logout</a>
 
-<AuthorizeView Roles="Manager">
+<AuthorizeView Roles="Worker">
     <Authorized>
         Авторизованный! Поздравляю!
     </Authorized>
     <NotAuthorized>
-        <p>dvjbknl</p>
+        <p>Вы не авторизованы</p>
     </NotAuthorized>
 </AuthorizeView>
 
