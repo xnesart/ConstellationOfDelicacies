@@ -1,10 +1,5 @@
 ﻿using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConstellationOfDelicacies.Dal.Repositories
 {
@@ -17,6 +12,12 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             _storage = SingletoneStorage.GetStorage().Storage;
         }
 
+        public OrdersDto GetOrderById(int orderId)
+        {
+            var order = _storage.Orders.Where(o => o.Id == orderId).Single();
+            return order;
+        }
+
         public void AddOrder(OrdersDto order)
         {
             _storage.Orders.Add(order);
@@ -25,7 +26,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public void DeleteOrder(int orderId)
         {
-            var order = _storage.Orders.Where(o => o.Id == orderId).Single();
+            var order = GetOrderById(orderId);
             
             if (order != null)
             {
@@ -33,13 +34,12 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
                 _storage.Orders.Update(order);
                 _storage.SaveChanges();
-            }
-          
+            }          
         }
 
         public void UpdateOrder(OrdersDto order)
         {
-            var storageOrder = _storage.Orders.Where(o => o.Id == order.Id).Single();
+            var storageOrder = GetOrderById(order.Id);
 
             if (storageOrder != null)
             {
@@ -52,6 +52,29 @@ namespace ConstellationOfDelicacies.Dal.Repositories
                 _storage.Orders.Update(storageOrder);
                 _storage.SaveChanges();
             }
+        }
+
+        public List<OrdersDto> GetFreeOrders()
+        {
+            var orders = _storage.Orders.Where(o => o.Tasks.All(t => t.Title != "Менеджер"))
+                .Where(o => o.IsDeleted == false).ToList();
+            return orders;
+        }
+
+        public List<OrdersDto> GetAllManagerOrders(int managerId)
+        {
+            var orders = _storage.Orders
+                .Where(o => o.Tasks!.Any(t => t.Title == "Менеджер" && t.Users!.Any(u => u.Id == managerId)))
+                .ToList();
+            return orders;
+        }
+
+        public List<OrdersDto> GetAllUsersOrders(int userId)
+        {
+            var orders = _storage.Orders
+                .Where(o => o.Tasks!.Any(t => t.Title == "Пользователь" && t.Users!.Any(u => u.Id == userId)))
+                .ToList();
+            return orders;
         }
     }
 }
