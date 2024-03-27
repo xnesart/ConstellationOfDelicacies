@@ -97,4 +97,12 @@ public class UserClient : IUserClient
 
         return result;
     }
+
+    public UsersOutputModel GetUserByMail(string mail)
+    {
+        var user = _repository.GetUserByMail(mail);
+        var result = _mapper.Map<UsersOutputModel>(user);
+
+        return result;
+    }
 }

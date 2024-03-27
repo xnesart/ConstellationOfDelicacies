@@ -22,4 +22,6 @@ public interface IUserClient
     public List<UsersOutputModel> GetUsersByProfile(int prId);
 
     public bool CheckLoginRights(LoginInputModel Model);
+
+    public UsersOutputModel GetUserByMail(string mail);
 }

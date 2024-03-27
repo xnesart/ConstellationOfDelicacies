@@ -20,4 +20,6 @@ public interface IUserRepository
 
     public List<UsersDto> GetUsersByProfile(int prId);
 
+    public UsersDto GetUserByMail(string mail);
+
 }
