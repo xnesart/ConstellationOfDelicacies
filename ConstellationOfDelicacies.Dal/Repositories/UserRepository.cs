@@ -126,6 +126,19 @@ public class UserRepository:IUserRepository
         {
              users = new List<UsersDto>();
         }
+
         return users;
+    }
+
+    public UsersDto GetUserByMail(string mail)
+    {
+        UsersDto user;
+        if (_storage.Users != null)
+        {
+            user = _storage.Users.Where(u => u.Mail == mail && u.IsDeleted == false).Single();
+        }
+        else user = new UsersDto();
+
+        return user;
     }
 }
