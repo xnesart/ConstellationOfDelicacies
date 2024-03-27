@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ConstellationOfDelicacies.Bll.Mapping;
+using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
@@ -28,6 +29,27 @@ namespace ConstellationOfDelicacies.Bll.Clients
         public void DeleteUserOrder(int orderId)
         {
             _repository.DeleteOrder(orderId);
+        }
+
+        public List<OrdersOutputModel> GetFreeOrders()
+        {
+            var orders = _repository.GetFreeOrders();
+            var result = _mapper.Map<List<OrdersOutputModel>>(orders);
+            return result;
+        }
+
+        public List<OrdersOutputModel> GetManagerOrders(int managerId)
+        {
+            var orders = _repository.GetAllManagerOrders(managerId);
+            var result = _mapper.Map<List<OrdersOutputModel>>(orders);
+            return result;
+        }
+
+        public List<OrdersOutputModel> GetUsersOrders(int userId)
+        {
+            var orders = _repository.GetAllUsersOrders(userId);
+            var result = _mapper.Map<List<OrdersOutputModel>>(orders);
+            return result;
         }
 
         public void UpdateUserOrder(OrderInputModel order)
