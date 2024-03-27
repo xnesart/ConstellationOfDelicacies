@@ -11,6 +11,7 @@ Context context = SingletoneStorage.GetStorage().Storage;
 
 TaskClient taskClient = new TaskClient();
 OrderClient orderClient = new OrderClient();
+UserClient userClient = new UserClient();
 
 //OrderInputModel o = new OrderInputModel()
 //{
@@ -23,14 +24,27 @@ OrderClient orderClient = new OrderClient();
 //orderClient.AddUserOrder(o);
 
 
-TasksInputModel a = new TasksInputModel()
+//TasksInputModel a = new TasksInputModel()
+//{
+//    Order = new OrderInputModel() { Id = 1 },
+//    Title = "Пользователь",
+//    Users = [new UsersInputModel { Id = 2 }],
+//    Status = new TaskStatusesInputModel() { Id = 1 }
+//};
+
+//taskClient.AddOrderTask(a);
+
+UsersInputModel usersDto2 = new UsersInputModel()
 {
-    Order = new OrderInputModel() { Id = 1 },
-    Title = "Пользователь",
-    Users = [new UsersInputModel { Id = 2 }],
-    Status = new TaskStatusesInputModel() { Id = 1 }
+    Profiles = [ new ProfilesInputModel() { Id = 2 },
+        new ProfilesInputModel() { Id = 4 }],
+    Role = new RolesInputModel() { Title = "Сотрудник" },
+    FirstName = "Артем",
+    LastName = "Артемович",
+    Mail = "artem@cod.g",
+    Password = "1111"
 };
 
-taskClient.AddOrderTask(a);
+userClient.AddUser(usersDto2);
 
 Console.WriteLine();
