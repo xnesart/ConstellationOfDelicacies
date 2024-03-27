@@ -13,7 +13,10 @@
     <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
 </div>
 
-<Button Color="ButtonColor.Primary" @onclick="ShowTemplate">Добавить повара</Button>
+<div>
+    <Button Color="ButtonColor.Primary" @onclick="ShowTemplate">Добавить повара</Button>
+</div>
+
 
 <div class="chiefs-container">
     <div class="chiefs-field">
@@ -34,11 +37,6 @@
     {
         _client = new UserClient();
         _chiefs = _client.GetAllChiefs();
-    }
-
-    protected override void OnInitialized()
-    {
-        //_chiefs = _client.GetUsersByProfile(1);
     }
 
     private void RemoveChief(int id)

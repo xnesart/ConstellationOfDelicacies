@@ -68,22 +68,25 @@
 
     [Parameter, EditorRequired]
     public int SpId { get; set; }
-    [Parameter]
-    public Action action { get; set; }
 
     private List<ProfilesOutputModel>? _profiles;
     private bool isSubmited;
 
-    protected override void OnInitialized()
+    public AddWorkerTemplate()
     {
         Model = new UsersInputModel();
         Model.Role = new RolesInputModel() { Title = "Worker" };
         Model.Profiles = new List<ProfilesInputModel>();
+    }
 
+    protected override void OnInitialized()
+    {
         ProfileClient profileClient = new ProfileClient();
         _profiles = profileClient.GetProfiles(SpId);
 
         Model.ProfileId = _profiles.First().Id;
+
+        base.OnInitializedAsync();
     }
 
     public void AddWorker()
@@ -93,6 +96,6 @@
         
         isSubmited = true;
 
-        //userClient.AddUser(Model);
+        userClient.AddUser(Model);
     }
 }
