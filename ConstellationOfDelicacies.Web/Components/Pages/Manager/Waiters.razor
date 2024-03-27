@@ -8,7 +8,8 @@
     <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
     <a class="top-bar-link current-page" href="/waiters">Редактировать официантов</a>
 </div>
-<a class="btn btn-primary add-waiter-link" href="./waiter">Добавить официанта</a>
+
+<Button Color="ButtonColor.Primary" @onclick="ShowModal">Добавить повара</Button>
 
 <div class="waiters-container">
     <div class="waiters-field">
@@ -21,6 +22,8 @@
 </div>
 
 @code {
+    private Modal modal = default!;
+
     private List<UsersOutputModel> _waiters;
     private UserClient _client;
 
@@ -28,6 +31,13 @@
     {
         _client = new UserClient();
         _waiters = _client.GetAllWaiters();
+    }
+
+    private async Task ShowModal()
+    {
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+        await modal.ShowAsync<AddWaiterTemplate>(title: "Добавить официанта");
     }
 
 }

@@ -4,6 +4,8 @@
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Dal.Dtos
 
+<Modal @ref="modal" />
+
 <div class="top-row top-row-manager manager-top-bar">
     <a class="top-bar-link" href="/manager">Мои заявки</a>
     <a class="top-bar-link" href="/applications">Все заявки</a>
@@ -12,6 +14,7 @@
 </div>
 
 <a class="btn btn-primary add-chiefs-link" href="./chief">Добавить повара</a>
+<Button Color="ButtonColor.Primary" @onclick="ShowTemplate">Добавить повара</Button>
 
 <div class="chiefs-container">
     <div class="chiefs-field">
@@ -23,6 +26,8 @@
 </div>
 
 @code {
+    private Modal modal = default!;
+
     private List<UsersOutputModel> _chiefs;
     private UserClient _client;
 
@@ -44,4 +49,10 @@
         _chiefs = _client.GetUsersByProfile(1);
     }
 
+    private async Task ShowTemplate()
+    {
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+        await modal.ShowAsync<AddChiefTemplate>(title: "Добавить повара");
+    }
 }
