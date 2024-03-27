@@ -88,8 +88,7 @@ public class UserClient : IUserClient
     public bool CheckLoginRights(LoginInputModel Model)
     {
         bool result = false;
-        var users = GetAllUsers();
-        var user = users.Where(u => u.Mail == Model.Email).SingleOrDefault();
+        var user = GetUserByMail(Model.Email);
         if (user != null)
         {
             result = true;
