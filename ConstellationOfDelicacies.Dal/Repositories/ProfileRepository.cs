@@ -5,7 +5,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 {
     public class ProfileRepository: IProfileRepository
     {
-        private Context _storage;
+        private readonly Context _storage;
 
         public ProfileRepository()
         {
@@ -16,6 +16,12 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         {
             var pr = _storage.Profiles.Where(p => p.Specialization.Id == spId).ToList();
 
+            return pr;
+        }
+
+        public ProfilesDto GetProfileById(int prId)
+        {
+            var pr = _storage.Profiles.Where(p => p.Id == prId).Single();
             return pr;
         }
     }
