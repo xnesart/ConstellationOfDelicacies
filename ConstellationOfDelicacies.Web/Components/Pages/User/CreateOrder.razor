@@ -1,6 +1,6 @@
 ﻿@page "/order"
 
-@using ConstellationOfDelicacies.Bll.IOrderClient
+@using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using Microsoft.AspNetCore.Components.Forms
 
@@ -63,7 +63,7 @@
     public CreateOrder()
     {
         Model = new OrderInputModel();
-        user = new UserMock();
+        user = new OrderClient();
 
         _minDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
         _maxDate = _minDate.AddMonths(3);
