@@ -3,13 +3,13 @@
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Dal
+@using ConstellationOfDelicacies.Bll.Enums
 @rendermode InteractiveServer
-@inject NavigationManager NavigationManager
 
 <AddWorkerTemplate SpId="@_spChief" />
 
 @code {
 
-    private int _spChief = 1;
+    private int _spChief = (int)Specializations.Chief;
     
 }

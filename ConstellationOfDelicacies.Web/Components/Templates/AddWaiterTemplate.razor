@@ -1,11 +1,12 @@
 ﻿@page "/waiter"
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Enums
 
 <AddWorkerTemplate SpId="@_spWaiter"/>
 
 @code {
 
-    private int _spWaiter = 2;
+    private int _spWaiter = (int)Specializations.Waiter;
 
 }
