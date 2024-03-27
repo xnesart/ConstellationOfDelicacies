@@ -22,7 +22,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
 
         public void AddOrderTask(TasksInputModel model)
         {
-            TasksDto tasksDto = _mapper.Map<TasksDto>(model);
+            var tasksDto = _mapper.Map<TasksDto>(model);
             _repository.AddOrderTask(tasksDto);
         }
 
@@ -33,7 +33,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
 
         public void UpdateOrderTask(TasksInputModel model)
         {
-            TasksDto tasksDto = _mapper.Map<TasksDto>(model);
+            var tasksDto = _mapper.Map<TasksDto>(model);
             _repository.UpdateOrderTask(tasksDto);
         }
     }

@@ -6,6 +6,8 @@ public interface IUserRepository
 {
     public List<UsersDto> GetAllUsers();
 
+    public UsersDto GetUserById(int id);
+
     public void AddUser(UsersDto user);
 
     public void UpdateUser(UsersDto user);

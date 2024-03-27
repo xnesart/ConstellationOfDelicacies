@@ -4,9 +4,9 @@ namespace ConstellationOfDelicacies.Bll.Models.InputModels
 {
     public class OrderInputModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public DateTime OrderDate { get; set; }
 
@@ -27,5 +27,6 @@ namespace ConstellationOfDelicacies.Bll.Models.InputModels
         [Range(1, 1000)]
         public int NumberOfPersons { get; set; }
 
+        public decimal? TotalPrice { get; set; }
     }
 }

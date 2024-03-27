@@ -1,30 +1,41 @@
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ConstellationOfDelicacies.Dal.Repositories;
 
 public class UserRepository:IUserRepository
 {
     private readonly Context _storage;
+    private readonly IProfileRepository _profileRepository;
+    private readonly IRoleRepository _roleRepository;
 
     public UserRepository()
     {
         _storage = SingletoneStorage.GetStorage().Storage;
+        _profileRepository = new ProfileRepository();
+        _roleRepository = new RoleRepository();
     }
 
     public UsersDto SetUserDto(UsersDto user)
     {
-        user.Role = _storage.Roles.Where(r => r.Title == user.Role.Title).Single();
+        user.Role = _roleRepository.GetRoleByTitle(user.Role.Title);
         if (user.Profiles != null)
         {
             foreach (var pr in user.Profiles.ToList())
             {
-                user.Profiles.Add(_storage.Profiles.Where(p => p.Id == pr.Id).Single());
+                user.Profiles.Add(_profileRepository.GetProfileById(pr.Id));
                 user.Profiles.Remove(pr);
             }
         }
 
+        return user;
+    }
+
+    public UsersDto GetUserById(int id)
+    {
+        var user = _storage.Users.Where(u => u.Id == id).Include(u => u.Profiles).Single();
         return user;
     }
 
@@ -40,7 +51,7 @@ public class UserRepository:IUserRepository
     {
         user = SetUserDto(user);
 
-        var storageUser = _storage.Users.Where(u => u.Id == user.Id).Include(u => u.Profiles).Single();
+        var storageUser = GetUserById(user.Id);
 
         if (storageUser != null)
         {
@@ -63,7 +74,7 @@ public class UserRepository:IUserRepository
 
     public void UpdateUserPassword(UsersDto user)
     {
-        var storageUser = _storage.Users.Where(u => u.Id == user.Id).Single();
+        var storageUser = GetUserById(user.Id);
 
         if (storageUser != null)
         {
@@ -75,7 +86,7 @@ public class UserRepository:IUserRepository
 
     public void DeleteUser(int id)
     {
-        var userToRemove = _storage.Users.FirstOrDefault(u => u.Id == id);
+        var userToRemove = GetUserById(id);
         if (userToRemove != null)
         {
             userToRemove.IsDeleted = true;
@@ -98,7 +109,8 @@ public class UserRepository:IUserRepository
 
     public List<UsersDto> GetUsersBySpecialization(int spId)
     {
-        var users = _storage.Users.Where(u => u.Profiles.Any(p => p.Specialization.Id == spId)).ToList();
+        var users = _storage.Users.Where(u => u.Profiles.Any(p => p.Specialization.Id == spId))
+            .Where(u => u.IsDeleted == false).Include(u => u.Profiles).ToList();
         return users;
     }
 
@@ -107,7 +119,8 @@ public class UserRepository:IUserRepository
         List<UsersDto> users;
         if (_storage.Users != null)
         {
-             users = _storage.Users.Where(u => u.Profiles.Any(p => p.Id == prId)).ToList();
+             users = _storage.Users.Where(u => u.Profiles.Any(p => p.Id == prId))
+                .Where(u => u.IsDeleted == false).ToList();
         }
         else
         {

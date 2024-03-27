@@ -15,6 +15,8 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         public TasksDto SetTaskDto(TasksDto taskDto)
         {
             taskDto.Order = _storage.Orders.Where(o => o.Id == taskDto.Order.Id).Single();
+            taskDto.Status = _storage.TaskStatuses.Where(s => s.Id == taskDto.Status.Id).Single();
+
             if (taskDto.Profiles != null) 
             {
                 foreach (var pr in taskDto.Profiles.ToList())

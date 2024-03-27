@@ -18,5 +18,5 @@ public class OrdersDto
 
     public decimal TotalPrice { get; set; }
 
-    public ICollection<TasksDto>? Tasks { get; set; }
+    public ICollection<TasksDto> Tasks { get; set; }
 }
