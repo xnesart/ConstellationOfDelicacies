@@ -2,6 +2,8 @@
 @rendermode InteractiveServer
 @using ConstellationOfDelicacies.Bll.Clients
 
+<Modal @ref="modal" />
+
 <div class="top-row top-row-manager manager-top-bar">
     <a class="top-bar-link" href="/manager">Мои заявки</a>
     <a class="top-bar-link" href="/applications">Все заявки</a>
@@ -9,7 +11,9 @@
     <a class="top-bar-link current-page" href="/waiters">Редактировать официантов</a>
 </div>
 
-<Button Color="ButtonColor.Primary" @onclick="ShowModal">Добавить повара</Button>
+<div>
+    <Button Color="ButtonColor.Primary" @onclick="ShowModal">Добавить официанта</Button>
+</div>
 
 <div class="waiters-container">
     <div class="waiters-field">
