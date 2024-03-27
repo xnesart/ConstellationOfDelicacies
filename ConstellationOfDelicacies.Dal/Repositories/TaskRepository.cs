@@ -19,18 +19,20 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
             if (taskDto.Profiles != null) 
             {
-                foreach (var pr in taskDto.Profiles.ToList())
+                List<ProfilesDto> profiles = taskDto.Profiles.ToList();
+                taskDto.Profiles.Clear();
+                foreach (var pr in profiles)
                 {
                     taskDto.Profiles.Add(_storage.Profiles.Where(p => p.Id == pr.Id).Single());
-                    taskDto.Profiles.Remove(pr);
                 }
             }
             if (taskDto.Users != null)
             {
+                List<UsersDto> users = taskDto.Users.ToList();
+                taskDto.Users.Clear();
                 foreach (var u in taskDto.Users.ToList())
                 {
                     taskDto.Users.Add(_storage.Users.Where(us => us.Id == u.Id).Single());
-                    taskDto.Users.Remove(u);
                 }
             }
 

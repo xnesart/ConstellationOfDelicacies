@@ -1,4 +1,5 @@
 using AutoMapper;
+using ConstellationOfDelicacies.Bll.Enums;
 using ConstellationOfDelicacies.Bll.IManager;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
@@ -14,9 +15,6 @@ public class UserClient : IUserClient
 {
     private readonly IMapper _mapper;
     private UserRepository _repository;
-
-    private int _spChief = 1;
-    private int _spWaiter = 2;
 
     public UserClient()
     {
@@ -60,7 +58,7 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetAllChiefs()
     {
-        List<UsersDto> chiefs = _repository.GetUsersBySpecialization(_spChief);
+        List<UsersDto> chiefs = _repository.GetUsersBySpecialization((int)Specializations.Chief);
         var result = _mapper.Map<List<UsersOutputModel>>(chiefs);
 
         return result;
@@ -68,7 +66,7 @@ public class UserClient : IUserClient
 
     public List<UsersOutputModel> GetAllWaiters()
     {
-        List<UsersDto> waiters = _repository.GetUsersBySpecialization(_spWaiter);
+        List<UsersDto> waiters = _repository.GetUsersBySpecialization((int)Specializations.Waiter);
         var result = _mapper.Map<List<UsersOutputModel>>(waiters);
 
         return result;

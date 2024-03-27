@@ -18,19 +18,18 @@ public class UserRepository:IUserRepository
         _roleRepository = new RoleRepository();
     }
 
-    public UsersDto SetUserDto(UsersDto user)
+    public void SetUserDto(UsersDto user)
     {
         user.Role = _roleRepository.GetRoleByTitle(user.Role.Title);
         if (user.Profiles != null)
         {
-            foreach (var pr in user.Profiles.ToList())
+            List<ProfilesDto> profiles = user.Profiles.ToList();
+            user.Profiles.Clear();
+            foreach (var pr in profiles)
             {
                 user.Profiles.Add(_profileRepository.GetProfileById(pr.Id));
-                user.Profiles.Remove(pr);
             }
         }
-
-        return user;
     }
 
     public UsersDto GetUserById(int id)
@@ -41,7 +40,7 @@ public class UserRepository:IUserRepository
 
     public void AddUser(UsersDto user)
     {
-        user = SetUserDto(user); 
+        SetUserDto(user); 
 
         _storage.Users.Add(user);
         _storage.SaveChanges();
@@ -49,7 +48,7 @@ public class UserRepository:IUserRepository
 
     public void UpdateUser(UsersDto user)
     {
-        user = SetUserDto(user);
+        SetUserDto(user);
 
         var storageUser = GetUserById(user.Id);
 
