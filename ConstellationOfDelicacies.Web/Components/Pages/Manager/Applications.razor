@@ -1,4 +1,8 @@
 @page "/applications"
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+
+@inject NavigationManager navManager
 @rendermode InteractiveServer
 
 <div class="top-row top-row-manager manager-top-bar">
@@ -41,6 +45,32 @@
 </div>
 
 @code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> State { get; set; }
+    private List<Claim> claims = new List<Claim>();
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await State;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            claims = user.Claims.ToList();
+
+            if (claims.Where(c => c.Type == ClaimTypes.Role).Single().Value != "Пользователь")
+            {
+                navManager.NavigateTo("./");
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {    
+        await GetClaimsPrincipalData();
+        await base.OnInitializedAsync();
+    }
 
     private List<TableItem> applicationsList = new List<TableItem>
     {

@@ -3,7 +3,10 @@
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using Microsoft.AspNetCore.Components.Forms
 @using ConstellationOfDelicacies.Bll.Clients
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
+@inject NavigationManager navManager
 @rendermode InteractiveServer
 
 <PageTitle>Сделать Заказ</PageTitle>
@@ -59,6 +62,27 @@
     private TimeOnly _minTime = new TimeOnly(6, 0);
     private TimeOnly _maxTime = new TimeOnly(23, 0);
 
+    [CascadingParameter]
+    public Task<AuthenticationState> State { get; set; }
+
+    private List<Claim> claims = new List<Claim>();
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await State;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            claims = user.Claims.ToList();
+
+            if (claims.Where(c => c.Type == ClaimTypes.Role).Single().Value != "Пользователь")
+            {
+                navManager.NavigateTo("./");
+            }
+        }
+    }
+
     public CreateOrder()
     {
         Model = new OrderInputModel();
@@ -66,6 +90,12 @@
 
         _minDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
         _maxDate = _minDate.AddMonths(3);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetClaimsPrincipalData();
+        await base.OnInitializedAsync();
     }
 
     public void AddOrder()
