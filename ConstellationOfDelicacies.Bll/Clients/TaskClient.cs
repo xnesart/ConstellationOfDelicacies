@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ConstellationOfDelicacies.Bll.Enums;
 using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
@@ -22,6 +23,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
 
         public void AddOrderTask(TasksInputModel model)
         {
+            model.Status = new TaskStatusesInputModel() { Id = (int)TaskStatuses.Created };
             var tasksDto = _mapper.Map<TasksDto>(model);
             _repository.AddOrderTask(tasksDto);
         }

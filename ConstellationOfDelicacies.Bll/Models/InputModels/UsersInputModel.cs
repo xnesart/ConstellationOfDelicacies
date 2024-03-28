@@ -14,20 +14,20 @@ public class UsersInputModel
 
     [Required]
     [MaxLength(50)]
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
 
     [MaxLength(50)]
     public string? MiddleName { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
     [Required]
     public string? Phone { get; set; }
 
     [Required]
-    public string Mail { get; set; }
+    public string? Mail { get; set; }
 
     [Required]
     public string? Password { get; set; }
