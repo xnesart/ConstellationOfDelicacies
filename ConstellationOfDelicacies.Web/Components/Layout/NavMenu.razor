@@ -4,10 +4,9 @@
 
 <AuthorizeView Roles="Сотрудник, Менеджер, Пользователь">
     <NotAuthorized>
-        <NavMenuManager />
+        <NavMenuUser />
     </NotAuthorized>
 </AuthorizeView>
-
 
 <AuthorizeView Roles="Пользователь">
     <Authorized >
@@ -23,6 +22,6 @@
 
 <AuthorizeView Roles="Сотрудник">
     <Authorized>
-        
+        <NavMenuWorker/>
     </Authorized>
 </AuthorizeView>
