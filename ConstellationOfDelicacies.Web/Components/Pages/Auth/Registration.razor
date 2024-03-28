@@ -43,15 +43,22 @@
                 <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                 <a href="/" class="btn btn-primary">Отмена</a>
             </div>
-
         </EditForm>
+        @if (_mailCheck)
+        {
+            <div class="alert alert-danger" role="alert">
+                Регистрация не удалась. Проверьте свои учетные данные и повторите попытку.
+            </div>
+        }
     </div>
 </div>
 
 
 @code {
-    [SupplyParameterFromForm] public RegistrationInputModel Model { get; set; }
+    [SupplyParameterFromForm] 
+    public RegistrationInputModel Model { get; set; }
     private string _redirect { get; set; }
+    private bool _mailCheck { get; set; }
 
     public Registration()
     {
@@ -73,13 +80,27 @@
                 Title = "Пользователь"
             }
         };
-        
-        UserClient userClient = new UserClient();
-        userClient.AddUser(model);
-        _redirect = "/registrationComplete";
-        if (!string.IsNullOrEmpty(_redirect))
+
+        MailCheck();
+        if (_mailCheck == false)
         {
-            navManager.NavigateTo(_redirect);
+            UserClient userClient = new UserClient();
+            userClient.AddUser(model);
+            _redirect = "/registrationComplete";
+            if (!string.IsNullOrEmpty(_redirect))
+            {
+                navManager.NavigateTo(_redirect);
+            }
+        }
+    }
+
+    private void MailCheck()
+    {
+        UserClient userClient = new UserClient();
+        var user = userClient.GetUserByEmail(Model.Email);
+        if (user != null && user.Mail == Model.Email)
+        {
+            _mailCheck = true;
         }
     }
 
