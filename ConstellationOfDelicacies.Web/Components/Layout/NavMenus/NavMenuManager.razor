@@ -1,11 +1,33 @@
-﻿<h3>NavMenuManager</h3>
+﻿@rendermode InteractiveServer
 
-<div class="top-row top-row-manager manager-top-bar">
-    <a class="top-bar-link current-page" href="/manager">Мои заявки</a>
-    <a class="top-bar-link" href="/applications">Все заявки</a>
-    <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
-    <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
+<div class="navmenu">
+    <div class="navmenu-logo">
+        <a href="/">
+            <img class="navmenu-logo-img" src="/Resources/logo.png" />
+        </a>
+    </div>
+    <nav class="navmenu-links">
+        <div class="nav-item">
+            <NavLink class="nav-link navmenu-link" Match="NavLinkMatch.All" href="/applications">Все заявки</NavLink>
+        </div>
+        <div class="nav-item">
+            <NavLink class="nav-link navmenu-link" Match="NavLinkMatch.All" href="/manager">Мои заявки</NavLink>
+        </div> 
+        <div class="nav-item">
+            <Dropdown>
+                <DropdownToggleButton Class="nav-link navmenu-link">Сотрудники</DropdownToggleButton>
+                <DropdownMenu>
+                    <DropdownItem To="/chiefs" Type="ButtonType.Link">Повара</DropdownItem>
+                    <DropdownItem To="/waiters" Type="ButtonType.Link">Официанты</DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
+        </div>
+    </nav>
+    <div class="navmenu-user">
+        <button class="navmenu-button">Войти</button>
+    </div>
 </div>
+
 
 @code {
 
