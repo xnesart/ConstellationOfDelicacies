@@ -69,7 +69,7 @@
 
     [Parameter, EditorRequired]
     public int SpId { get; set; }
-
+    
     private List<ProfilesOutputModel>? _profiles;
     private bool isSubmited;
 
@@ -89,19 +89,16 @@
 
         base.OnInitializedAsync();
         SpecializationClient spClient = new SpecializationClient();
-        //_spTitle = spClient.GetSpTitleById(SpId); 
+
     }
 
     public void AddWorker()
     {
-        Model.Profiles!.Add(new ProfilesInputModel() { Id = Model.ProfileId }); //добавляем в профиль модели
+        Model.Profiles!.Add(new ProfilesInputModel() { Id = Model.ProfileId });
         UserClient userClient = new UserClient();
         
         isSubmited = true;
 
         userClient.AddUser(Model);
-        
-        NavigationManager.NavigateTo("/chiefs");
-        StateHasChanged();
     }
 }
