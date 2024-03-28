@@ -1,6 +1,7 @@
 ﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
 @using System
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <div >
@@ -68,25 +69,27 @@
 
     [Parameter, EditorRequired]
     public int SpId { get; set; }
-
+    
     private List<ProfilesOutputModel>? _profiles;
     private bool isSubmited;
 
     public AddWorkerTemplate()
     {
         Model = new UsersInputModel();
-        Model.Role = new RolesInputModel() { Title = "Worker" };
+        Model.Role = new RolesInputModel() { Title = "Сотрудник" };
         Model.Profiles = new List<ProfilesInputModel>();
     }
 
     protected override void OnInitialized()
     {
         ProfileClient profileClient = new ProfileClient();
-        _profiles = profileClient.GetProfiles(SpId);
+        _profiles = profileClient.GetProfiles(SpId); 
 
         Model.ProfileId = _profiles.First().Id;
 
         base.OnInitializedAsync();
+        SpecializationClient spClient = new SpecializationClient();
+
     }
 
     public void AddWorker()

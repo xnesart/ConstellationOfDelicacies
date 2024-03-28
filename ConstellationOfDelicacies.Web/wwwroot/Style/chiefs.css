@@ -1,17 +1,7 @@
 .chiefs-container {
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-}
-
-.chiefs-field {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto;
-    gap: 20px;
-    overflow: auto;
-    width: 1200px;
-    height: 700px;
+    flex-wrap: wrap;
+    align-content: flex-start;
 }
 
 .chiefs-card {
