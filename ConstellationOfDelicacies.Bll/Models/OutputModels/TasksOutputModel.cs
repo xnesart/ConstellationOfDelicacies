@@ -12,7 +12,7 @@ public class TasksOutputModel
 
     public bool IsDeleted { get; set; }
 
-    public List<UsersOutputModel> Workers { get; set; }
+    public List<UsersOutputModel> Users { get; set; }
 
     public TaskStatusesOutputModel Status { get; set; }
 

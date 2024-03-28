@@ -12,7 +12,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             _storage = SingletoneStorage.GetStorage().Storage;
         }
 
-        public TasksDto SetTaskDto(TasksDto taskDto)
+        public void SetTaskDto(TasksDto taskDto)
         {
             taskDto.Order = _storage.Orders.Where(o => o.Id == taskDto.Order.Id).Single();
             taskDto.Status = _storage.TaskStatuses.Where(s => s.Id == taskDto.Status.Id).Single();
@@ -30,18 +30,16 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             {
                 List<UsersDto> users = taskDto.Users.ToList();
                 taskDto.Users.Clear();
-                foreach (var u in taskDto.Users.ToList())
+                foreach (var u in users)
                 {
                     taskDto.Users.Add(_storage.Users.Where(us => us.Id == u.Id).Single());
                 }
             }
-
-            return taskDto;
         }
 
         public void AddOrderTask(TasksDto orderTask)
         {
-            orderTask = SetTaskDto(orderTask);
+            SetTaskDto(orderTask);
 
             _storage.Tasks.Add(orderTask);
             _storage.SaveChanges();
@@ -62,7 +60,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public void UpdateOrderTask(TasksDto orderTask)
         {
-            orderTask = SetTaskDto(orderTask);
+            SetTaskDto(orderTask);
 
             var storageTask = _storage.Tasks.Where(t => t.Id == orderTask.Id).Single();
 

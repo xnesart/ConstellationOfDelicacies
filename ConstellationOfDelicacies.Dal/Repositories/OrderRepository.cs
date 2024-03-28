@@ -1,5 +1,6 @@
 ﻿using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConstellationOfDelicacies.Dal.Repositories
 {
@@ -18,10 +19,11 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             return order;
         }
 
-        public void AddOrder(OrdersDto order)
+        public int AddOrder(OrdersDto order)
         {
             _storage.Orders.Add(order);
             _storage.SaveChanges();
+            return order.Id;
         }
 
         public void DeleteOrder(int orderId)
@@ -56,8 +58,9 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public List<OrdersDto> GetFreeOrders()
         {
-            var orders = _storage.Orders.Where(o => o.Tasks.All(t => t.Title != "Менеджер"))
-                .Where(o => o.IsDeleted == false).ToList();
+            var orders = _storage.Orders
+                .Where(o => o.Tasks.All(t => t.Title != "Менеджер") && o.IsDeleted == false)
+                .Include(o => o.Tasks).ThenInclude(t => t.Users).ToList();
             return orders;
         }
 
@@ -65,7 +68,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         {
             var orders = _storage.Orders
                 .Where(o => o.Tasks!.Any(t => t.Title == "Менеджер" && t.Users!.Any(u => u.Id == managerId)))
-                .ToList();
+                .Include(o => o.Tasks).ThenInclude(t => t.Users).ToList();
             return orders;
         }
 

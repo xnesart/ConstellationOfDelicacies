@@ -1,4 +1,4 @@
-﻿@page "/test"
+@page "/test"
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 @rendermode InteractiveServer   
@@ -11,7 +11,10 @@
 <a href="./login">login</a>
 <a href="./logout">logout</a>
 
-<AuthorizeView Roles="Сотрудник, Менеджер, Пользователь">
+<AuthorizeView Roles="Пользователь, Сотрудник, Менеджер">
+    <Authorized>
+        Авторизованный! Поздравляю!
+    </Authorized>
     <NotAuthorized>
         <p>Вы не авторизованы</p>
     </NotAuthorized>

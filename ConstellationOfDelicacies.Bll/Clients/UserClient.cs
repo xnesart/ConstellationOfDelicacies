@@ -74,7 +74,15 @@ public class UserClient : IUserClient
 
     public UsersOutputModel GetUserByEmail(string mail)
     {
-        throw new NotImplementedException();
+        List<UsersDto> users = _repository.GetAllUsers();
+        UsersDto user = new UsersDto();
+        UsersOutputModel usersOutputModel = new UsersOutputModel();
+        user = users.FirstOrDefault(u => u.Mail == mail);
+        if (user != null)
+        {
+            usersOutputModel = _mapper.Map<UsersOutputModel>(user);
+        }
+        return usersOutputModel;
     }
 
     public List<UsersOutputModel> GetUsersByProfile(int prId)
