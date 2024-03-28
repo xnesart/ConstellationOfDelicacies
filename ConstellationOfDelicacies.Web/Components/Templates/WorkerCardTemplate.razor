@@ -2,7 +2,22 @@
 @using ConstellationOfDelicacies.Bll.Clients
 @rendermode InteractiveServer
 
-<div class="chiefs-card">
+<Card Style="width:300px; margin-right:10px; margin-bottom:10px">
+    <CardBody>
+        <CardTitle>Id: @Worker.Id </CardTitle>
+            <CardText>
+                <p>Имя: @Worker.FirstName</p>
+            <p>Отчество: @Worker.MiddleName</p>
+            <p>Фамилия: @Worker.LastName</p>
+            <p>Телефон: @Worker.Phone</p>
+            <p>Почта: @Worker.Mail</p>
+        </CardText>
+        <Button Color="ButtonColor.Primary" @onclick="() => RemoveWorker(Worker.Id)">Удалить</Button>
+    </CardBody>
+</Card>
+
+
+@* <div class="chiefs-card">
     <p class="chief-id">Id: @Worker.Id</p>
     <p class="chief-name">Имя: @Worker.FirstName</p>
     <p class="chief-lastName">Отчество: @Worker.MiddleName</p>
@@ -11,7 +26,7 @@
     <p class="chief-mail">Почта: @Worker.Mail</p>
     <a href="./chiefs/@Worker.Id" class="chief-edit-link">Редактировать</a>
     <button @onclick="() => RemoveWorker(Worker.Id)" class="btn btn-primary" type="button">Удалить</button>
-</div>
+</div> *@
 
 @code {
 

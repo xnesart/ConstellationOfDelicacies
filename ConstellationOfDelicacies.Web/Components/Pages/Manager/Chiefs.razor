@@ -13,18 +13,19 @@
     <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
 </div>
 
-<div>
-    <Button Color="ButtonColor.Primary" @onclick="ShowTemplate">Добавить повара</Button>
-</div>
+<div class="container">
+    <div class="add-worker">
+        <Button Color="ButtonColor.Primary" @onclick="ShowTemplate">Добавить повара</Button>
+    </div>
 
-
-<div class="chiefs-container">
-    <div class="chiefs-field">
+    <CardGroup>
         @foreach (var chief in _chiefs)
         {
-            <WorkerCardTemplate Worker="@chief"/>
+            <div class="worker-card">
+                <WorkerCardTemplate Worker="@chief" />
+            </div>
         }
-    </div>
+    </CardGroup>        
 </div>
 
 @code {
