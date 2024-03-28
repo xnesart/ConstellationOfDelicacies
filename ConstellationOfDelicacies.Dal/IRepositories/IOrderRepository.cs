@@ -6,7 +6,7 @@ namespace ConstellationOfDelicacies.Dal.IRepositories
     {
         public OrdersDto GetOrderById(int orderId);
 
-        public void AddOrder(OrdersDto order);
+        public int AddOrder(OrdersDto order);
 
         public void UpdateOrder(OrdersDto order);
 

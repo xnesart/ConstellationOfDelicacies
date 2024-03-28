@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
@@ -11,11 +12,13 @@ namespace ConstellationOfDelicacies.Bll.Clients
     public class OrderClient : IOrderClient
     {
         private readonly IOrderRepository _repository;
+        private readonly ITaskClient _taskClient;
         private readonly IMapper _mapper;
 
         public OrderClient()
         {
             _repository = new OrderRepository();
+            _taskClient = new TaskClient();
             IConfigurationProvider config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
             _mapper = new Mapper(config);
         }
@@ -23,7 +26,15 @@ namespace ConstellationOfDelicacies.Bll.Clients
         public void AddUserOrder(OrderInputModel order)
         {
             var ordersDto = _mapper.Map<OrdersDto>(order);
-            _repository.AddOrder(ordersDto);
+            int orderId = _repository.AddOrder(ordersDto);
+
+            var userTask = new TasksInputModel() 
+            {
+                Order = new OrderInputModel() { Id = orderId },
+                Title = "Пользователь",
+                Users = [new UsersInputModel() { Id = order.UserId}]
+            };
+            _taskClient.AddOrderTask(userTask);
         }
 
         public void DeleteUserOrder(int orderId)
