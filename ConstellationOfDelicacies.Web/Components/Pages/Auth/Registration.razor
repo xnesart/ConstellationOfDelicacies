@@ -1,30 +1,86 @@
 @page "/registration"
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@inject NavigationManager navManager
+@rendermode InteractiveServer
 
 <div class="registration-container">
-<h3>Регистрация</h3>
-    
+    <h3>Регистрация</h3>
+
     <div class="registration-form">
-        <form class="row g-3">
+        <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartRegistration" FormName="LoginForm">
             <div class="col-md-12">
-                <label for="inputName" class="form-label">ФИО</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Введите ФИО">
+                <label for="login-name" class="form-label">Введите имя:</label>
+                <InputText type="text" class="form-control" id="login-name" placeholder="Имя"
+                           @bind-Value="Model.Name"/>
             </div>
             <div class="col-md-12">
-                <label for="inputEmail" class="form-label">Эл. адрес</label>
-                <input type="email" class="form-control" id="inputEmail">
+                <label for="login-middleName" class="form-label">Введите фамилию:</label>
+                <InputText type="text" class="form-control" id="login-middleName" placeholder="Фамилия"
+                           @bind-Value="Model.MiddleName"/>
             </div>
             <div class="col-md-12">
-                <label for="inputPassword" class="form-label">Пароль</label>
-                <input type="password" class="form-control" id="inputPassword">
+                <label for="login-lastName" class="form-label">Введите отчество:</label>
+                <InputText type="text" class="form-control" id="login-lastName" placeholder="Отчество"
+                           @bind-Value="Model.LastName"/>
             </div>
-            <div class="col-12">
+            <div class="col-md-12">
+                <label for="login-mail" class="form-label">Введите электронную почту:</label>
+                <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail"
+                           @bind-Value="Model.Email"/>
+            </div>
+            <div class="col-md-12">
+                <label for="login-phone" class="form-label">Введите телефон:</label>
+                <InputText type="phone" class="form-control" id="login-phone" placeholder="Телефон"
+                           @bind-Value="Model.Phone"/>
+            </div>
+            <div class="col-md-12">
+                <label for="login-pass" class="form-label">Введите пароль:</label>
+                <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
+                           @bind-Value="Model.Password"/>
+            </div>
+            <div class="col-md-12"lass="col-12">
                 <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                <a href="/" class="btn btn-primary">Отмена</a>
             </div>
-        </form>
+
+        </EditForm>
     </div>
 </div>
 
 
 @code {
+    [SupplyParameterFromForm] public RegistrationInputModel Model { get; set; }
+    private string _redirect { get; set; }
+
+    public Registration()
+    {
+        Model = new RegistrationInputModel();
+    }
+
+    private void StartRegistration()
+    {
+        UsersInputModel model = new UsersInputModel()
+        {
+            FirstName = Model.Name,
+            MiddleName = Model.MiddleName,
+            LastName = Model.LastName,
+            Mail = Model.Email,
+            Password = Model.Password,
+            Phone = Model.Phone,
+            Role = new RolesInputModel()
+            {
+                Title = "Пользователь"
+            }
+        };
+        
+        UserClient userClient = new UserClient();
+        userClient.AddUser(model);
+        _redirect = "/registrationComplete";
+        if (!string.IsNullOrEmpty(_redirect))
+        {
+            navManager.NavigateTo(_redirect);
+        }
+    }
 
 }
