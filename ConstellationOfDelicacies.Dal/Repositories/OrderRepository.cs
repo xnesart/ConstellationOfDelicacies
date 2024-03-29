@@ -15,7 +15,8 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public OrdersDto GetOrderById(int orderId)
         {
-            var order = _storage.Orders.Where(o => o.Id == orderId).Single();
+            var order = _storage.Orders.Where(o => o.Id == orderId)
+                .Include(o => o.Tasks).ThenInclude(t => t.Users).Single();
             return order;
         }
 

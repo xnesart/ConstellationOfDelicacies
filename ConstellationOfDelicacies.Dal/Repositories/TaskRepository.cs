@@ -1,5 +1,6 @@
 ﻿using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConstellationOfDelicacies.Dal.Repositories
 {
@@ -35,6 +36,16 @@ namespace ConstellationOfDelicacies.Dal.Repositories
                     taskDto.Users.Add(_storage.Users.Where(us => us.Id == u.Id).Single());
                 }
             }
+        }
+
+        public List<TasksDto> GetOrderTasks(int orderId)
+        {
+            List<TasksDto> result = new List<TasksDto>();
+            result = _storage.Tasks.Where(t => t.Order.Id == orderId && t.IsDeleted == false 
+                && t.Title != "Пользователь" && t.Title != "Менеджер" )
+                .Include(t => t.Users).Include(t => t.Profiles).ToList();
+                
+            return result;
         }
 
         public void AddOrderTask(TasksDto orderTask)

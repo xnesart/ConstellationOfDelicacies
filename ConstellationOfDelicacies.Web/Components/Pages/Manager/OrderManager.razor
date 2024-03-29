@@ -1,0 +1,65 @@
+﻿@page "/order"
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+
+<div>
+    <OrderCardTemplate Order="_order"/>
+</div>
+
+<div>
+    <Card>
+        <CardBody>
+            <CardTitle>
+                <div class="order-tasks-header">
+                    <h4>Задачи заказа</h4>
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="AddOrderTasks">
+                        Добавить задачу
+                    </Button>
+                </div>                
+            </CardTitle>
+            <CardText>
+                @if (_orderTasks.Count() == 0)
+                {
+                    <p class="order-tasks-side-text">Ещё нет назначенных задач</p>
+                }
+                else
+                {
+                    <div>
+                        @foreach (var t in _orderTasks)
+                        {
+                            <OrderTaskTemplate Task="t"/>
+                        }
+                    </div>                    
+                }
+            </CardText>
+        </CardBody>
+    </Card>
+</div>
+
+@code {
+    [Parameter]
+    public int orderId { get; set; }
+
+    private IOrderClient? _client;
+    private ITaskClient? _taskClient;
+
+    private OrdersOutputModel? _order;
+    private List<TasksOutputModel>? _orderTasks;    
+
+    protected override void OnInitialized()
+    {
+        orderId = 7;
+        _client = new OrderClient();
+        _taskClient = new TaskClient();
+
+        _order = _client.GetOrderById(orderId);
+        _orderTasks = _taskClient.GetOrderTasks(orderId);        
+
+        base.OnInitialized();
+    }
+
+    private async Task AddOrderTasks()
+    {
+        
+    }
+}
