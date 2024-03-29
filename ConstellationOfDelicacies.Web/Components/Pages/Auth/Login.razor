@@ -9,7 +9,7 @@
 
 
 <div class="login-form">
-    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLoginTest" FormName="LoginForm">
         <div class="col-md-12">
             <label for="login-mail" class="form-label">Введите электронную почту:</label>
             <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail" 
@@ -50,9 +50,23 @@
         Model = new LoginInputModel();
     }
 
-    public async Task StartLogin()
+    public async Task StartLoginTest()
     {
-        
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimTypes.Role, "Менеджер")
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var pr = new ClaimsPrincipal(identity);
+
+        await httpContext.SignInAsync(pr);
+
+        navManager.NavigateTo("./");
+    }
+
+    public async Task StartLogin()
+    {        
         UserClient userClient = new UserClient();
         if (userClient.CheckLoginRights(Model) == false)
         {
