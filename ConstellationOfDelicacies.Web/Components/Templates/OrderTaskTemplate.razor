@@ -34,7 +34,7 @@
             </div>
         </CardText>
         <div>
-            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="OnOnEditTask">
+            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="EditTask">
                 Изменить задачу
             </Button>
             <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button">
@@ -54,7 +54,7 @@
 
     private Modal modal = default!;
 
-    private async void OnOnEditTask()
+    private async void EditTask()
     {
         modal.IsVerticallyCentered = true;
         modal.IsScrollable = true;
@@ -63,7 +63,7 @@
         parameters.Add("Task", Task);
         parameters.Add("UpdatePage", UpdatePage);
 
-        await modal.ShowAsync<EditTaskTemplate>(title: "Добавить задачу", parameters: parameters);
+        await modal.ShowAsync<EditTaskTemplate>(title: $"Изменить задачу: {Task.Title}", parameters: parameters);
     }
 
 }
