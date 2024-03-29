@@ -37,6 +37,14 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _taskClient.AddOrderTask(userTask);
         }
 
+        public OrdersOutputModel GetOrderById(int orderId)
+        {
+            var order = _repository.GetOrderById(orderId);
+            var result = _mapper.Map<OrdersOutputModel>(order);
+
+            return result;
+        }
+
         public void DeleteUserOrder(int orderId)
         {
             _repository.DeleteOrder(orderId);

@@ -1,0 +1,129 @@
+﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Enums
+@rendermode InteractiveServer
+
+<div>
+    @if (isSubmited)
+    {
+        <div class="alert alert-success">
+            Задача "@Model.Title" добавлена
+        </div>
+    }
+    <EditForm class="row g-3" Model="@Model" FormName="AddTask" OnValidSubmit="AddTask">
+        <DataAnnotationsValidator />
+
+        <div class="col-md-12">
+            <label for="task-title" class="form-label">Введите название:</label>
+            <InputText class="form-control" @bind-Value="@Model.Title" id="task-title"
+                       placeholder="Название" />
+        </div>
+        <div class="col-md-12">
+            <label for="task-specialization" class="form-label">Выберите специализацию:</label>
+            <InputSelect class="form-control" id="task-specialization" @bind-Value="@Model.SpId" 
+                         @oninput="SpChanged">
+                <option disabled selected value style="display:none"></option>
+                @foreach (var s in _specializations)
+                {
+                    <option value="@s.Id">@s.Title</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-md-12">
+            <label for="task-profile" class="form-label">Выберите профиль:</label>
+            <InputSelect disabled="@_isPrDisabled" class="form-control" id="task-profile" 
+                         @bind-Value="@Model.PrId" @oninput="PrChanged">
+                <option value=""></option>
+                @foreach (var p in _profiles)
+                {
+                    <option value="@p.Id">@p.Title</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-md-12">
+            <label for="task-worker" class="form-label">Выберите сотрудника:</label>
+            <InputSelect disabled="@_isWorkerDisabled" class="form-control" id="task-worker"
+                         @bind-Value="@Model.WorkerId">
+                <option value=""></option>
+                @foreach (var w in _workers)
+                {
+                    <option value="@w.Id">@w.FirstName @w.LastName</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private TasksInputModel Model { get; set; }
+
+    [Parameter]
+    public int OrderId { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private List<ProfilesOutputModel> _profiles;
+    private List<SpecializationsOutputModel> _specializations;
+    private List<UsersOutputModel> _workers;
+
+    private bool _isPrDisabled = true;
+    private bool _isWorkerDisabled = true;
+    private bool isSubmited;
+
+    public AddTaskTemplate()
+    {
+        Model = new TasksInputModel();
+        _profiles = new List<ProfilesOutputModel>();
+        _workers = new List<UsersOutputModel>();
+
+        ISpecializationClient specializationClient = new SpecializationClient();
+        _specializations = specializationClient.GetAllSpecializations();
+    }
+
+    protected override void OnInitialized()
+    {
+        Model.Order = new OrderInputModel() { Id = OrderId };
+        base.OnInitialized();
+    }
+
+    public void SpChanged(ChangeEventArgs e)
+    {
+        _isPrDisabled = false;
+        _isWorkerDisabled = true;
+        _workers = new List<UsersOutputModel>();
+
+        IProfileClient profileClient = new ProfileClient();
+        _profiles = profileClient.GetProfiles(Int32.Parse(e.Value.ToString()));
+        StateHasChanged();
+    }
+
+    public void PrChanged(ChangeEventArgs e)
+    {
+        _isWorkerDisabled = false;
+
+        IUserClient userClient = new UserClient();
+        _workers = userClient.GetUsersByProfile(Int32.Parse(e.Value.ToString()));
+        StateHasChanged();
+    }
+
+    public void AddTask()
+    {
+        Model.Status = new TaskStatusesInputModel() { Id = (int)TaskStatuses.Created };
+        Model.Profiles = [new ProfilesInputModel() { Id = Model.PrId }];
+        if (Model.WorkerId != null) Model.Users = [new UsersInputModel() { Id = Model.WorkerId }];
+
+        ITaskClient taskClient = new TaskClient();
+        taskClient.AddOrderTask(Model);
+
+        isSubmited = true;
+
+        UpdatePage();
+        StateHasChanged();
+    }
+}

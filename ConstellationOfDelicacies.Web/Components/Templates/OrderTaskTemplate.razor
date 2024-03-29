@@ -1,0 +1,38 @@
+﻿<Card Style="width:320px;">
+    <CardBody>
+        <CardTitle>
+            <div>
+                <div>@Task.Title</div>
+                <div>@Task.Status.Title</div>
+            </div>            
+        </CardTitle>
+        <CardText>
+            <div>
+                <p>Сотрудники:</p>
+                @if (Task.Users.Count() == 0)
+                {
+                    <p>не назначены</p>
+                } else
+                {
+                    <div>
+                        @foreach (var u in Task.Users)
+                        {
+                            <p>@u.FirstName @u.LastName ;</p>
+                        }
+                    </div>                    
+                }
+            </div>
+        </CardText>
+        <div>
+            <Button Color="ButtonColor.Primary" Type="ButtonType.Button">Изменить задачу</Button>
+            <Button Color="ButtonColor.Primary" Type="ButtonType.Button">Редактировать сотрудников</Button>
+        </div>
+        
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter, EditorRequired]
+    public TasksOutputModel Task { get; set; }
+
+}

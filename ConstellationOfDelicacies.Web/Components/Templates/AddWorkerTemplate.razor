@@ -59,7 +59,6 @@
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Добавить</button>
-            <a href="/waiters" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
         </div>
     </EditForm>
 </div>
@@ -70,6 +69,9 @@
 
     [Parameter, EditorRequired]
     public int SpId { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
 
     private List<ProfilesOutputModel> _profiles;
     private bool isSubmited;
@@ -97,9 +99,11 @@
     {
         Model.Profiles!.Add(new ProfilesInputModel() { Id = Model.ProfileId });
         UserClient userClient = new UserClient();
-        
+
         isSubmited = true;
 
         userClient.AddUser(Model);
+        UpdatePage();
+        StateHasChanged();
     }
 }

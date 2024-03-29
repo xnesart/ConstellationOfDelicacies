@@ -2,6 +2,7 @@
 using ConstellationOfDelicacies.Bll.Enums;
 using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
+using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
@@ -19,6 +20,14 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _repository = new TaskRepository();
             IConfigurationProvider config = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
             _mapper = new Mapper(config);
+        }
+
+        public async Task<List<TasksOutputModel>> GetOrderTasks(int orderId)
+        {
+            List<TasksDto> tasks = await _repository.GetOrderTasks(orderId);
+            var result = _mapper.Map<List<TasksOutputModel>>(tasks);
+
+            return result;
         }
 
         public void AddOrderTask(TasksInputModel model)

@@ -1,0 +1,15 @@
+﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+
+<EditForm Model="@Model" FormName="EditTask">
+
+</EditForm>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public TasksOutputModel Task { get; set; }
+
+    [SupplyParameterFromForm]
+    public TasksInputModel Model { get; set; }
+
+}

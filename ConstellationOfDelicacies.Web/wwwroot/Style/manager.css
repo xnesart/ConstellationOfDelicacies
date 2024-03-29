@@ -19,3 +19,17 @@
 .add-worker{
     margin-bottom: 10px;
 }
+
+.order-tasks-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.order-tasks-side-text {
+    color: grey;
+}
+
+.order-tasks-title {
+    font-weight: 700;
+}

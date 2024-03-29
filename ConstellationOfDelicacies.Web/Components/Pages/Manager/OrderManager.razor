@@ -1,11 +1,13 @@
 ﻿@page "/order"
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
+@rendermode InteractiveServer
+
+<Modal @ref="modal" />
 
 <div>
     <OrderCardTemplate Order="_order"/>
 </div>
-
 <div>
     <Card>
         <CardBody>
@@ -18,7 +20,7 @@
                 </div>                
             </CardTitle>
             <CardText>
-                @if (_orderTasks.Count() == 0)
+                @if (_orderTasks == null || _orderTasks.Count == 0)
                 {
                     <p class="order-tasks-side-text">Ещё нет назначенных задач</p>
                 }
@@ -40,26 +42,47 @@
     [Parameter]
     public int orderId { get; set; }
 
+    private Modal modal = default!;
+
     private IOrderClient? _client;
     private ITaskClient? _taskClient;
 
     private OrdersOutputModel? _order;
-    private List<TasksOutputModel>? _orderTasks;    
+    private List<TasksOutputModel>? _orderTasks;
 
-    protected override void OnInitialized()
+    private Action OnUpdatePage;
+
+    public OrderManager()
+    {
+        OnUpdatePage = UpdatePage;
+    }
+
+    protected override async Task OnInitializedAsync()
     {
         orderId = 7;
         _client = new OrderClient();
         _taskClient = new TaskClient();
 
         _order = _client.GetOrderById(orderId);
-        _orderTasks = _taskClient.GetOrderTasks(orderId);        
+        _orderTasks = await _taskClient.GetOrderTasks(orderId);        
 
         base.OnInitialized();
     }
 
+    public async void UpdatePage()
+    {
+        _orderTasks = await _taskClient.GetOrderTasks(orderId);
+        StateHasChanged();
+    }
+
     private async Task AddOrderTasks()
     {
-        
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("OrderId", orderId);
+        parameters.Add("UpdatePage", OnUpdatePage);
+        await modal.ShowAsync<AddTaskTemplate>(title: "Добавить задачу", parameters: parameters);
     }
 }
