@@ -1,6 +1,6 @@
 using AutoMapper;
 using ConstellationOfDelicacies.Bll.Enums;
-using ConstellationOfDelicacies.Bll.IManager;
+using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;

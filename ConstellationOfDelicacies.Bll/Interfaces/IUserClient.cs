@@ -1,7 +1,7 @@
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 
-namespace ConstellationOfDelicacies.Bll.IManager;
+namespace ConstellationOfDelicacies.Bll.Interfaces;
 
 public interface IUserClient
 {

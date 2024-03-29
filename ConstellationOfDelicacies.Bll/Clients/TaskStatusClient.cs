@@ -1,8 +1,7 @@
 using AutoMapper;
-using ConstellationOfDelicacies.Bll.IManager;
+using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
-using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
 using ConstellationOfDelicacies.Dal.Repositories;
