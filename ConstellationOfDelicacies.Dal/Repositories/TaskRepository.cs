@@ -71,34 +71,12 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public void UpdateOrderTask(TasksDto orderTask)
         {
-            SetTaskDto(orderTask);
-
             var storageTask = _storage.Tasks.Where(t => t.Id == orderTask.Id).Single();
 
-            if (storageTask != null)
-            {
-                storageTask.Title = orderTask.Title;
+            storageTask.Title = orderTask.Title;
 
-                storageTask.Profiles.Clear();
-                foreach (var p in orderTask.Profiles)
-                {
-                    storageTask.Profiles.Add(p);
-                }
-
-                if (storageTask.Users != null) storageTask.Users.Clear();
-                else storageTask.Users = new List<UsersDto>();
-                
-                if (orderTask.Users != null)
-                {
-                    foreach (var u in orderTask.Users)
-                    {
-                        storageTask.Users.Add(u);
-                    }
-                }
-
-                _storage.Tasks.Update(storageTask);
-                _storage.SaveChanges();
-            }
+            _storage.Tasks.Update(storageTask);
+            _storage.SaveChanges();
         }
     }
 }

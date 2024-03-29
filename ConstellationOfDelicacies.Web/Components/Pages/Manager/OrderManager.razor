@@ -1,6 +1,7 @@
 ﻿@page "/order"
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Models.InputModels;
 @rendermode InteractiveServer
 
 <Modal @ref="modal" />
@@ -26,10 +27,10 @@
                 }
                 else
                 {
-                    <div>
+                    <div class="order-tasks">
                         @foreach (var t in _orderTasks)
                         {
-                            <OrderTaskTemplate Task="t"/>
+                            <OrderTaskTemplate Task="t" UpdatePage="OnUpdatePage"/>
                         }
                     </div>                    
                 }
@@ -75,7 +76,7 @@
         StateHasChanged();
     }
 
-    private async Task AddOrderTasks()
+    private async void AddOrderTasks()
     {
         modal.IsVerticallyCentered = true;
         modal.IsScrollable = true;
@@ -83,6 +84,7 @@
         var parameters = new Dictionary<string, object>();
         parameters.Add("OrderId", orderId);
         parameters.Add("UpdatePage", OnUpdatePage);
+
         await modal.ShowAsync<AddTaskTemplate>(title: "Добавить задачу", parameters: parameters);
     }
 }

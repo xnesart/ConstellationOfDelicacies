@@ -1,31 +1,45 @@
-﻿<Card Style="width:320px;">
+﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+
+<Modal @ref="modal" />
+
+<Card Style="width:330px; margin-bottom: 10px; margin-right: 10px">
     <CardBody>
         <CardTitle>
-            <div>
-                <div>@Task.Title</div>
-                <div>@Task.Status.Title</div>
+            <div class="task-header">
+                <div class="task-header-title"><span>@Task.Title</span></div>
+                <div class="task-status">
+                    <TaskStatusTemplate Status="Task.Status" />
+                </div>                
             </div>            
         </CardTitle>
         <CardText>
-            <div>
-                <p>Сотрудники:</p>
+            <div class="task-workers">
+                <div>
+                    <p class="order-tasks-title task-workers-title">Сотрудники:</p>
+                </div>
                 @if (Task.Users.Count() == 0)
                 {
-                    <p>не назначены</p>
+                    <div>
+                        <p>не назначены</p>
+                    </div>                    
                 } else
                 {
                     <div>
                         @foreach (var u in Task.Users)
                         {
-                            <p>@u.FirstName @u.LastName ;</p>
+                            <p>@u.FirstName @u.LastName</p>
                         }
                     </div>                    
                 }
             </div>
         </CardText>
         <div>
-            <Button Color="ButtonColor.Primary" Type="ButtonType.Button">Изменить задачу</Button>
-            <Button Color="ButtonColor.Primary" Type="ButtonType.Button">Редактировать сотрудников</Button>
+            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="OnOnEditTask">
+                Изменить задачу
+            </Button>
+            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button">
+                Изменить сотрудников
+            </Button>
         </div>
         
     </CardBody>
@@ -34,5 +48,22 @@
 @code {
     [Parameter, EditorRequired]
     public TasksOutputModel Task { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private Modal modal = default!;
+
+    private async void OnOnEditTask()
+    {
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("Task", Task);
+        parameters.Add("UpdatePage", UpdatePage);
+
+        await modal.ShowAsync<EditTaskTemplate>(title: "Добавить задачу", parameters: parameters);
+    }
 
 }
