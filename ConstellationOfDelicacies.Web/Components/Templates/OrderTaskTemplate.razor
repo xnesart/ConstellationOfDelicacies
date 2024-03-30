@@ -1,4 +1,6 @@
 ﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
 
 <Modal @ref="modal" />
 
@@ -6,7 +8,10 @@
     <CardBody>
         <CardTitle>
             <div class="task-header">
-                <div class="task-header-title"><span>@OrderTask.Title</span></div>
+                <div class="task-header-title">
+                    <p>@OrderTask.Title</p>
+                    <p>Стоимость: @taskPrice</p>
+                </div>
                 <div class="task-status">
                     <TaskStatusTemplate Status="OrderTask.Status" />
                 </div>                
@@ -54,6 +59,15 @@
 
     private Modal modal = default!;
 
+    private decimal taskPrice;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ITaskClient taskClient = new TaskClient();
+        taskPrice = taskClient.GetOrderTaskPrice(OrderTask);
+        base.OnInitialized();
+    }
+
     private async Task EditTask()
     {
         modal.IsVerticallyCentered = true;
@@ -72,7 +86,7 @@
         modal.IsScrollable = true;
 
         var parameters = new Dictionary<string, object>();
-        parameters.Add("OrderTask", OrderTask);
+        parameters.Add("OrderTaskId", OrderTask.Id);
         parameters.Add("UpdatePage", UpdatePage);
 
         await modal.ShowAsync<EditTaskWorkersTemplate>(title: $"Изменить сотрудников: {OrderTask.Title}", 

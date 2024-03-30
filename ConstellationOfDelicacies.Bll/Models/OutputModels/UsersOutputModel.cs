@@ -4,7 +4,7 @@ public class UsersOutputModel
 {
     public int Id { get; set; }
 
-    public ProfilesOutputModel? Profiles { get; set; }
+    public ProfilesOutputModel? Profile { get; set; }
 
     public ICollection<TasksOutputModel> Task { get; set; }
 

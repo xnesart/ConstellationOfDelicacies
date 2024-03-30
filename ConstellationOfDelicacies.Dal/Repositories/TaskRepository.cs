@@ -46,12 +46,20 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             }
         }
 
-        public async Task<List<TasksDto>> GetOrderTasks(int orderId)
+        public TasksDto GetOrderTask(int taskId)
+        {
+            var result = _storage.Tasks.Where(t => t.Id == taskId)
+                .Include(t => t.Users!).ThenInclude(u => u.Profile).Single();
+            return result;
+        }
+
+        public List<TasksDto> GetAllOrderTasks(int orderId)
         {
             List<TasksDto> result = new List<TasksDto>();
-            result = await _storage.Tasks.Where(t => t.Order.Id == orderId && t.IsDeleted == false 
+            result = _storage.Tasks.Where(t => t.Order.Id == orderId && t.IsDeleted == false 
                 && t.Title != "Пользователь" && t.Title != "Менеджер" )
-                .Include(t => t.Users).Include(t => t.Profiles).Include(t => t.Status).ToListAsync();
+                .Include(t => t.Status).Include(t => t.Profiles)
+                .Include(t => t.Users).ThenInclude(u => u.Profile).ToList();
                 
             return result;
         }

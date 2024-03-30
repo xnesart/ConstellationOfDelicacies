@@ -1,14 +1,15 @@
 ﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
+@rendermode InteractiveServer
 
-<EditForm Model="@Model" FormName="AddTaskWorker">
+<EditForm Model="@Model" FormName="AddTaskWorker" OnValidSubmit="AddWorker">
     <DataAnnotationsValidator />
 
     <div class="col-md-12">
         <label for="task-specialization" class="form-label">Выберите специализацию:</label>
         <InputSelect disabled="@_isSpDisabled" class="form-control" id="task-specialization" 
-                     @bind-Value="@_spId">
+                     @bind-Value="@Model.SpId">
             <option disabled selected value style="display:none"></option>
             @foreach (var s in _specializations)
             {
@@ -80,6 +81,9 @@
         ProfilesOutputModel anyPr = OrderTask.Profiles.First();
         _spId = specializationClient.GetSpByProfileId(anyPr.Id).Id;
 
+        Model.SpId = _spId;
+        Model.Title = OrderTask.Title;
+
         SpChanged();
 
         base.OnInitialized();
@@ -110,6 +114,9 @@
         Model.Id = OrderTask.Id;
         Model.Profiles = [new ProfilesInputModel() { Id = Model.PrId }];
         if (Model.WorkerId != null) Model.Users = [new UsersInputModel() { Id = Model.WorkerId }];
+
+        ITaskClient taskClient = new TaskClient();
+        taskClient.AddTaskWorker(Model);
 
         UpdatePage();
         StateHasChanged();

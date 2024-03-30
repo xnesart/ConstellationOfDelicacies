@@ -5,7 +5,7 @@ namespace ConstellationOfDelicacies.Bll.Interfaces
 {
     public interface ITaskClient
     {
-        public Task<List<TasksOutputModel>> GetOrderTasks(int orderId);
+        public List<TasksOutputModel> GetAllOrderTasks(int orderId);
 
         public void AddOrderTask(TasksInputModel model);
 
@@ -14,5 +14,9 @@ namespace ConstellationOfDelicacies.Bll.Interfaces
         public void DeleteOrderTask(int taskId);
 
         public void UpdateOrderTask(TasksInputModel model);
+
+        public decimal GetOrderTaskPrice(TasksOutputModel model);
+
+        public TasksOutputModel GetOrderTask(int taskId);
     }
 }

@@ -13,14 +13,16 @@ TaskClient taskClient = new TaskClient();
 OrderClient orderClient = new OrderClient();
 UserClient userClient = new UserClient();
 
-TasksInputModel model = new TasksInputModel()
-{
-    Id = 7, 
-    Profiles = [new ProfilesInputModel() { Id = 2}],
-    Users = [new UsersInputModel() { Id = 12} ]
-};
+var a = orderClient.GetOrderById(7);
 
-taskClient.AddTaskWorker(model);
+//TasksInputModel model = new TasksInputModel()
+//{
+//    Id = 7, 
+//    Profiles = [new ProfilesInputModel() { Id = 2}],
+//    Users = [new UsersInputModel() { Id = 12} ]
+//};
+
+//taskClient.AddTaskWorker(model);
 
 Console.WriteLine();
 

@@ -22,9 +22,17 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _mapper = new Mapper(config);
         }
 
-        public async Task<List<TasksOutputModel>> GetOrderTasks(int orderId)
+        public TasksOutputModel GetOrderTask(int taskId)
         {
-            List<TasksDto> tasks = await _repository.GetOrderTasks(orderId);
+            TasksDto orderTask = _repository.GetOrderTask(taskId);
+            var result = _mapper.Map<TasksOutputModel>(orderTask);
+
+            return result;
+        }
+
+        public List<TasksOutputModel> GetAllOrderTasks(int orderId)
+        {
+            List<TasksDto> tasks = _repository.GetAllOrderTasks(orderId);
             var result = _mapper.Map<List<TasksOutputModel>>(tasks);
 
             return result;
@@ -52,6 +60,18 @@ namespace ConstellationOfDelicacies.Bll.Clients
         {
             var tasksDto = _mapper.Map<TasksDto>(model);
             _repository.UpdateOrderTask(tasksDto);
+        }
+
+        public decimal GetOrderTaskPrice(TasksOutputModel model)
+        {           
+            decimal price = 0;
+
+            foreach (var u in model.Users)
+            {
+                price += u.Profile!.Cost;
+            }
+
+            return price;
         }
     }
 }

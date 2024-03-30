@@ -48,7 +48,7 @@
     private IOrderClient? _client;
     private ITaskClient? _taskClient;
 
-    private OrdersOutputModel? _order;
+    private OrdersOutputModel _order;
     private List<TasksOutputModel>? _orderTasks;
 
     private Action OnUpdatePage;
@@ -65,14 +65,14 @@
         _taskClient = new TaskClient();
 
         _order = _client.GetOrderById(orderId);
-        _orderTasks = await _taskClient.GetOrderTasks(orderId);        
+        _orderTasks = _taskClient.GetAllOrderTasks(orderId);        
 
         base.OnInitialized();
     }
 
-    public async void UpdatePage()
+    public void UpdatePage()
     {
-        _orderTasks = await _taskClient.GetOrderTasks(orderId);
+        _orderTasks = _taskClient.GetAllOrderTasks(orderId);
         StateHasChanged();
     }
 

@@ -4,7 +4,9 @@ namespace ConstellationOfDelicacies.Dal.IRepositories
 {
     public interface ITaskRepository
     {
-        public Task<List<TasksDto>> GetOrderTasks(int orderId);
+        public TasksDto GetOrderTask(int taskId);
+
+        public List<TasksDto> GetAllOrderTasks(int orderId);
 
         public void AddOrderTask(TasksDto orderTask);
 

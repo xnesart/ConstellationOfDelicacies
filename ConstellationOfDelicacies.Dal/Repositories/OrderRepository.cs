@@ -15,7 +15,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public OrdersDto GetOrderById(int orderId)
         {
-            var order = _storage.Orders.Where(o => o.Id == orderId)
+            OrdersDto order = _storage.Orders.Where(o => o.Id == orderId)
                 .Include(o => o.Tasks).ThenInclude(t => t.Users).Single();
             return order;
         }
@@ -29,7 +29,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public void DeleteOrder(int orderId)
         {
-            var order = GetOrderById(orderId);
+            OrdersDto order = GetOrderById(orderId);
             
             if (order != null)
             {
@@ -42,7 +42,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
 
         public void UpdateOrder(OrdersDto order)
         {
-            var storageOrder = GetOrderById(order.Id);
+            OrdersDto storageOrder = GetOrderById(order.Id);
 
             if (storageOrder != null)
             {
@@ -79,6 +79,15 @@ namespace ConstellationOfDelicacies.Dal.Repositories
                 .Where(o => o.Tasks!.Any(t => t.Title == "Пользователь" && t.Users!.Any(u => u.Id == userId)))
                 .ToList();
             return orders;
+        }
+
+        public void UpdateOrderPrice(decimal price, int orderId)
+        {
+            var order = _storage.Orders.Where(o => o.Id == orderId).Single();
+            order.TotalPrice = price;
+
+            _storage.Orders.Update(order);
+            _storage.SaveChanges();
         }
     }
 }

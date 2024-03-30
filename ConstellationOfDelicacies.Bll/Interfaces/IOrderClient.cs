@@ -19,5 +19,7 @@ public interface IOrderClient
     public List<OrdersOutputModel> GetManagerOrders(int managerId);
 
     public List<OrdersOutputModel> GetUsersOrders(int userId);
+
+    public void UpdateOrderPrice(int orderId);
 }
 

@@ -4,7 +4,7 @@
         <div class="task-worker-info">
             <div>
                 <p>@Worker.FirstName @Worker.LastName</p>
-                <p>Стоимость: @WorkerPrice</p>
+                <p>Стоимость услуг: @Worker.Profile!.Cost</p>
             </div>            
             <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="DeleteWorker">
                 Удалить
@@ -17,14 +17,6 @@
 
     [Parameter, EditorRequired]
     public UsersOutputModel Worker { get; set; }
-
-    private int WorkerPrice;
-
-    protected override void OnInitialized()
-    {
-        
-        base.OnInitialized();
-    }
 
     public void DeleteWorker()
     {
