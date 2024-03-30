@@ -14,7 +14,7 @@
             <CardText>
                 @foreach (var w in _workers)
                 {
-                    <TaskWorkerTemplate Worker="w" />
+                    <TaskWorkerTemplate Worker="w" UpdatePage="UpdatePage" TaskId="OrderTaskId"/>
                 }
             </CardText>            
         </CardBody>

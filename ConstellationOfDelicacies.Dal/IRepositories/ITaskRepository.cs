@@ -12,6 +12,8 @@ namespace ConstellationOfDelicacies.Dal.IRepositories
 
         public void AddTaskUser(TasksDto orderTask);
 
+        public void DeleteTaskUser(TasksDto orderTask);
+
         public void DeleteOrderTask(int taskId);
 
         public void UpdateOrderTask(TasksDto orderTask);

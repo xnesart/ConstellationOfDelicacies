@@ -5,39 +5,42 @@
 <Modal @ref="modal" />
 
 <Card Style="width:330px; margin-bottom: 10px; margin-right: 10px">
-    <CardBody>
-        <CardTitle>
-            <div class="task-header">
-                <div class="task-header-title">
-                    <p>@OrderTask.Title</p>
-                    <p>Стоимость: @taskPrice</p>
+    <CardBody class="order-task-card">
+        <div>
+            <CardTitle>
+                <div class="task-header">
+                    <div class="task-header-title">
+                        <p>@OrderTask.Title</p>
+                        <p>Стоимость: @taskPrice</p>
+                    </div>
+                    <div class="task-status">
+                        <TaskStatusTemplate Status="OrderTask.Status" />
+                    </div>
                 </div>
-                <div class="task-status">
-                    <TaskStatusTemplate Status="OrderTask.Status" />
-                </div>                
-            </div>            
-        </CardTitle>
-        <CardText>
-            <div class="task-workers">
-                <div>
-                    <p class="order-tasks-title task-workers-title">Сотрудники:</p>
+            </CardTitle>
+            <CardText>
+                <div class="task-workers">
+                    <div>
+                        <p class="order-tasks-title task-workers-title">Сотрудники:</p>
+                    </div>
+                    @if (OrderTask.Users.Count() == 0)
+                    {
+                        <div>
+                            <p>не назначены</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            @foreach (var u in OrderTask.Users)
+                            {
+                                <p>@u.FirstName @u.LastName</p>
+                            }
+                        </div>
+                    }
                 </div>
-                @if (OrderTask.Users.Count() == 0)
-                {
-                    <div>
-                        <p>не назначены</p>
-                    </div>                    
-                } else
-                {
-                    <div>
-                        @foreach (var u in OrderTask.Users)
-                        {
-                            <p>@u.FirstName @u.LastName</p>
-                        }
-                    </div>                    
-                }
-            </div>
-        </CardText>
+            </CardText>
+        </div>        
         <div>
             <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="EditTask">
                 Изменить задачу

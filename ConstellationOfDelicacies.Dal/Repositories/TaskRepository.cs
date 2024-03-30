@@ -59,7 +59,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             result = _storage.Tasks.Where(t => t.Order.Id == orderId && t.IsDeleted == false 
                 && t.Title != "Пользователь" && t.Title != "Менеджер" )
                 .Include(t => t.Status).Include(t => t.Profiles)
-                .Include(t => t.Users).ThenInclude(u => u.Profile).ToList();
+                .Include(t => t.Users!).ThenInclude(u => u.Profile).ToList();
                 
             return result;
         }
@@ -69,6 +69,16 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             SetTaskDto(orderTask);
 
             _storage.Tasks.Add(orderTask);
+            _storage.SaveChanges();
+        }
+
+        public void DeleteTaskUser(TasksDto orderTask)
+        {
+            var storageTask = _storage.Tasks.FirstOrDefault(t => t.Id == orderTask.Id);
+            var storageUser = _storage.Users.FirstOrDefault(u => u.Id == orderTask.Users!.First().Id);
+
+            storageTask.Users.Remove(storageUser);
+            _storage.Tasks.Update(storageTask);
             _storage.SaveChanges();
         }
 
