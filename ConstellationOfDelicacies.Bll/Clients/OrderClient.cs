@@ -37,6 +37,14 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _taskClient.AddOrderTask(userTask);
         }
 
+        public OrdersOutputModel GetOrderById(int orderId)
+        {
+            OrdersDto order = _repository.GetOrderById(orderId);
+            var result = _mapper.Map<OrdersOutputModel>(order);
+
+            return result;
+        }
+
         public void DeleteUserOrder(int orderId)
         {
             _repository.DeleteOrder(orderId);
@@ -67,6 +75,21 @@ namespace ConstellationOfDelicacies.Bll.Clients
         {
             var ordersDto = _mapper.Map<OrdersDto>(order);
             _repository.UpdateOrder(ordersDto);
+        }
+
+        public void UpdateOrderPrice(int orderId)
+        {
+            ITaskClient taskClient = new TaskClient();
+            List<TasksOutputModel> orderTasks = taskClient.GetAllOrderTasks(orderId);
+
+            decimal price = 0;
+
+            foreach(var t in orderTasks)
+            {
+                price += taskClient.GetOrderTaskPrice(t);
+            }
+
+            _repository.UpdateOrderPrice(price, orderId);
         }
     }
 }

@@ -1,0 +1,90 @@
+﻿@page "/order"
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Models.InputModels;
+@rendermode InteractiveServer
+
+<Modal @ref="modal" />
+
+<div>
+    <OrderCardTemplate Order="_order"/>
+</div>
+<div>
+    <Card>
+        <CardBody>
+            <CardTitle>
+                <div class="order-tasks-header">
+                    <h4>Задачи заказа</h4>
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="AddOrderTasks">
+                        Добавить задачу
+                    </Button>
+                </div>                
+            </CardTitle>
+            <CardText>
+                @if (_orderTasks == null || _orderTasks.Count == 0)
+                {
+                    <p class="order-tasks-side-text">Ещё нет назначенных задач</p>
+                }
+                else
+                {
+                    <div class="order-tasks">
+                        @foreach (var t in _orderTasks)
+                        {
+                            <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage"/>
+                        }
+                    </div>                    
+                }
+            </CardText>
+        </CardBody>
+    </Card>
+</div>
+
+@code {
+    [Parameter]
+    public int orderId { get; set; }
+
+    private Modal modal = default!;
+
+    private IOrderClient? _client;
+    private ITaskClient? _taskClient;
+
+    private OrdersOutputModel _order;
+    private List<TasksOutputModel>? _orderTasks;
+
+    private Action OnUpdatePage;
+
+    public OrderManager()
+    {
+        OnUpdatePage = UpdatePage;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        orderId = 7;
+        _client = new OrderClient();
+        _taskClient = new TaskClient();
+
+        _order = _client.GetOrderById(orderId);
+        _orderTasks = _taskClient.GetAllOrderTasks(orderId);        
+
+        base.OnInitialized();
+    }
+
+    public void UpdatePage()
+    {
+        _orderTasks = _taskClient.GetAllOrderTasks(orderId);
+        StateHasChanged();
+    }
+
+    private async Task AddOrderTasks()
+    {
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("OrderId", orderId);
+        parameters.Add("UpdatePage", OnUpdatePage);
+
+        await modal.ShowAsync<AddTaskTemplate>(title: "Добавить задачу", parameters: parameters);
+    }
+}

@@ -1,0 +1,70 @@
+﻿@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@rendermode InteractiveServer
+
+<div class="task-current-workers">
+    <Card>
+        <CardBody>
+            <CardTitle>
+                <p>Назначенные сотрдуники</p>
+            </CardTitle>
+            <CardSubTitle>
+                <p>Текущая стоимость: @taskPrice</p>
+            </CardSubTitle>
+            <CardText>
+                @foreach (var w in _workers)
+                {
+                    <TaskWorkerTemplate Worker="w" />
+                }
+            </CardText>            
+        </CardBody>
+    </Card>    
+</div>
+
+<div class="task-add-worker">
+    <Card>
+        <CardBody>
+            <AddTaskWorkerTemplate OrderTask="OrderTask" UpdatePage="UpdatePage"/>
+        </CardBody>
+    </Card>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public int OrderTaskId { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private TasksOutputModel OrderTask;
+    private ITaskClient _taskClient;
+
+    private List<UsersOutputModel> _workers;
+
+    private decimal taskPrice;
+
+    public EditTaskWorkersTemplate()
+    {
+        OrderTask = new TasksOutputModel();
+        _workers = new List<UsersOutputModel>();
+        _taskClient = new TaskClient();
+    }
+
+    protected override void OnInitialized()
+    {        
+        OrderTask = _taskClient.GetOrderTask(OrderTaskId);
+        taskPrice = _taskClient.GetOrderTaskPrice(OrderTask);
+        _workers = OrderTask.Users.ToList();
+        UpdatePage += UpdateWorkers;
+        base.OnInitialized();
+    }
+
+    public void UpdateWorkers()
+    {
+        OrderTask = _taskClient.GetOrderTask(OrderTaskId);
+        _workers = OrderTask.Users.ToList();
+        StateHasChanged();
+    }  
+
+}

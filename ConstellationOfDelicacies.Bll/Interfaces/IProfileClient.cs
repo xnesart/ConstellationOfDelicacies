@@ -5,4 +5,5 @@ namespace ConstellationOfDelicacies.Bll.Interfaces;
 public interface IProfileClient
 {
     public List<ProfilesOutputModel> GetProfiles(int spId);
+
 }

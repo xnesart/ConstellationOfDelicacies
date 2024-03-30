@@ -1,0 +1,19 @@
+﻿@switch(Status.Id)
+{
+    case 1:
+        <div class="alert alert-warning task-status-alert">@Status.Title</div>
+        break;
+    case 2:
+        <div class="alert alert-success task-status-alert">@Status.Title</div>
+        break;
+    case 3:
+        <div class="alert alert-info task-status-alert">@Status.Title</div>
+        break;
+}
+
+@code {
+
+    [Parameter]
+    public TaskStatusesOutputModel Status {get; set;}
+
+}

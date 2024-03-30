@@ -1,10 +1,10 @@
-using ConstellationOfDelicacies.Bll.IManager;
+using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Dal;
 
 namespace ConstellationOfDelicacies.Bll;
 
-public class ManagerMock:IManager.IManager
+public class ManagerMock : IManager 
 {
     private List<WorkerOutputModel> _chiefs;
     private List<WorkerOutputModel> _waiters;

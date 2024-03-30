@@ -2,7 +2,7 @@ namespace ConstellationOfDelicacies.Bll.Models;
 
 public class SpecializationsOutputModel
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     public string? Title { get; set; }
 

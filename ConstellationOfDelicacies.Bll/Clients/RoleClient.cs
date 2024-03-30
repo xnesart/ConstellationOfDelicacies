@@ -1,5 +1,4 @@
 using AutoMapper;
-using ConstellationOfDelicacies.Bll.IManager;
 using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
@@ -7,7 +6,6 @@ using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace ConstellationOfDelicacies.Bll.Clients;
 

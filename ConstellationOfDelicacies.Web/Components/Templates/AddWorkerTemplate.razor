@@ -1,10 +1,11 @@
 ﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Enums
 @using System
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<div >
+<div>
     @if (isSubmited)
     {
         <div class="alert alert-success">
@@ -48,8 +49,9 @@
             <p class="order-form-note">*Минимум 4 символа</p>
         </div>
         <div class="col-md-12">
-            <label for="worker-profile" class="form-label">Должность</label>
-            <InputSelect class="form-control" id="worker-profile" @bind-Value="@Model.ProfileId">
+            <label for="worker-profile" class="form-label">Профиль</label>
+            <InputSelect class="form-control" id="worker-profile" @bind-Value="@Model.Profile!.Id">
+                <option disabled selected value style="display:none"></option>
                 @foreach (var p in _profiles)
                 {
                     <option value="@p.Id">@p.Title</option>
@@ -58,7 +60,6 @@
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Добавить</button>
-            <a href="/waiters" class="btn btn-primary waiters-edit-back-button waiters-add-back-link">Вернуться назад</a>
         </div>
     </EditForm>
 </div>
@@ -69,23 +70,26 @@
 
     [Parameter, EditorRequired]
     public int SpId { get; set; }
-    
-    private List<ProfilesOutputModel>? _profiles;
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private List<ProfilesOutputModel> _profiles;
     private bool isSubmited;
 
     public AddWorkerTemplate()
     {
         Model = new UsersInputModel();
-        Model.Role = new RolesInputModel() { Title = "Сотрудник" };
-        Model.Profiles = new List<ProfilesInputModel>();
+        Model.Role = new RolesInputModel() { Id = (int)Roles.Worker };
+        Model.Profile = new ProfilesInputModel();
+
+        _profiles = new List<ProfilesOutputModel>();
     }
 
     protected override void OnInitialized()
     {
         ProfileClient profileClient = new ProfileClient();
         _profiles = profileClient.GetProfiles(SpId); 
-
-        Model.ProfileId = _profiles.First().Id;
 
         base.OnInitializedAsync();
         SpecializationClient spClient = new SpecializationClient();
@@ -94,11 +98,12 @@
 
     public void AddWorker()
     {
-        Model.Profiles!.Add(new ProfilesInputModel() { Id = Model.ProfileId });
         UserClient userClient = new UserClient();
-        
+
         isSubmited = true;
 
         userClient.AddUser(Model);
+        UpdatePage();
+        StateHasChanged();
     }
 }

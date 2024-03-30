@@ -1,0 +1,25 @@
+﻿
+<Card Style="margin-bottom: 5px;">
+    <CardBody>
+        <div class="task-worker-info">
+            <div>
+                <p>@Worker.FirstName @Worker.LastName</p>
+                <p>Стоимость услуг: @Worker.Profile!.Cost</p>
+            </div>            
+            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="DeleteWorker">
+                Удалить
+            </Button>
+        </div>
+    </CardBody>
+</Card>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public UsersOutputModel Worker { get; set; }
+
+    public void DeleteWorker()
+    {
+        
+    }
+}
