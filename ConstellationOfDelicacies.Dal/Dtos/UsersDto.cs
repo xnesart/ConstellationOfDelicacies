@@ -4,7 +4,7 @@ public class UsersDto
 {
     public int Id { get; set; }
 
-    public ICollection<ProfilesDto> Profiles { get; set; }
+    public ProfilesDto? Profile { get; set; }
 
     public ICollection<TasksDto> Tasks { get; set; }
 

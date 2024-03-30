@@ -1,0 +1,43 @@
+﻿@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@rendermode InteractiveServer
+
+<Card Style="margin-bottom: 5px;">
+    <CardBody>
+        <div class="task-worker-info">
+            <div>
+                <p>@Worker.FirstName @Worker.LastName</p>
+                <p>Стоимость услуг: @Worker.Profile!.Cost</p>
+            </div>            
+            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="DeleteWorker">
+                Удалить
+            </Button>
+        </div>
+    </CardBody>
+</Card>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public UsersOutputModel Worker { get; set; }
+
+    [Parameter]
+    public int TaskId { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    public void DeleteWorker()
+    {
+        ITaskClient taskClient = new TaskClient();
+        TasksInputModel model = new TasksInputModel()
+        {
+            Id = TaskId,
+            Users = [new UsersInputModel() { Id = Worker.Id }]
+        };
+
+        taskClient.DeleteTaskWorker(model);
+        UpdatePage();
+    }
+}

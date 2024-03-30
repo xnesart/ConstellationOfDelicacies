@@ -1,6 +1,6 @@
 using ConstellationOfDelicacies.Bll.Models;
 
-namespace ConstellationOfDelicacies.Bll.IManager;
+namespace ConstellationOfDelicacies.Bll.Interfaces;
 
 public interface IManager
 {
