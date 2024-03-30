@@ -2,7 +2,10 @@
 <Card Style="margin-bottom: 5px;">
     <CardBody>
         <div class="task-worker-info">
-            <span>@Worker.FirstName @Worker.LastName</span>
+            <div>
+                <p>@Worker.FirstName @Worker.LastName</p>
+                <p>Стоимость: @WorkerPrice</p>
+            </div>            
             <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="DeleteWorker">
                 Удалить
             </Button>
@@ -14,6 +17,14 @@
 
     [Parameter, EditorRequired]
     public UsersOutputModel Worker { get; set; }
+
+    private int WorkerPrice;
+
+    protected override void OnInitialized()
+    {
+        
+        base.OnInitialized();
+    }
 
     public void DeleteWorker()
     {

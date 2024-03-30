@@ -1,6 +1,7 @@
 @page "/registration"
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Enums
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
@@ -77,7 +78,7 @@
             Phone = Model.Phone,
             Role = new RolesInputModel()
             {
-                Title = "Пользователь"
+                Id = (int)Roles.User
             }
         };
 

@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ConstellationOfDelicacies.Dal.Repositories;
 
-public class UserRepository:IUserRepository
+public class UserRepository : IUserRepository
 {
     private readonly Context _storage;
     private readonly IProfileRepository _profileRepository;
@@ -20,21 +20,16 @@ public class UserRepository:IUserRepository
 
     public void SetUserDto(UsersDto user)
     {
-        user.Role = _roleRepository.GetRoleByTitle(user.Role.Title);
-        if (user.Profiles != null)
+        user.Role = _roleRepository.GetRoleById(user.Role.Id);
+        if (user.Profile != null)
         {
-            List<ProfilesDto> profiles = user.Profiles.ToList();
-            user.Profiles.Clear();
-            foreach (var pr in profiles)
-            {
-                user.Profiles.Add(_profileRepository.GetProfileById(pr.Id));
-            }
+            user.Profile = _profileRepository.GetProfileById(user.Profile.Id);
         }
     }
 
     public UsersDto GetUserById(int id)
     {
-        var user = _storage.Users.Where(u => u.Id == id).Include(u => u.Profiles).Single();
+        var user = _storage.Users.Where(u => u.Id == id).Include(u => u.Profile).Single();
         return user;
     }
 
@@ -59,13 +54,8 @@ public class UserRepository:IUserRepository
             storageUser.MiddleName = user.MiddleName;
             storageUser.Phone = user.Phone;
             storageUser.Mail = user.Mail;
-
-            storageUser.Profiles.Clear();
-            foreach (var p in user.Profiles)
-            {
-                storageUser.Profiles.Add(p);
-            }
-
+            storageUser.Profile = user.Profile;
+            
             _storage.Users.Update(storageUser);
             _storage.SaveChanges();
         }        
@@ -109,7 +99,7 @@ public class UserRepository:IUserRepository
     public List<UsersDto> GetUsersBySpecialization(int spId)
     {
         var users = _storage.Users
-            .Where(u => u.Profiles.Any(p => p.Specialization.Id == spId) && u.IsDeleted == false)
+            .Where(u => u.Profile!.Specialization.Id == spId && u.IsDeleted == false)
             .ToList();
         return users;
     }
@@ -119,7 +109,7 @@ public class UserRepository:IUserRepository
         List<UsersDto> users;
         if (_storage.Users != null)
         {
-             users = _storage.Users.Where(u => u.Profiles.Any(p => p.Id == prId))
+             users = _storage.Users.Where(u => u.Profile!.Id == prId)
                 .Where(u => u.IsDeleted == false).ToList();
         }
         else
