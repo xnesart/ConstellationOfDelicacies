@@ -1,76 +1,62 @@
 @page "/applications"
 @using Microsoft.AspNetCore.Components.Authorization
-@using System.Security.Claims
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<div class="top-row top-row-manager manager-top-bar">
-    <a class="top-bar-link" href="/manager">Мои заявки</a>
-    <a class="top-bar-link current-page" href="/applications">Все заявки</a>
-    <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
-    <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
-</div>
-<div class="applications">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Содержание заказа</th>
-            <th>Дата заказа</th>
-            <th>Пожелания</th>
-            <th>Имя клиента</th>
-            <th>Адрес</th>
-            <th>Телефон</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in applicationsList)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Services</td>
-                <td>@item.OrderDate</td>
-                <td>@item.Wishes</td>
-                <td>@item.ClientName</td>
-                <td>@item.Address</td>
-                <td>@item.Phone</td>
-                <td>
-                    <button class="btn btn-primary" type="button">Взять в работу</button>
-                </td>
-            </tr>
+<PageTitle>Свободные заказы</PageTitle>
+
+<AuthorizeView Roles="Менеджер">
+    <Authorized>
+        <div class="top-row top-row-manager manager-top-bar">
+            <a class="top-bar-link" href="/manager">Мои заявки</a>
+            <a class="top-bar-link current-page" href="/applications">Все заявки</a>
+            <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
+            <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
+        </div>
+        <div class="applications">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Содержание заказа</th>
+                        <th>Дата заказа</th>
+                        <th>Пожелания</th>
+                        <th>Имя клиента</th>
+                        <th>Адрес</th>
+                        <th>Телефон</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in applicationsList)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Services</td>
+                            <td>@item.OrderDate</td>
+                            <td>@item.Wishes</td>
+                            <td>@item.ClientName</td>
+                            <td>@item.Address</td>
+                            <td>@item.Phone</td>
+                            <td>
+                                <button class="btn btn-primary" type="button">Взять в работу</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        @{
+            navManager.NavigateTo("./");
         }
-        </tbody>
-    </table>
-</div>
+    </NotAuthorized>
+</AuthorizeView>
+
+
 
 @code {
-
-    [CascadingParameter]
-    public Task<AuthenticationState> State { get; set; }
-    private List<Claim> claims = new List<Claim>();
-
-    private async Task GetClaimsPrincipalData()
-    {
-        var authState = await State;
-        var user = authState.User;
-
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
-        {
-            claims = user.Claims.ToList();
-
-            if (claims.Where(c => c.Type == ClaimTypes.Role).Single().Value != "Пользователь")
-            {
-                navManager.NavigateTo("./");
-            }
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {    
-        await GetClaimsPrincipalData();
-        await base.OnInitializedAsync();
-    }
 
     private List<TableItem> applicationsList = new List<TableItem>
     {

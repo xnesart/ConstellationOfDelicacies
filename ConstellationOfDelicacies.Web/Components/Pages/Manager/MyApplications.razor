@@ -1,64 +1,79 @@
 @page "/ApplicationComponent"
 @using ConstellationOfDelicacies.Bll.Interfaces
+@using Microsoft.AspNetCore.Components.Authorization
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
-<div class="col-12 application-component">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Содержание заказа</th>
-            <th>Дата заказа</th>
-            <th>Пожелания</th>
-            <th>Имя клиента</th>
-            <th>Адрес</th>
-            <th>Телефон</th>
-            <th>Повар</th>
-            <th>Официант</th>
-            <th>Позвонить</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in applicationsList)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Services</td>
-                <td>@item.OrderDate</td>
-                <td>@item.Wishes</td>
-                <td>@item.ClientName</td>
-                <td>@item.Address</td>
-                <td>@item.Phone</td>
-                <td>
-                    <select class="form-select" aria-label="Выбрать повара">
-                        @foreach (var chief in _chiefs)
-                        {
-                            <option value="@chief.Id">@chief.Name</option>
-                        }
-                    </select>
-                </td>
-                <td>
-                    <select class="form-select" aria-label="Выбрать официанта">
-                        @foreach (var waiter in _waiters)
-                        {
-                            <option value="@waiter.Id">@waiter.Name</option>
-                        }
-                    </select>
-                </td>
-                <td>
-                    <button class="btn btn-primary" type="button">Позвонить</button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-</div>
+@inject NavigationManager navManager
+@rendermode InteractiveServer
+
+<PageTitle>Мои заказы</PageTitle>
+
+<AuthorizeView Roles="Менеджер">
+    <Authorized>
+        <div class="col-12 application-component">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Содержание заказа</th>
+                        <th>Дата заказа</th>
+                        <th>Пожелания</th>
+                        <th>Имя клиента</th>
+                        <th>Адрес</th>
+                        <th>Телефон</th>
+                        <th>Повар</th>
+                        <th>Официант</th>
+                        <th>Позвонить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in applicationsList)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Services</td>
+                            <td>@item.OrderDate</td>
+                            <td>@item.Wishes</td>
+                            <td>@item.ClientName</td>
+                            <td>@item.Address</td>
+                            <td>@item.Phone</td>
+                            <td>
+                                <select class="form-select" aria-label="Выбрать повара">
+                                    @foreach (var chief in _chiefs)
+                                    {
+                                        <option value="@chief.Id">@chief.Name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-select" aria-label="Выбрать официанта">
+                                    @foreach (var waiter in _waiters)
+                                    {
+                                        <option value="@waiter.Id">@waiter.Name</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" type="button">Позвонить</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
+
+
 
 @code {
     private List<Application> applicationsList;
     private List<WorkerOutputModel> _chiefs;
     private List<WorkerOutputModel> _waiters;
     IManager manager = new ManagerMock();
-
 
     public MyApplications()
     {
@@ -91,6 +106,8 @@
                 Phone = "987-654-3210"
             },
         };
+
+        base.OnInitialized();
     }
 
     private class Application

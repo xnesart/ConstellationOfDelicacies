@@ -1,32 +1,47 @@
 @page "/chiefs"
-@rendermode InteractiveServer
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Dal.Dtos
+@using Microsoft.AspNetCore.Components.Authorization
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
-<Modal @ref="modal" />
+@inject NavigationManager navManager
+@rendermode InteractiveServer
 
-<div class="top-row top-row-manager manager-top-bar">
-    <a class="top-bar-link" href="/manager">Мои заявки</a>
-    <a class="top-bar-link" href="/applications">Все заявки</a>
-    <a class="top-bar-link current-page" href="/chiefs">Редактировать поваров</a>
-    <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
-</div>
+<PageTitle>Повара</PageTitle>
 
-<div class="container">
-    <div class="add-worker">
-        <Button Color="ButtonColor.Primary" @onclick="ShowTemplate">Добавить повара</Button>
-    </div>
+<AuthorizeView Roles="Менеджер">
+    <Authorized>
+        <Modal @ref="modal" />
 
-    <CardGroup>
-        @foreach (var chief in _chiefs)
-        {
-            <div class="worker-card">
-                <WorkerCardTemplate Worker="@chief" />
+        <div class="top-row top-row-manager manager-top-bar">
+            <a class="top-bar-link" href="/manager">Мои заявки</a>
+            <a class="top-bar-link" href="/applications">Все заявки</a>
+            <a class="top-bar-link current-page" href="/chiefs">Редактировать поваров</a>
+            <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
+        </div>
+
+        <div class="container">
+            <div class="add-worker">
+                <Button Color="ButtonColor.Primary" @onclick="ShowTemplate">Добавить повара</Button>
             </div>
-        }
-    </CardGroup>        
-</div>
+
+            <CardGroup>
+                @foreach (var chief in _chiefs)
+                {
+                    <div class="worker-card">
+                        <WorkerCardTemplate Worker="@chief" />
+                    </div>
+                }
+            </CardGroup>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
+
+
 
 @code {
     private Modal modal = default!;

@@ -2,42 +2,57 @@
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Models.InputModels;
+@using Microsoft.AspNetCore.Components.Authorization
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
+
+@inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<Modal @ref="modal" />
+<PageTitle>Заказ</PageTitle>
 
-<div>
-    <OrderCardTemplate Order="_order"/>
-</div>
-<div>
-    <Card>
-        <CardBody>
-            <CardTitle>
-                <div class="order-tasks-header">
-                    <h4>Задачи заказа</h4>
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="AddOrderTasks">
-                        Добавить задачу
-                    </Button>
-                </div>                
-            </CardTitle>
-            <CardText>
-                @if (_orderTasks == null || _orderTasks.Count == 0)
-                {
-                    <p class="order-tasks-side-text">Ещё нет назначенных задач</p>
-                }
-                else
-                {
-                    <div class="order-tasks">
-                        @foreach (var t in _orderTasks)
+<AuthorizeView Roles="Менеджер">
+    <Authorized>
+        <Modal @ref="modal" />
+
+        <div>
+            <OrderCardTemplate Order="_order" />
+        </div>
+        <div>
+            <Card>
+                <CardBody>
+                    <CardTitle>
+                        <div class="order-tasks-header">
+                            <h4>Задачи заказа</h4>
+                            <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="AddOrderTasks">
+                                Добавить задачу
+                            </Button>
+                        </div>
+                    </CardTitle>
+                    <CardText>
+                        @if (_orderTasks == null || _orderTasks.Count == 0)
                         {
-                            <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage"/>
+                            <p class="order-tasks-side-text">Ещё нет назначенных задач</p>
                         }
-                    </div>                    
-                }
-            </CardText>
-        </CardBody>
-    </Card>
-</div>
+                        else
+                        {
+                            <div class="order-tasks">
+                                @foreach (var t in _orderTasks)
+                                {
+                                    <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage" />
+                                }
+                            </div>
+                        }
+                    </CardText>
+                </CardBody>
+            </Card>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
+
+
 
 @code {
     [Parameter]
@@ -58,7 +73,7 @@
         OnUpdatePage = UpdatePage;
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         orderId = 7;
         _client = new OrderClient();

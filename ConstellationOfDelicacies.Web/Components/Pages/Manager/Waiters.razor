@@ -1,28 +1,41 @@
 @page "/waiters"
-@rendermode InteractiveServer
 @using ConstellationOfDelicacies.Bll.Clients
+@using Microsoft.AspNetCore.Components.Authorization
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
-<Modal @ref="modal" />
+@inject NavigationManager navManager
+@rendermode InteractiveServer
 
-<div class="top-row top-row-manager manager-top-bar">
-    <a class="top-bar-link" href="/manager">Мои заявки</a>
-    <a class="top-bar-link" href="/applications">Все заявки</a>
-    <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
-    <a class="top-bar-link current-page" href="/waiters">Редактировать официантов</a>
-</div>
+<AuthorizeView Roles="Менеджер">
+    <Authorized>
+        <PageTitle>Официанты</PageTitle>
 
-<div class="container">
-    <div class="add-worker">
-        <Button Color="ButtonColor.Primary" @onclick="ShowModal">Добавить официанта</Button>
-    </div>
+        <Modal @ref="modal" />
 
-    <CardGroup>
-        @foreach (var waiter in _waiters)
-        {
-            <WorkerCardTemplate Worker="@waiter" />
-        }
-    </CardGroup>
-</div>
+        <div class="top-row top-row-manager manager-top-bar">
+            <a class="top-bar-link" href="/manager">Мои заявки</a>
+            <a class="top-bar-link" href="/applications">Все заявки</a>
+            <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
+            <a class="top-bar-link current-page" href="/waiters">Редактировать официантов</a>
+        </div>
+
+        <div class="container">
+            <div class="add-worker">
+                <Button Color="ButtonColor.Primary" @onclick="ShowModal">Добавить официанта</Button>
+            </div>
+
+            <CardGroup>
+                @foreach (var waiter in _waiters)
+                {
+                    <WorkerCardTemplate Worker="@waiter" />
+                }
+            </CardGroup>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private Modal modal = default!;
