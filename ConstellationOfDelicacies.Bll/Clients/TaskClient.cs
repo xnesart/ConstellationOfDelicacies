@@ -2,6 +2,7 @@
 using ConstellationOfDelicacies.Bll.Enums;
 using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
+using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
@@ -21,11 +22,39 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _mapper = new Mapper(config);
         }
 
+        public TasksOutputModel GetOrderTask(int taskId)
+        {
+            TasksDto orderTask = _repository.GetOrderTask(taskId);
+            var result = _mapper.Map<TasksOutputModel>(orderTask);
+
+            return result;
+        }
+
+        public List<TasksOutputModel> GetAllOrderTasks(int orderId)
+        {
+            List<TasksDto> tasks = _repository.GetAllOrderTasks(orderId);
+            var result = _mapper.Map<List<TasksOutputModel>>(tasks);
+
+            return result;
+        }
+
         public void AddOrderTask(TasksInputModel model)
         {
             model.Status = new TaskStatusesInputModel() { Id = (int)TaskStatuses.Created };
             var tasksDto = _mapper.Map<TasksDto>(model);
             _repository.AddOrderTask(tasksDto);
+        }
+
+        public void AddTaskWorker(TasksInputModel model)
+        {
+            var taskDto = _mapper.Map<TasksDto>(model);
+            _repository.AddTaskUser(taskDto);
+        }
+
+        public void DeleteTaskWorker(TasksInputModel model)
+        {
+            var taskDto = _mapper.Map<TasksDto>(model);
+            _repository.DeleteTaskUser(taskDto);
         }
 
         public void DeleteOrderTask(int taskId)
@@ -37,6 +66,18 @@ namespace ConstellationOfDelicacies.Bll.Clients
         {
             var tasksDto = _mapper.Map<TasksDto>(model);
             _repository.UpdateOrderTask(tasksDto);
+        }
+
+        public decimal GetOrderTaskPrice(TasksOutputModel model)
+        {           
+            decimal price = 0;
+
+            foreach (var u in model.Users)
+            {
+                price += u.Profile!.Cost;
+            }
+
+            return price;
         }
     }
 }

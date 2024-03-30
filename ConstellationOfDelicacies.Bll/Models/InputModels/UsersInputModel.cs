@@ -6,9 +6,8 @@ public class UsersInputModel
 {
     public int? Id { get; set; }
 
-    public ICollection<ProfilesInputModel>? Profiles { get; set; }
-
-    public int? ProfileId { get; set; }
+    [Required]
+    public ProfilesInputModel? Profile { get; set; }
 
     public RolesInputModel? Role { get; set; }
 
@@ -31,4 +30,5 @@ public class UsersInputModel
 
     [Required]
     public string? Password { get; set; }
+
 }

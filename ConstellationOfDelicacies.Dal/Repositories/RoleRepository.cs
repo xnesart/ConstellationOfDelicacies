@@ -12,9 +12,9 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             _storage = SingletoneStorage.GetStorage().Storage;
         }
 
-        public RolesDto GetRoleByTitle(string title)
+        public RolesDto GetRoleById(int roleId)
         {
-            var role = _storage.Roles.Where(r => r.Title == title).Single();
+            var role = _storage.Roles.Where(r => r.Id == roleId).Single();
             return role;
         }
     }

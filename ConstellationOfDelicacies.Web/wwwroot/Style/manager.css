@@ -19,3 +19,71 @@
 .add-worker{
     margin-bottom: 10px;
 }
+
+.order-tasks-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.order-tasks-side-text {
+    color: grey;
+}
+
+.order-tasks-title {
+    font-weight: 700;
+}
+
+.order-tasks{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.task-workers {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.task-workers-title{
+    width: 110px;
+}
+
+.task-status {
+    display: inline-block;
+    width: auto;
+    font-size: 16px;
+}
+
+.task-status-alert {
+    margin-bottom: 0px;
+    padding: 10px;
+}
+
+.task-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-header-title{
+    margin-right: 10px;
+}
+
+.task-button {
+    margin-bottom: 5px;
+}
+
+.task-worker-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-task-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

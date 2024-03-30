@@ -1,0 +1,56 @@
+﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Clients
+
+@if (isSubmited)
+{
+    <div class="alert alert-success">
+        Название изменено на: @Model.Title
+    </div>
+}
+<EditForm class="row g-3" Model="@Model" FormName="EditTask">
+    <DataAnnotationsValidator />
+
+    <div class="col-md-12">
+        <label for="task-title" class="form-label">Введите название:</label>
+        <InputText class="form-control" @bind-Value="@Model.Title" id="task-title"
+                   placeholder="Название">@OrderTask.Title</InputText>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary" @onclick="EditTask">Изменить</button>
+    </div>
+</EditForm>
+
+    @code {
+
+    [Parameter, EditorRequired]
+    public TasksOutputModel OrderTask { get; set; }
+
+    [SupplyParameterFromForm]
+    public TasksInputModel Model { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private bool isSubmited;
+
+    public EditTaskTemplate()
+    {
+        Model = new TasksInputModel();        
+    }
+
+    protected override void OnInitialized()
+    {
+        Model.Id = OrderTask!.Id;
+        base.OnInitialized();
+    }
+
+    public void EditTask()
+    {
+        ITaskClient taskClient = new TaskClient();
+        taskClient.UpdateOrderTask(Model);
+        isSubmited = true;
+        UpdatePage();
+    }
+
+}
