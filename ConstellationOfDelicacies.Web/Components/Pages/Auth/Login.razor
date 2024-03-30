@@ -1,4 +1,4 @@
-﻿@page "/login"
+@page "/login"
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using System.Security.Claims
 @using ConstellationOfDelicacies.Bll.Clients
@@ -23,7 +23,7 @@
         <div class="col-md-12"lass="col-12">
             <button type="submit" class="btn btn-primary">Войти</button>
             <a href="/chiefs" class="btn btn-primary">Отмена</a>
-            <a href="/registration">Зарегистрироваться</a>
+            <a href="/registration" class="btn btn-warning">Зарегистрироваться</a>
         </div>
         
     </EditForm> 
@@ -50,9 +50,23 @@
         Model = new LoginInputModel();
     }
 
-    public async Task StartLogin()
+    public async Task StartLoginTest()
     {
-        
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimTypes.Role, "Менеджер")
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var pr = new ClaimsPrincipal(identity);
+
+        await httpContext.SignInAsync(pr);
+
+        navManager.NavigateTo("./");
+    }
+
+    public async Task StartLogin()
+    {        
         UserClient userClient = new UserClient();
         if (userClient.CheckLoginRights(Model) == false)
         {

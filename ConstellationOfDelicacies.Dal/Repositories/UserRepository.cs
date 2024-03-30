@@ -125,7 +125,7 @@ public class UserRepository : IUserRepository
         UsersDto user;
         if (_storage.Users != null)
         {
-            user = _storage.Users.Where(u => u.Mail == mail && u.IsDeleted == false).Single();
+            user = _storage.Users.Where(u => u.Mail == mail && u.IsDeleted == false).SingleOrDefault();
         }
         else user = new UsersDto();
 
