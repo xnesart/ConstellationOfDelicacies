@@ -123,6 +123,9 @@
 
         _isSubmited = true;
 
+        IOrderClient orderClient = new OrderClient();
+        orderClient.UpdateOrderPrice(OrderId);
+
         UpdatePage();
         StateHasChanged();
     }
