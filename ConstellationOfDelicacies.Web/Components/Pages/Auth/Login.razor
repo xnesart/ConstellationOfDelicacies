@@ -9,7 +9,7 @@
 
 
 <div class="login-form">
-    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLoginTest" FormName="LoginForm">
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
         <div class="col-md-12">
             <label for="login-mail" class="form-label">Введите электронную почту:</label>
             <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail" 
@@ -23,7 +23,7 @@
         <div class="col-md-12"lass="col-12">
             <button type="submit" class="btn btn-primary">Войти</button>
             <a href="/chiefs" class="btn btn-primary">Отмена</a>
-            <a href="/registration">Зарегистрироваться</a>
+            <a href="/registration" class="btn btn-warning">Зарегистрироваться</a>
         </div>
         
     </EditForm> 
