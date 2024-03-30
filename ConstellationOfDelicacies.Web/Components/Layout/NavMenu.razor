@@ -2,29 +2,26 @@
 @using System.Security.Claims
 @using ConstellationOfDelicacies.Web.Components.Layout.NavMenus
 
-<AuthorizeView Roles="User">
-    <Authorized >
-        <NavMenuUserAuth/>
-    </Authorized>
+<AuthorizeView Roles="Сотрудник, Менеджер, Пользователь">
     <NotAuthorized>
-        <NavMenuUser/>
+        <NavMenuUser />
     </NotAuthorized>
 </AuthorizeView>
 
-<AuthorizeView Roles="Manager">
-    <Authorized>
-           
+<AuthorizeView Roles="Пользователь">
+    <Authorized >
+        <NavMenuUserAuth/>
     </Authorized>
 </AuthorizeView>
 
-<AuthorizeView Roles="Chief">
+<AuthorizeView Roles="Менеджер">
     <Authorized>
-        
+        <NavMenuManager/>
     </Authorized>
 </AuthorizeView>
 
-<AuthorizeView Roles="Waiter">
+<AuthorizeView Roles="Сотрудник">
     <Authorized>
-
+        <NavMenuWorker/>
     </Authorized>
 </AuthorizeView>
