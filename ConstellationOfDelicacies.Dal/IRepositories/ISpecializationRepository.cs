@@ -6,6 +6,8 @@ namespace ConstellationOfDelicacies.Dal.IRepositories
     {
         public SpecializationsDto GetSpTitleById(int spId);
 
+        public SpecializationsDto GetSpByProfile(int prId);
+
         public List<SpecializationsDto> GetAllSpecializations();
     }
 }

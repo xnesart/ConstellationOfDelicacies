@@ -5,7 +5,7 @@
 @rendermode InteractiveServer
 
 <div>
-    @if (isSubmited)
+    @if (_isSubmited)
     {
         <div class="alert alert-success">
             Задача "@Model.Title" добавлена
@@ -68,13 +68,13 @@
     [Parameter]
     public Action UpdatePage { get; set; }
 
+    private List<UsersOutputModel> _workers;
     private List<ProfilesOutputModel> _profiles;
     private List<SpecializationsOutputModel> _specializations;
-    private List<UsersOutputModel> _workers;
 
     private bool _isPrDisabled = true;
     private bool _isWorkerDisabled = true;
-    private bool isSubmited;
+    private bool _isSubmited;
 
     public AddTaskTemplate()
     {
@@ -121,7 +121,7 @@
         ITaskClient taskClient = new TaskClient();
         taskClient.AddOrderTask(Model);
 
-        isSubmited = true;
+        _isSubmited = true;
 
         UpdatePage();
         StateHasChanged();

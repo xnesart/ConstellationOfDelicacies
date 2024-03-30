@@ -14,7 +14,7 @@
     <div class="col-md-12">
         <label for="task-title" class="form-label">Введите название:</label>
         <InputText class="form-control" @bind-Value="@Model.Title" id="task-title"
-                   placeholder="Название">@Task.Title</InputText>
+                   placeholder="Название">@OrderTask.Title</InputText>
     </div>
     <div class="col-12">
         <button type="submit" class="btn btn-primary" @onclick="EditTask">Изменить</button>
@@ -24,7 +24,7 @@
     @code {
 
     [Parameter, EditorRequired]
-    public TasksOutputModel Task { get; set; }
+    public TasksOutputModel OrderTask { get; set; }
 
     [SupplyParameterFromForm]
     public TasksInputModel Model { get; set; }
@@ -41,7 +41,7 @@
 
     protected override void OnInitialized()
     {
-        Model.Id = Task!.Id;
+        Model.Id = OrderTask!.Id;
         base.OnInitialized();
     }
 

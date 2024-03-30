@@ -23,6 +23,16 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             return result;
         }
 
+        public SpecializationsDto GetSpByProfile(int prId)
+        {
+            var result = _storage.Specializations.Where(s => s.Profiles.Any(p => p.Id == prId)).SingleOrDefault();
+            if (result == null)
+            {
+                return new SpecializationsDto() { Title = "Специализация не найдена"};
+            }
+            return result;
+        }
+
         public List<SpecializationsDto> GetAllSpecializations()
         {
             var result = _storage.Specializations.ToList();

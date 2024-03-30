@@ -13,13 +13,14 @@ TaskClient taskClient = new TaskClient();
 OrderClient orderClient = new OrderClient();
 UserClient userClient = new UserClient();
 
-OrderRepository orderRepository = new OrderRepository();
+TasksInputModel model = new TasksInputModel()
+{
+    Id = 7, 
+    Profiles = [new ProfilesInputModel() { Id = 2}],
+    Users = [new UsersInputModel() { Id = 12} ]
+};
 
-var a = orderClient.GetFreeOrders();
-
-var b = a[0].Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
-
-string clientName = $"{b.FirstName} {b.LastName}";
+taskClient.AddTaskWorker(model);
 
 Console.WriteLine();
 

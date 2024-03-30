@@ -32,4 +32,5 @@ public class UsersInputModel
 
     [Required]
     public string? Password { get; set; }
+
 }

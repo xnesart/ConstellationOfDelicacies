@@ -1,0 +1,42 @@
+﻿
+<div class="task-current-workers">
+    <Card>
+        <CardBody>
+            @foreach (var w in _workers)
+            {
+                <TaskWorkerTemplate Worker="w" />
+            }
+        </CardBody>
+    </Card>    
+</div>
+
+<div class="task-add-worker">
+    <Card>
+        <CardBody>
+            <AddTaskWorkerTemplate OrderTask="OrderTask"/>
+        </CardBody>
+    </Card>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public TasksOutputModel OrderTask { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private List<UsersOutputModel> _workers;
+
+    public EditTaskWorkersTemplate()
+    {
+        OrderTask = new TasksOutputModel();
+        _workers = new List<UsersOutputModel>();
+    }
+
+    protected override void OnInitialized()
+    {
+        _workers = OrderTask.Users.ToList();
+        base.OnInitialized();
+    }
+}

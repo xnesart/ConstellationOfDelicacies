@@ -37,6 +37,12 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _repository.AddOrderTask(tasksDto);
         }
 
+        public void AddTaskWorker(TasksInputModel model)
+        {
+            var taskDto = _mapper.Map<TasksDto>(model);
+            _repository.AddTaskUser(taskDto);
+        }
+
         public void DeleteOrderTask(int taskId)
         {
             _repository.DeleteOrderTask(taskId);

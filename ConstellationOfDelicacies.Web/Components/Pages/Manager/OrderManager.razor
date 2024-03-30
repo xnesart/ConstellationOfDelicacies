@@ -30,7 +30,7 @@
                     <div class="order-tasks">
                         @foreach (var t in _orderTasks)
                         {
-                            <OrderTaskTemplate Task="t" UpdatePage="OnUpdatePage"/>
+                            <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage"/>
                         }
                     </div>                    
                 }
@@ -76,7 +76,7 @@
         StateHasChanged();
     }
 
-    private async void AddOrderTasks()
+    private async Task AddOrderTasks()
     {
         modal.IsVerticallyCentered = true;
         modal.IsScrollable = true;
