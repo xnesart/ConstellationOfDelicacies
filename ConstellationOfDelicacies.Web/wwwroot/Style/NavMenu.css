@@ -47,6 +47,10 @@
     box-shadow: none;   
 }
 
+.nav-link {
+    color: #F1F5A8;
+}
+
     .nav-link:hover {
         color: #F1F5A8;
         box-shadow: none;

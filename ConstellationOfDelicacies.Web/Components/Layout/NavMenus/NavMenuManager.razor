@@ -14,13 +14,13 @@
             <NavLink class="nav-link navmenu-link" Match="NavLinkMatch.All" href="./">Мои заказы</NavLink>
         </div> 
         <div class="nav-item">
-            <Dropdown>
-                <DropdownToggleButton Class="nav-link navmenu-link">Сотрудники</DropdownToggleButton>
-                <DropdownMenu>
-                    <DropdownItem To="/chiefs" Type="ButtonType.Link">Повара</DropdownItem>
-                    <DropdownItem To="/waiters" Type="ButtonType.Link">Официанты</DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/chiefs">Повара</a></li>
+                <li><a class="dropdown-item" href="/waiters">Официанты</a></li>
+            </ul>
         </div>
     </nav>
     <div class="navmenu-user">
