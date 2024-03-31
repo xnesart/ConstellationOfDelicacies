@@ -64,6 +64,34 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             return result;
         }
 
+        public List<TasksDto> GetAllWorkerTasks(int userId)
+        {
+            List<TasksDto> result = new List<TasksDto>();
+            
+            // result = _storage.Tasks.Include(t=>t.Order).Include(t=>t.Users)
+            //     .Where(t=>!t.IsDeleted).Where(t => t.Order != null && !t.Order.IsDeleted && !t.Order.IsCompleted)
+            //.ToList();
+             result = _storage.Tasks.Include(t=>t.Status).Where(t=>t.Users.Any(u=>u.Id == userId) && !t.IsDeleted).Include(t=>t.Order).ToList();
+            
+            return result;
+        }
+
+        public void UpdateTaskStatus(int id,int taskId)
+        {
+            // var task = _storage.Tasks.FirstOrDefault(t => t.Id == taskId);
+            var task = _storage.Tasks.Where(t=>t.Id == id).FirstOrDefault();
+            if (task != null)
+            {
+                // var status = _storage.TaskStatuses.FirstOrDefault(s => s.Id == id);
+                var status = _storage.TaskStatuses.Where(s=>s.Id == taskId).FirstOrDefault();
+                if (status != null)
+                {
+                    task.Status = status;
+                    _storage.SaveChanges();
+                }
+            }
+        }
+
         public void AddOrderTask(TasksDto orderTask)
         {
             SetTaskDto(orderTask);
