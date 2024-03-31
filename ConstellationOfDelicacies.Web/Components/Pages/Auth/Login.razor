@@ -7,35 +7,37 @@
 @using Microsoft.AspNetCore.Mvc
 @inject NavigationManager navManager
 
+<Card>
+    <CardBody>
+        <div class="login-form">
+            <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
+                <DataAnnotationsValidator />
 
-<div class="login-form">
-    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
-        <DataAnnotationsValidator />
+                <div class="col-md-12">
+                    <label for="login-mail" class="form-label">Введите электронную почту:</label>
+                    <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail"
+                               @bind-Value="Model.Email" />
+                </div>
+                <div class="col-md-12">
+                    <label for="login-pass" class="form-label">Введите пароль:</label>
+                    <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
+                               @bind-Value="Model.Password" />
+                </div>
+                <div class="col-md-12" lass="col-12">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <a href="/registration" class="btn btn-warning">Зарегистрироваться</a>
+                </div>
 
-        <div class="col-md-12">
-            <label for="login-mail" class="form-label">Введите электронную почту:</label>
-            <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail" 
-                       @bind-Value="Model.Email"/>
+            </EditForm>
+            @if (_authenticationFailed)
+            {
+                <div class="alert alert-danger" role="alert">
+                    Аутентификация не удалась. Проверьте свои учетные данные и повторите попытку.
+                </div>
+            }
         </div>
-        <div class="col-md-12">
-            <label for="login-pass" class="form-label">Введите пароль:</label>
-            <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
-                       @bind-Value="Model.Password" />
-        </div>
-        <div class="col-md-12"lass="col-12">
-            <button type="submit" class="btn btn-primary">Войти</button>
-            <a href="/chiefs" class="btn btn-primary">Отмена</a>
-            <a href="/registration" class="btn btn-warning">Зарегистрироваться</a>
-        </div>
-        
-    </EditForm> 
-     @if (_authenticationFailed)
-    {
-        <div class="alert alert-danger" role="alert">
-            Аутентификация не удалась. Проверьте свои учетные данные и повторите попытку.
-        </div>
-    }
-</div>
+    </CardBody>    
+</Card>
 
 
 @code {
