@@ -1,0 +1,74 @@
+﻿@using ConstellationOfDelicacies.Web.Components.Templates.User
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Clients
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using System
+@rendermode InteractiveServer
+
+<PageTitle>Мои заказы</PageTitle>
+
+<Card>
+    <CardBody>
+        <div>
+            <CardTitle>Мои заказы:</CardTitle>
+            <CardSubTitle Style="margin-bottom: 5px;">
+                Чтобы отменить заказ в работе, свяжитесь с менеджером
+            </CardSubTitle>
+        </div>
+        
+        <div>
+            @foreach (var o in _orders)
+            {
+                <div>
+                    <UserOrderCardTemplate Order="o" OnDeleteOrder="OnUpdatePage"/>
+                </div>
+            }
+        </div>        
+    </CardBody>
+</Card>
+
+@code {
+    private List<OrdersOutputModel> _orders;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> State { get; set; }
+
+    private List<Claim> claims = new List<Claim>();
+    private int _userId;
+
+    public Action OnUpdatePage;
+
+    public UserOrders()
+    {
+        OnUpdatePage = UpdatePage;
+        _orders = new List<OrdersOutputModel>();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await State;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            claims = user.Claims.ToList();
+            _userId = Int32.Parse(claims.Where(c => c.Type == "UserId").First().Value);
+        }
+
+        GetUserOrders();
+    }
+
+    private void GetUserOrders()
+    {
+        IOrderClient orderClient = new OrderClient();
+        _orders = orderClient.GetUsersOrders(_userId);
+    }
+
+    public void UpdatePage()
+    {
+        GetUserOrders();
+        StateHasChanged();
+    }
+
+}

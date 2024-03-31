@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ConstellationOfDelicacies.Bll.Enums;
 using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
@@ -61,6 +62,12 @@ namespace ConstellationOfDelicacies.Bll.Clients
         {
             var orders = _repository.GetAllManagerOrders(managerId);
             var result = _mapper.Map<List<OrdersOutputModel>>(orders);
+
+            foreach (var r in result)
+            {
+                GetOrderStatus(r);
+            }
+
             return result;
         }
 
@@ -68,7 +75,33 @@ namespace ConstellationOfDelicacies.Bll.Clients
         {
             var orders = _repository.GetAllUsersOrders(userId);
             var result = _mapper.Map<List<OrdersOutputModel>>(orders);
+
+            foreach (var r in result)
+            {
+                GetOrderStatus(r);
+            }
+
             return result;
+        }
+
+        private void GetOrderStatus(OrdersOutputModel model)
+        {
+            if (model.IsDeleted)
+            {
+                model.Status = OrderStatus.Deleted;
+            }
+            else if (model.IsCompleted)
+            {
+                model.Status = OrderStatus.Completed;
+            }
+            else if (model.Tasks.Any(t => t.Title == "Менеджер"))
+            {
+                model.Status = OrderStatus.InProgress;
+            }
+            else
+            {
+                model.Status = OrderStatus.Created;
+            }
         }
 
         public void UpdateUserOrder(OrderInputModel order)
