@@ -95,7 +95,7 @@ public class UserRepository : IUserRepository
 
       return users;
     }
-
+    
     public List<UsersDto> GetUsersBySpecialization(int spId)
     {
         var users = _storage.Users
