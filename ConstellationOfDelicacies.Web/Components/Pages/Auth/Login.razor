@@ -81,11 +81,13 @@
  
         RoleClient roleClient = new RoleClient();
         var role = roleClient.GetRoleByEmail(Model.Email);
+        var userByEmail = userClient.GetUserByEmail(Model.Email);
         if (role != null && role.Title != null)
         {
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, Model.Email),
+                new Claim("UserId", userByEmail.Id.ToString()),
                 new Claim(ClaimTypes.Role, role.Title)
             }; 
 

@@ -19,5 +19,6 @@ namespace ConstellationOfDelicacies.Dal.IRepositories
         public List<OrdersDto> GetAllUsersOrders(int userId);
 
         public void UpdateOrderPrice(decimal price, int orderId);
+
     }
 }

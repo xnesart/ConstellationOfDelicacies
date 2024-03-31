@@ -8,6 +8,7 @@ public interface IUserRepository
 
     public UsersDto GetUserById(int id);
 
+
     public void AddUser(UsersDto user);
 
     public void UpdateUser(UsersDto user);
@@ -21,5 +22,7 @@ public interface IUserRepository
     public List<UsersDto> GetUsersByProfile(int prId);
 
     public UsersDto GetUserByMail(string mail);
+
+    public UsersDto GetOrderUser(int orderId);
 
 }

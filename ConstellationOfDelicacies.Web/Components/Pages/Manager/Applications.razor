@@ -1,4 +1,7 @@
 @page "/applications"
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Web.Components.Templates.Manager
 @using Microsoft.AspNetCore.Components.Authorization
 
 @inject NavigationManager navManager
@@ -60,20 +63,9 @@
 
     private List<TableItem> applicationsList = new List<TableItem>
     {
-        new TableItem { Id = 1, Services = "Меню золотая устрица", OrderDate = "23.05.24", Wishes = "мне нужна помощь с сервировкой стола", ClientName = "Иван Петро", Address = "Улица шапокляк 10", Phone = "+7965896646" },
-        new TableItem { Id = 2, Services = "Меню вкус Италии", OrderDate = "24.05.24", Wishes = "Привозите после 17 00", ClientName = "Максим Федоров", Address = "Ул. Ленина 150", Phone = "+7965894534" },
-        new TableItem { Id = 3, Services = "Меню морской ёж", OrderDate = "24.05.24", Wishes = "привозите утром", ClientName = "Олег Виссарионович", Address = "Ул. Горького 12", Phone = "+785455443" },
-    };
 
-    private class TableItem
-    {
-        public int Id { get; set; }
-        public string Services { get; set; }
-        public string OrderDate { get; set; }
-        public string Wishes { get; set; }
-        public string ClientName { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
+         
+        base.OnAfterRender(firstRender);
     }
 
 }

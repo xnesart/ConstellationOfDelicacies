@@ -13,7 +13,20 @@ TaskClient taskClient = new TaskClient();
 OrderClient orderClient = new OrderClient();
 UserClient userClient = new UserClient();
 
-var a = orderClient.GetOrderById(7);
+UserRepository userRepository = new UserRepository();
+
+//UsersDto userDto = new UsersDto()
+//{
+//    Role = new RolesDto() { Id = 1 },
+//    FirstName = "Менеджер",
+//    MiddleName = "Очень",
+//    LastName = "Новичок",
+//    Phone = "85555555511",
+//    Mail = "manager2@cod.com",
+//    Password = "qqq"
+//};
+
+//userRepository.AddUser(userDto);
 
 //TasksInputModel model = new TasksInputModel()
 //{
@@ -24,7 +37,7 @@ var a = orderClient.GetOrderById(7);
 
 //taskClient.AddTaskWorker(model);
 
-Console.WriteLine();
+//Console.WriteLine();
 
 //OrderInputModel o = new OrderInputModel()
 //{

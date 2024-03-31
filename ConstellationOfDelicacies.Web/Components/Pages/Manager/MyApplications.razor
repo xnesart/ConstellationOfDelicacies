@@ -70,20 +70,20 @@
 
 
 @code {
-    private List<Application> applicationsList;
-    private List<WorkerOutputModel> _chiefs;
-    private List<WorkerOutputModel> _waiters;
-    IManager manager = new ManagerMock();
+    [CascadingParameter]
+    public Task<AuthenticationState> State { get; set; }
 
     public MyApplications()
     {
-        _chiefs = manager.GetAllChiefs();
-        _waiters = manager.GetAllWaiters();
+        _orders = new List<OrdersOutputModel>();
     }
 
-    protected override void OnInitialized()
+    private async Task GetClaimsPrincipalData()
     {
-        applicationsList = new List<Application>
+        var authState = await State;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
             new Application
             {
@@ -110,15 +110,15 @@
         base.OnInitialized();
     }
 
-    private class Application
+    protected override async Task OnInitializedAsync()
     {
-        public int Id { get; set; }
-        public string Services { get; set; }
-        public DateTime OrderDate { get; set; }
-        public string Wishes { get; set; }
-        public string ClientName { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
+        _managerId = 20;
+        //await GetClaimsPrincipalData();
+
+        IOrderClient orderClient = new OrderClient();
+        _orders = orderClient.GetManagerOrders(_managerId);
+
+        await base.OnInitializedAsync();
     }
 
 }

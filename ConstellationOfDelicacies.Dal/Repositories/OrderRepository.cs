@@ -68,8 +68,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         public List<OrdersDto> GetAllManagerOrders(int managerId)
         {
             var orders = _storage.Orders
-                .Where(o => o.Tasks!.Any(t => t.Title == "Менеджер" && t.Users!.Any(u => u.Id == managerId)))
-                .Include(o => o.Tasks).ThenInclude(t => t.Users).ToList();
+                .Where(o => o.Tasks!.Any(t => t.Title == "Менеджер" && t.Users!.Any(u => u.Id == managerId))).ToList();
             return orders;
         }
 
