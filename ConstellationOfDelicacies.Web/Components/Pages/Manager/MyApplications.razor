@@ -1,77 +1,52 @@
 @page "/ApplicationComponent"
 @using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Clients
 @using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using ConstellationOfDelicacies.Web.Components.Templates.Manager
 @using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<PageTitle>Мои заказы</PageTitle>
-
 <AuthorizeView Roles="Менеджер">
     <Authorized>
-        <div class="col-12 application-component">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Содержание заказа</th>
-                        <th>Дата заказа</th>
-                        <th>Пожелания</th>
-                        <th>Имя клиента</th>
-                        <th>Адрес</th>
-                        <th>Телефон</th>
-                        <th>Повар</th>
-                        <th>Официант</th>
-                        <th>Позвонить</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in applicationsList)
-                    {
-                        <tr>
-                            <td>@item.Id</td>
-                            <td>@item.Services</td>
-                            <td>@item.OrderDate</td>
-                            <td>@item.Wishes</td>
-                            <td>@item.ClientName</td>
-                            <td>@item.Address</td>
-                            <td>@item.Phone</td>
-                            <td>
-                                <select class="form-select" aria-label="Выбрать повара">
-                                    @foreach (var chief in _chiefs)
-                                    {
-                                        <option value="@chief.Id">@chief.Name</option>
-                                    }
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-select" aria-label="Выбрать официанта">
-                                    @foreach (var waiter in _waiters)
-                                    {
-                                        <option value="@waiter.Id">@waiter.Name</option>
-                                    }
-                                </select>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary" type="button">Позвонить</button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        <PageTitle>Мои заказы</PageTitle>
+
+        @if (_orders.Count() == 0)
+        {
+            <Card>
+                <CardBody>
+                    <CardText>У вас еще нет заказов</CardText>
+                </CardBody>
+            </Card>
+        }
+        else
+        {
+            <div>
+                @foreach (var o in _orders)
+                {
+                    <div>
+                        <ManagerOrderCardTemplate Order="o" />
+                    </div>
+                }
+            </div>
+        }
     </Authorized>
     <NotAuthorized>
         <HomeRedirect/>
     </NotAuthorized>
 </AuthorizeView>
 
-
-
 @code {
     [CascadingParameter]
     public Task<AuthenticationState> State { get; set; }
+
+    private List<Claim> claims = new List<Claim>();
+
+    private List<OrdersOutputModel> _orders;
+
+    private int _managerId;
 
     public MyApplications()
     {
@@ -85,29 +60,10 @@
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
         {
-            new Application
-            {
-                Id = 1,
-                Services = "Заказ 1",
-                OrderDate = DateTime.Now,
-                Wishes = "Нет особых пожеланий",
-                ClientName = "Иван",
-                Address = "ул. Пушкина, д. 10",
-                Phone = "123-456-7890"
-            },
-            new Application
-            {
-                Id = 2,
-                Services = "Заказ 2",
-                OrderDate = DateTime.Now.AddDays(-1),
-                Wishes = "Соус на боке",
-                ClientName = "Мария",
-                Address = "ул. Лермонтова, д. 20",
-                Phone = "987-654-3210"
-            },
-        };
+            claims = user.Claims.ToList();
 
-        base.OnInitialized();
+            _managerId = Int32.Parse(claims.Where(c => c.Type == "UserId").Single().Value);
+        }
     }
 
     protected override async Task OnInitializedAsync()

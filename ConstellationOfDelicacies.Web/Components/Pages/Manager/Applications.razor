@@ -4,6 +4,7 @@
 @using ConstellationOfDelicacies.Web.Components.Templates.Manager
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
@@ -34,9 +35,7 @@
 
     </Authorized>
     <NotAuthorized>
-        @{
-            navManager.NavigateTo("./");
-        }
+        <HomeRedirect/>
     </NotAuthorized>
 </AuthorizeView>
 
