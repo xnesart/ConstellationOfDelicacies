@@ -5,25 +5,29 @@
 @inject NavigationManager navManager
 
 <Card>
-    <CardBody Class="d-flex p-2 flex-row justify-content-between ">
+    <CardBody Class="d-flex flex-row justify-content-between ">
         <div>
             <CardTitle>Заказ @Order!.Id</CardTitle>
             <CardSubTitle>Заказчик: @_userName</CardSubTitle>
             <CardText>Пожелания: @Order!.Comment</CardText>
         </div>
         <div class="d-flex align-items-center">
-            <Button Color="ButtonColor.Primary" @onclick="AcceptOrder">Принять</Button>
+            <Button Style="margin-right: 10px;" Color="ButtonColor.Primary" @onclick="AcceptOrder">
+                Принять
+            </Button>
         </div>
     </CardBody>
 </Card>
 
-    @code {
+@code {
 
     [Parameter]
     public OrdersOutputModel Order { get; set; }
 
+    [Parameter]
+    public int ManagerId { get; set; }
+
     private string? _userName;
-    private int _managerId;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -39,7 +43,7 @@
     public void AcceptOrder()
     {
         OrderInputModel addManager = new OrderInputModel();
-        addManager.UserId = _managerId;
+        addManager.UserId = ManagerId;
         addManager.Id = Order!.Id;
 
         IOrderClient orderClient = new OrderClient();

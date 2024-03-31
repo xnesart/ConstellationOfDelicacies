@@ -1,54 +1,39 @@
 @page "/applications"
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Web.Components.Templates.Manager
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<div class="top-row top-row-manager manager-top-bar">
-    <a class="top-bar-link" href="/manager">Мои заявки</a>
-    <a class="top-bar-link current-page" href="/applications">Все заявки</a>
-    <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
-    <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
-</div>
-<div class="applications">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Содержание заказа</th>
-            <th>Дата заказа</th>
-            <th>Пожелания</th>
-            <th>Имя клиента</th>
-            <th>Адрес</th>
-            <th>Телефон</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in applicationsList)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Services</td>
-                <td>@item.OrderDate</td>
-                <td>@item.Wishes</td>
-                <td>@item.ClientName</td>
-                <td>@item.Address</td>
-                <td>@item.Phone</td>
-                <td>
-                    <button class="btn btn-primary" type="button">Взять в работу</button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+<PageTitle>Заявки заказов</PageTitle>
+
+<div>
+    @foreach (var o in _orders)
+    {
+        <div>
+            <FreeOrderCardTemplate ManagerId="_managerId" Order="o"/>
+        </div>
+    }
 </div>
 
 @code {
 
     [CascadingParameter]
     public Task<AuthenticationState> State { get; set; }
+
     private List<Claim> claims = new List<Claim>();
+
+    private List<OrdersOutputModel> _orders;
+
+    private int _managerId;
+
+    public Applications()
+    {
+        _orders = new List<OrdersOutputModel>();
+    }
 
     private async Task GetClaimsPrincipalData()
     {
@@ -59,35 +44,25 @@
         {
             claims = user.Claims.ToList();
 
-            if (claims.Where(c => c.Type == ClaimTypes.Role).Single().Value != "Пользователь")
-            {
-                navManager.NavigateTo("./");
-            }
+            _managerId = Int32.Parse(claims.Where(c => c.Type == "UserId").Single().Value);
         }
     }
 
     protected override async Task OnInitializedAsync()
-    {    
-        await GetClaimsPrincipalData();
+    {
+        //await GetClaimsPrincipalData();
+
+        IOrderClient orderClient = new OrderClient();
+        _orders = orderClient.GetFreeOrders();
+
         await base.OnInitializedAsync();
     }
 
-    private List<TableItem> applicationsList = new List<TableItem>
+    protected override void OnAfterRender(bool firstRender)
     {
-        new TableItem { Id = 1, Services = "Меню золотая устрица", OrderDate = "23.05.24", Wishes = "мне нужна помощь с сервировкой стола", ClientName = "Иван Петро", Address = "Улица шапокляк 10", Phone = "+7965896646" },
-        new TableItem { Id = 2, Services = "Меню вкус Италии", OrderDate = "24.05.24", Wishes = "Привозите после 17 00", ClientName = "Максим Федоров", Address = "Ул. Ленина 150", Phone = "+7965894534" },
-        new TableItem { Id = 3, Services = "Меню морской ёж", OrderDate = "24.05.24", Wishes = "привозите утром", ClientName = "Олег Виссарионович", Address = "Ул. Горького 12", Phone = "+785455443" },
-    };
 
-    private class TableItem
-    {
-        public int Id { get; set; }
-        public string Services { get; set; }
-        public string OrderDate { get; set; }
-        public string Wishes { get; set; }
-        public string ClientName { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
+         
+        base.OnAfterRender(firstRender);
     }
 
 }
