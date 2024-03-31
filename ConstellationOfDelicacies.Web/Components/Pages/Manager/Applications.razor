@@ -3,52 +3,35 @@
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Web.Components.Templates.Manager
 @using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<PageTitle>Свободные заказы</PageTitle>
-
 <AuthorizeView Roles="Менеджер">
     <Authorized>
-        <div class="top-row top-row-manager manager-top-bar">
-            <a class="top-bar-link" href="/manager">Мои заявки</a>
-            <a class="top-bar-link current-page" href="/applications">Все заявки</a>
-            <a class="top-bar-link" href="/chiefs">Редактировать поваров</a>
-            <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
-        </div>
-        <div class="applications">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Содержание заказа</th>
-                        <th>Дата заказа</th>
-                        <th>Пожелания</th>
-                        <th>Имя клиента</th>
-                        <th>Адрес</th>
-                        <th>Телефон</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in applicationsList)
-                    {
-                        <tr>
-                            <td>@item.Id</td>
-                            <td>@item.Services</td>
-                            <td>@item.OrderDate</td>
-                            <td>@item.Wishes</td>
-                            <td>@item.ClientName</td>
-                            <td>@item.Address</td>
-                            <td>@item.Phone</td>
-                            <td>
-                                <button class="btn btn-primary" type="button">Взять в работу</button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+        <PageTitle>Свободные заказы</PageTitle>
+
+        @if (_orders.Count() == 0)
+        {
+            <Card>
+                <CardBody>
+                    <CardText>Нет свободных заказов</CardText>
+                </CardBody>
+            </Card>
+        }
+        else
+        {
+            <div>
+                @foreach (var o in _orders)
+                {
+                    <div>
+                        <FreeOrderCardTemplate ManagerId="_managerId" Order="o" />
+                    </div>
+                }
+            </div>
+        }
+
     </Authorized>
     <NotAuthorized>
         @{
@@ -57,14 +40,48 @@
     </NotAuthorized>
 </AuthorizeView>
 
-
-
 @code {
 
-    private List<TableItem> applicationsList = new List<TableItem>
-    {
+    [CascadingParameter]
+    public Task<AuthenticationState> State { get; set; }
 
-         
+    private List<Claim> claims = new List<Claim>();
+
+    private List<OrdersOutputModel> _orders;
+
+    private int _managerId;
+
+    public Applications()
+    {
+        _orders = new List<OrdersOutputModel>();
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await State;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            claims = user.Claims.ToList();
+
+            _managerId = Int32.Parse(claims.Where(c => c.Type == "UserId").Single().Value);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _managerId = 20;
+        //await GetClaimsPrincipalData();
+
+        IOrderClient orderClient = new OrderClient();
+        _orders = orderClient.GetFreeOrders();
+
+        await base.OnInitializedAsync();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {         
         base.OnAfterRender(firstRender);
     }
 
