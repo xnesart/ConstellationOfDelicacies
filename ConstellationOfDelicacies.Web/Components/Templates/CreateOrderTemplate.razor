@@ -1,0 +1,92 @@
+﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@rendermode InteractiveServer
+
+<div class="order-form">
+    @if (_isAuthFaild)
+    {
+        <div class="alert alert-warning mb-2">
+            Пожалуйста, войдите или зарегистрируйтесь, чтобы оставить заказ
+        </div>
+    } else if (_isSubmited)
+    {
+        <div class="alert alert-success mb-2">
+            Заказ успешно отправлен
+        </div>
+    }
+
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@AddOrder">
+        <DataAnnotationsValidator />
+
+        <div class="col-md-12">
+            <label for="order-date" class="form-label">Выберите дату:</label>
+            <DateInput TValue="DateOnly" @bind-Value="Model.OrderDateOnly" EnableMinMax="true"
+                       Min="@_minDate" Max="@_maxDate" id="order-date" class="form-control" />
+            <p class="order-form-note">*Заказы принимаются не менее чем за неделю и не более чем на три месяца вперед</p>
+        </div>
+        <div class="col-md-12">
+            <label for="order-time" class="form-label">Выберите время:</label>
+            <TimeInput TValue="TimeOnly" @bind-Value="Model.OrderTimeOnly" EnableMinMax="true"
+                       Min="@_minTime" Max="@_maxTime" id="order-time" class="form-control" />
+            <p class="order-form-note">*Время работы с 6:00 до 24:00. Последний заказ возможен в 23:00</p>
+        </div>
+        <div class="col-md-12">
+            <label for="order-num-of-per" class="form-label">Введите количество персон:</label>
+            <InputNumber class="form-control" @bind-Value="Model.NumberOfPersons" id="order-num-of-per" />
+        </div>
+        <div class="col-md-12">
+            <label for="order-address" class="form-label">Введите адрес:</label>
+            <InputText class="form-control" @bind-Value="Model.Address" id="order-address"
+                       placeholder="Адрес" />
+        </div>
+        <div class="col-md-12">
+            <label for="order-comment" class="form-label">Ваши пожелания:</label>
+            <InputText class="form-control" type="text" @bind-Value="Model.Comment" id="order-comment"
+                       placeholder="Пожелания" />
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Заказать</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public OrderInputModel Model { get; set; }
+
+    [Parameter]
+    public int UserId { get; set; }
+
+    private bool _isSubmited;
+    private bool _isAuthFaild;
+
+    private DateOnly _minDate;
+    private DateOnly _maxDate;
+    private TimeOnly _minTime = new TimeOnly(6, 0);
+    private TimeOnly _maxTime = new TimeOnly(23, 0);
+
+    public CreateOrderTemplate()
+    {
+        Model = new OrderInputModel();
+
+        _minDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
+        _maxDate = _minDate.AddMonths(3);
+    }
+
+    public void AddOrder()
+    {
+        if(UserId == 0)
+        {
+            _isAuthFaild = true;
+            return;
+        }
+
+        Model.OrderDate = Model.OrderDateOnly.ToDateTime(Model.OrderTimeOnly);
+        Model.UserId = UserId;
+
+        IOrderClient user = new OrderClient();
+        user.AddUserOrder(Model);
+    }
+
+}
