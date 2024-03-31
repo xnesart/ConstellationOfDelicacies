@@ -10,18 +10,20 @@
 
     <div class="registration-form">
         <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartRegistration" FormName="LoginForm">
+            <DataAnnotationsValidator/>
+
             <div class="col-md-12">
                 <label for="login-name" class="form-label">Введите имя:</label>
                 <InputText type="text" class="form-control" id="login-name" placeholder="Имя"
                            @bind-Value="Model.Name"/>
             </div>
             <div class="col-md-12">
-                <label for="login-middleName" class="form-label">Введите фамилию:</label>
+                <label for="login-middleName" class="form-label">Введите отчество:</label>
                 <InputText type="text" class="form-control" id="login-middleName" placeholder="Фамилия"
                            @bind-Value="Model.MiddleName"/>
             </div>
             <div class="col-md-12">
-                <label for="login-lastName" class="form-label">Введите отчество:</label>
+                <label for="login-lastName" class="form-label">Введите фамилию:</label>
                 <InputText type="text" class="form-control" id="login-lastName" placeholder="Отчество"
                            @bind-Value="Model.LastName"/>
             </div>
