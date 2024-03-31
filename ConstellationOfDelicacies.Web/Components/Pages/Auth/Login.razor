@@ -90,8 +90,6 @@
                 new Claim("UserId", userByEmail.Id.ToString()),
                 new Claim(ClaimTypes.Role, role.Title)
             }; 
-
-            SetRedirect(role);
             
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var user = new ClaimsPrincipal(identity);
@@ -102,26 +100,4 @@
         }
     }
 
-    public void SetRedirect(RolesOutputModel role)
-    {
-        if (role != null && role.Title != null)
-        {
-            if (role.Title == "Менеджер")
-            {
-                _redirect = "/manager";
-            }
-            else if (role.Title == "Сотрудник")
-            {
-                _redirect = "/";
-            }
-            else if (role.Title == "Пользователь")
-            {
-                _redirect = "/";
-            }
-            else
-            {
-                _authenticationFailed = true;
-            }
-        }
-    }
 }
