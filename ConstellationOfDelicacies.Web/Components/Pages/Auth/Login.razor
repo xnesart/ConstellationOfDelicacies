@@ -79,7 +79,9 @@
             _authenticationFailed = true;
             return;
         }
- 
+
+        Model.Email = Model.Email.ToLower();
+
         RoleClient roleClient = new RoleClient();
         var role = roleClient.GetRoleByEmail(Model.Email);
         var userByEmail = userClient.GetUserByEmail(Model.Email);

@@ -83,7 +83,7 @@
             FirstName = Model.Name,
             MiddleName = Model.MiddleName,
             LastName = Model.LastName,
-            Mail = Model.Email,
+            Mail = Model.Email.ToLower(),
             Password = Model.Password,
             Phone = Model.Phone,
             Role = new RolesInputModel()
