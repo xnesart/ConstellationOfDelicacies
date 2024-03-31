@@ -8,6 +8,8 @@ public interface IOrderClient
 {
     public void AddUserOrder(OrderInputModel order);
 
+    public void AddManagerToOrder(OrderInputModel order);
+
     public OrdersOutputModel GetOrderById(int orderId);
 
     public void UpdateUserOrder(OrderInputModel order);
