@@ -23,4 +23,6 @@ public interface IUserRepository
 
     public UsersDto GetUserByMail(string mail);
 
+    public UsersDto GetOrderUser(int orderId);
+
 }

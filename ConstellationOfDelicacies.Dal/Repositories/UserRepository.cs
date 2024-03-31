@@ -131,4 +131,11 @@ public class UserRepository : IUserRepository
 
         return user;
     }
+
+    public UsersDto GetOrderUser(int orderId)
+    {
+        var user = _storage.Users
+            .Where(u => u.Tasks.Any(t => t.Title == "Пользователь" && t.Order.Id == orderId)).Single();
+        return user;
+    }
 }
