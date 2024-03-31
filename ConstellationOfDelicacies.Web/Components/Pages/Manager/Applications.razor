@@ -1,23 +1,33 @@
 @page "/applications"
-@using Microsoft.AspNetCore.Components.Authorization
-@using System.Security.Claims
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Web.Components.Templates.Manager
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
 <PageTitle>Заявки заказов</PageTitle>
 
-<div>
-    @foreach (var o in _orders)
-    {
-        <div>
-            <FreeOrderCardTemplate ManagerId="_managerId" Order="o"/>
-        </div>
-    }
-</div>
+@if (_orders.Count() == 0)
+{
+    <Card>
+        <CardBody>
+            <CardText>Нет свободных заказов</CardText>
+        </CardBody>
+    </Card>
+} else
+{
+    <div>
+        @foreach (var o in _orders)
+        {
+            <div>
+                <FreeOrderCardTemplate ManagerId="_managerId" Order="o"/>
+            </div>
+        }
+    </div>
+}
 
 @code {
 
@@ -50,6 +60,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _managerId = 20;
         //await GetClaimsPrincipalData();
 
         IOrderClient orderClient = new OrderClient();
