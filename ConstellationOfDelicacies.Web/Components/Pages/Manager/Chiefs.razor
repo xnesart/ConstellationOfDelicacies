@@ -52,7 +52,13 @@
     public Chiefs()
     {
         _client = new UserClient();
+        _chiefs = new List<UsersOutputModel>();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
         _chiefs = _client.GetAllChiefs();
+        base.OnAfterRender(firstRender);
     }
 
     private void RemoveChief(int id)

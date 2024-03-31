@@ -46,7 +46,13 @@
     public Waiters()
     {
         _client = new UserClient();
+        _waiters = new List<UsersOutputModel>();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
         _waiters = _client.GetAllWaiters();
+        base.OnAfterRender(firstRender);
     }
 
     private async Task ShowModal()
