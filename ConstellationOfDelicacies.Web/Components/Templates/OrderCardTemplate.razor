@@ -2,16 +2,22 @@
 
 <Card>
     <CardBody>
-        <CardTitle><span class="order-tasks-title">Заказ: @Order!.Id</span></CardTitle>
-        <CardSubTitle class="order-tasks-side-text mb-2">Заказчик: @_userName</CardSubTitle>
-        <CardText>
-            <p><span class="order-tasks-title">Количество человек:</span> @Order!.NumberOfPersons</p>
-            <p><span class="order-tasks-title">Комментарий заказчика:</span> @Order!.Comment</p>
-            <p><span class="order-tasks-title">Адресс проведения:</span> @Order!.Address</p>
-        </CardText>
-        <ul>
-            <li>Стоимость заказа: @Order!.TotalPrice</li>
-        </ul>
+        <div>
+            <CardTitle><span class="order-tasks-title">Заказ: @Order!.Id</span></CardTitle>
+            <CardSubTitle class="order-tasks-side-text mb-2">Заказчик: @_userName</CardSubTitle>
+            <CardText>
+                <p><span class="order-tasks-title">Количество человек:</span> @Order!.NumberOfPersons</p>
+                <p><span class="order-tasks-title">Комментарий заказчика:</span> @Order!.Comment</p>
+                <p><span class="order-tasks-title">Адресс проведения:</span> @Order!.Address</p>
+            </CardText>
+            <ul>
+                <li>Стоимость заказа: @Order!.TotalPrice</li>
+            </ul>
+        </div>
+        <div>
+            <Button Color="ButtonColor.Primary">Завершить</Button>
+            <Button Color="ButtonColor.Warning">Отменить</Button>
+        </div>
     </CardBody>
 </Card>
 
@@ -21,6 +27,7 @@
     public OrdersOutputModel? Order { get; set; }
 
     private string? _userName;
+    private string? _userPhone;
 
     protected override void OnInitialized()
     {
@@ -50,6 +57,7 @@
         {
             var user = Order.Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
             _userName = $"{user.FirstName} {user.LastName}";
+            _userPhone = user.Phone;
             StateHasChanged();
         }
         base.OnAfterRender(firstRender);
