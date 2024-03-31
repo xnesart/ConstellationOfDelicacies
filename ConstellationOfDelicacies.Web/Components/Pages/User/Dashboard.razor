@@ -1,0 +1,43 @@
+@page "/dashboard"
+@using ConstellationOfDelicacies.Bll.Clients
+@rendermode InteractiveServer
+
+<h3>Dashboard</h3>
+<h3>Ваши задачи на сегодня:</h3>
+<div class="container dashboard-container">
+    <CardGroup Class="dashboard-cardgroup">
+        @foreach (var task in _tasks)
+        {
+            <div class="worker-card">
+                <DashBoardCardTemplate Task="@task" UserId="@UserId" />
+            </div>
+        }
+    </CardGroup>
+</div>
+@code {
+    private List<TasksOutputModel> _tasks;
+    private List<OrdersOutputModel> _orders;
+    [Parameter]
+    public int UserId { get; set; }
+
+    public Dashboard()
+    {
+        GetTaskForWorker();
+    }
+    
+    private void GetTaskForWorker()
+    {
+        TaskClient client = new TaskClient();
+        _tasks = client.GetAllWorkerTasks(6);
+        
+        //var res = _tasks.Where(t=>t.Users.Where(u=>u.Id==))
+        Console.WriteLine();
+    }
+
+    private void GetAllOrders()
+    {
+        // OrderClient orderClient = new OrderClient();
+        // _orders = orderClient.
+    }
+
+}

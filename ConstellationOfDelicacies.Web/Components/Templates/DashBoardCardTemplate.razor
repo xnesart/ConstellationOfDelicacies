@@ -1,0 +1,70 @@
+@using ConstellationOfDelicacies.Bll.Clients
+
+@* <h3>DashBoardCardTemplate</h3> *@
+<Card>
+    <CardBody class="dashboard-card">
+        <CardTitle><span class="order-tasks-title">Заказ</span></CardTitle>
+        <CardSubTitle class="order-tasks-side-text mb-2">Заказчик: @Task?.Users?.FirstOrDefault()?.FirstName</CardSubTitle>
+        <CardText>
+            @* <p><span class="order-tasks-title">Что надо сделать</span> @Task!.Order.Comment</p> *@
+            <p><span class="order-tasks-title">Что надо сделать</span> @Task!.Title</p>
+            @* <p><span class="order-tasks-title">Комментарий заказчика:</span> @Order!.Comment</p> *@
+            @* <p><span class="order-tasks-title">Адрес проведения:</span> @Order!.Address</p> *@
+        </CardText>
+        <ul>
+            <li>Стоимость заказа: @Task!.Order.TotalPrice</li>
+        </ul>
+        @if (Task.Status.Id == 1)
+        {
+            <button type="submit" class="btn btn-primary" onclick="@GetOnWork">Взять в работу</button>
+        }
+    </CardBody>
+</Card>
+@code {
+    [Parameter, EditorRequired]
+    public TasksOutputModel? Task { get; set; }
+    
+    [Parameter]
+    public int UserId { get; set; }
+    private string? _userName;
+
+    private void GetOnWork()
+    {
+        Task.Status.Id = 2;
+        TaskClient taskClient = new TaskClient();
+        
+    }
+
+    // protected override void OnInitialized()
+    // {
+    //     if (Task == null)
+    //     {
+    //         _userName = "???";
+    //         Task = new TasksOutputModel()
+    //         {
+    //             Id = 0,
+    //             Title = "???",
+    //             Status = new TaskStatusesOutputModel(){Title = "Статус не определен"}
+    //         };
+    //     } 
+    //     else
+    //     {
+    //         var user = Order.Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
+    //         _userName = $"{user.FirstName} {user.LastName}";
+    //     }  
+    //
+    //     base.OnInitialized();
+    // }
+    //
+    // protected override void OnAfterRender(bool firstRender)
+    // {
+    //     if (Order.Tasks != null)
+    //     {
+    //         var user = Order.Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
+    //         _userName = $"{user.FirstName} {user.LastName}";
+    //         StateHasChanged();
+    //     }
+    //     base.OnAfterRender(firstRender);
+    // }
+    
+}

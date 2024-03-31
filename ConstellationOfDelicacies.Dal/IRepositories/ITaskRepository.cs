@@ -7,6 +7,8 @@ namespace ConstellationOfDelicacies.Dal.IRepositories
         public TasksDto GetOrderTask(int taskId);
 
         public List<TasksDto> GetAllOrderTasks(int orderId);
+        public List<TasksDto> GetAllWorkerTasks(int userId);
+        public void UpdateTaskStatus(int statusId, int taskId);
 
         public void AddOrderTask(TasksDto orderTask);
 
