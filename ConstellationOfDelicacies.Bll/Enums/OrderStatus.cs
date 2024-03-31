@@ -1,10 +1,11 @@
 ﻿
 namespace ConstellationOfDelicacies.Bll.Enums
 {
-    public enum TaskStatuses
+    public enum OrderStatus
     {
         Created = 1,
         InProgress = 2,
-        Completed = 3
+        Completed = 3,
+        Deleted = 4
     }
 }
