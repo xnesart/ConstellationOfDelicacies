@@ -60,7 +60,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         public List<OrdersDto> GetFreeOrders()
         {
             var orders = _storage.Orders
-                .Where(o => o.Tasks.All(t => t.Title != "Менеджер") && o.IsDeleted == false)
+                .Where(o => o.Tasks.All(t => t.Title != "Менеджер") && !o.IsDeleted)
                 .Include(o => o.Tasks).ThenInclude(t => t.Users).ToList();
             return orders;
         }
@@ -76,7 +76,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         {
             var orders = _storage.Orders
                 .Where(o => o.Tasks!.Any(t => t.Title == "Пользователь" && t.Users!.Any(u => u.Id == userId)))
-                .ToList();
+                .Include(o => o.Tasks).ThenInclude(t => t.Users).ToList();
             return orders;
         }
 

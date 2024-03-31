@@ -1,3 +1,5 @@
+using ConstellationOfDelicacies.Bll.Enums;
+
 namespace ConstellationOfDelicacies.Bll.Models;
 
 public class OrdersOutputModel
@@ -9,6 +11,8 @@ public class OrdersOutputModel
     public bool IsCompleted { get; set; }
 
     public bool IsDeleted { get; set; }
+
+    public OrderStatus Status { get; set; }
 
     public string Comment { get; set; }
 
