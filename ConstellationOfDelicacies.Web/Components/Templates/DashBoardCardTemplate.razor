@@ -1,0 +1,34 @@
+@using ConstellationOfDelicacies.Bll.Clients
+
+<Card>
+    <CardBody class="dashboard-card">
+        <CardTitle><span class="order-tasks-title">Заказ</span></CardTitle>
+        <CardSubTitle class="order-tasks-side-text mb-2">Заказчик: @Task?.Users?.FirstOrDefault()?.FirstName</CardSubTitle>
+        <CardText>
+            <p><span class="order-tasks-title">Что надо сделать</span> @Task!.Title</p>
+        </CardText>
+        @if (Task.Status.Id == 1)
+        {
+            <button type="submit" class="btn btn-primary" onclick="@GetOnWork">Взять в работу</button>
+        }
+        else
+        {
+            <p>Заказ взят вами в работу</p>
+        }
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter, EditorRequired]
+    public TasksOutputModel? Task { get; set; }
+    
+    [Parameter]
+    public int UserId { get; set; }
+    private string? _userName;
+
+    private void GetOnWork()
+    {
+        TaskClient taskClient = new TaskClient();
+        taskClient.UpdateTaskStatus(Task.Id,2);
+    }
+}

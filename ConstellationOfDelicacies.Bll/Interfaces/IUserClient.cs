@@ -24,4 +24,6 @@ public interface IUserClient
     public bool CheckLoginRights(LoginInputModel Model);
 
     public UsersOutputModel GetUserByMail(string mail);
+
+    public UsersOutputModel GetOrderUser(int orderId);
 }

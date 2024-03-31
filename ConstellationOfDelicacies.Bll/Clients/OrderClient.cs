@@ -38,6 +38,18 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _taskClient.AddOrderTask(userTask);
         }
 
+        public void AddManagerToOrder(OrderInputModel order)
+        {
+            var managerTask = new TasksInputModel()
+            {
+                Order = new OrderInputModel() { Id = order.Id },
+                Title = "Менеджер",
+                Users = [new UsersInputModel() { Id = order.UserId }]
+            };
+
+            _taskClient.AddOrderTask(managerTask);
+        }
+
         public OrdersOutputModel GetOrderById(int orderId)
         {
             OrdersDto order = _repository.GetOrderById(orderId);

@@ -112,4 +112,12 @@ public class UserClient : IUserClient
 
         return result;
     }
+
+    public UsersOutputModel GetOrderUser(int orderId)
+    {
+        var user = _repository.GetOrderUser(orderId);
+        var result = _mapper.Map<UsersOutputModel>(user);
+
+        return result;
+    }
 }

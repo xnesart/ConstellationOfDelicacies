@@ -75,3 +75,13 @@ h1:focus {
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
 }
+.dashboard-container{
+    display: flex;
+}
+.dashboard-card{
+    /*margin: 30px;*/
+}
+.dashboard-cardgroup{
+    display: flex;
+    gap: 30px;
+}
