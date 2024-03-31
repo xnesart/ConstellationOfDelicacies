@@ -9,7 +9,9 @@
 
 
 <div class="login-form">
-    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLoginTest" FormName="LoginForm">
+        <DataAnnotationsValidator />
+
         <div class="col-md-12">
             <label for="login-mail" class="form-label">Введите электронную почту:</label>
             <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail" 
@@ -39,11 +41,13 @@
 @code {
     [SupplyParameterFromForm]
     public LoginInputModel Model { get; set; }
-    private string _redirect { get; set; }
 
     [CascadingParameter]
     public HttpContext httpContext { get; set; }
+
     private bool _authenticationFailed = false;
+    private string _redirect { get; set; }
+
 
     public Login()
     {
