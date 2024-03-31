@@ -76,10 +76,20 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             return result;
         }
 
-        public void UpdateTaskStatus(int statusId,int taskId)
+        public void UpdateTaskStatus(int id,int taskId)
         {
-            var task = GetOrderTask(taskId);
-            task.Id = statusId;
+            // var task = _storage.Tasks.FirstOrDefault(t => t.Id == taskId);
+            var task = _storage.Tasks.Where(t=>t.Id == id).FirstOrDefault();
+            if (task != null)
+            {
+                // var status = _storage.TaskStatuses.FirstOrDefault(s => s.Id == id);
+                var status = _storage.TaskStatuses.Where(s=>s.Id == taskId).FirstOrDefault();
+                if (status != null)
+                {
+                    task.Status = status;
+                    _storage.SaveChanges();
+                }
+            }
         }
 
         public void AddOrderTask(TasksDto orderTask)

@@ -53,6 +53,12 @@ namespace ConstellationOfDelicacies.Bll.Clients
             return result;
         }
 
+        public void UpdateTaskStatus(int id, int taskId)
+        {
+            TaskRepository taskRepository = new TaskRepository();
+            taskRepository.UpdateTaskStatus(id,taskId);
+        }
+
         public void AddTaskWorker(TasksInputModel model)
         {
             var taskDto = _mapper.Map<TasksDto>(model);
