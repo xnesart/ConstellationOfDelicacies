@@ -1,4 +1,4 @@
-@page "/ApplicationComponent"
+
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
 @using Microsoft.AspNetCore.Components.Authorization
@@ -48,7 +48,7 @@
 
     private int _managerId;
 
-    public MyApplications()
+    public ManagerOrders()
     {
         _orders = new List<OrdersOutputModel>();
     }
@@ -68,8 +68,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _managerId = 20;
-        //await GetClaimsPrincipalData();
+        await GetClaimsPrincipalData();
 
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetManagerOrders(_managerId);

@@ -1,4 +1,4 @@
-@page "/applications"
+@page "/free_orders"
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Web.Components.Templates.Manager
@@ -50,7 +50,7 @@
 
     private int _managerId;
 
-    public Applications()
+    public FreeOrders()
     {
         _orders = new List<OrdersOutputModel>();
     }
@@ -70,8 +70,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _managerId = 20;
-        //await GetClaimsPrincipalData();
+        await GetClaimsPrincipalData();
 
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetFreeOrders();
