@@ -6,4 +6,5 @@ public interface IProfileClient
 {
     public List<ProfilesOutputModel> GetProfiles(int spId);
 
+    public decimal GetChiefsAverageCost();
 }

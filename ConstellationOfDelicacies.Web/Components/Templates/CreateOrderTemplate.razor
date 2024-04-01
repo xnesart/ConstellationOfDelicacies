@@ -1,4 +1,5 @@
 ﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
 @rendermode InteractiveServer
 
@@ -32,7 +33,8 @@
         </div>
         <div class="col-md-12">
             <label for="order-num-of-per" class="form-label">Введите количество персон:</label>
-            <InputNumber class="form-control" @bind-Value="Model.NumberOfPersons" id="order-num-of-per" />
+            <InputNumber class="form-control" @bind-Value="Model.NumberOfPersons" id="order-num-of-per" 
+                         @oninput="CountApproxCost"/>
         </div>
         <div class="col-md-12">
             <label for="order-address" class="form-label">Введите адрес:</label>
@@ -43,6 +45,10 @@
             <label for="order-comment" class="form-label">Ваши пожелания:</label>
             <InputText class="form-control" type="text" @bind-Value="Model.Comment" id="order-comment"
                        placeholder="Пожелания" />
+        </div>
+        <div>
+            <p>Примерная стоимость заказа: @_approxCost</p>
+            <p>*Без учета обслуживания, по @_dishesCount блюда на человека</p>
         </div>
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Заказать</button>
@@ -66,12 +72,19 @@
     private TimeOnly _minTime = new TimeOnly(6, 0);
     private TimeOnly _maxTime = new TimeOnly(23, 0);
 
+    private decimal _chiefsAverageCost;
+    private decimal _approxCost;
+    private int _dishesCount = 3;
+
     public CreateOrderTemplate()
     {
         Model = new OrderInputModel();
 
         _minDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
         _maxDate = _minDate.AddMonths(3);
+
+        IProfileClient profileClient = new ProfileClient();
+        _chiefsAverageCost = profileClient.GetChiefsAverageCost();
     }
 
     public void AddOrder()
@@ -90,4 +103,13 @@
         _isSubmited = true;
     }
 
+    private void CountApproxCost(ChangeEventArgs e)
+    {
+        int numberOfPeople = 0;
+        if (e.Value.ToString() != "")
+        {
+            numberOfPeople = Int32.Parse(e.Value.ToString());
+        }
+        _approxCost = numberOfPeople * _chiefsAverageCost * _dishesCount;
+    }
 }
