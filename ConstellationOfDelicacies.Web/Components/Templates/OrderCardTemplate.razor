@@ -1,10 +1,16 @@
-﻿@rendermode InteractiveServer
+﻿@using ConstellationOfDelicacies.Web.Components.Templates.Manager
+@using ConstellationOfDelicacies.Bll.Enums
+@rendermode InteractiveServer
 
 <Card>
-    <CardBody>
+    <CardBody Class="d-flex flex-row justify-content-between">
         <div>
             <CardTitle><span class="order-tasks-title">Заказ: @Order!.Id</span></CardTitle>
-            <CardSubTitle class="order-tasks-side-text mb-2">Заказчик: @_userName</CardSubTitle>
+            <CardSubTitle class="order-tasks-side-text mb-2">
+                <p>Заказчик: @_userName</p>
+                <p>Номер телефона: @_userPhone</p>
+                <p>Электронная почта: @_userMail</p>
+            </CardSubTitle>
             <CardText>
                 <p><span class="order-tasks-title">Количество человек:</span> @Order!.NumberOfPersons</p>
                 <p><span class="order-tasks-title">Комментарий заказчика:</span> @Order!.Comment</p>
@@ -14,9 +20,15 @@
                 <li>Стоимость заказа: @Order!.TotalPrice</li>
             </ul>
         </div>
-        <div>
-            <Button Color="ButtonColor.Primary">Завершить</Button>
-            <Button Color="ButtonColor.Warning">Отменить</Button>
+        <div class="d-flex flex-column align-items-center justify-content-between">
+            <ManagerOrderStatusTemplate Status="Order.Status"/>
+            @if (Order.Status == OrderStatuses.InProgress)
+            {
+                <div>
+                    <Button Color="ButtonColor.Primary">Завершить</Button>
+                    <Button Color="ButtonColor.Warning">Отменить</Button>
+                </div>                
+            }            
         </div>
     </CardBody>
 </Card>
@@ -28,6 +40,7 @@
 
     private string? _userName;
     private string? _userPhone;
+    private string? _userMail;
 
     protected override void OnInitialized()
     {
@@ -58,6 +71,7 @@
             var user = Order.Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
             _userName = $"{user.FirstName} {user.LastName}";
             _userPhone = user.Phone;
+            _userMail = user.Mail;
             StateHasChanged();
         }
         base.OnAfterRender(firstRender);

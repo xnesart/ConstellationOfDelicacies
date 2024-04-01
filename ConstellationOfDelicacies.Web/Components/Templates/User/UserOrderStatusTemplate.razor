@@ -16,17 +16,17 @@
 
 @switch (Order.Status)
 {
-    case OrderStatus.InProgress:
+    case OrderStatuses.InProgress:
         <div class="d-inline alert alert-info task-status-alert text-center mb-2">В работе</div>
         <button class="btn btn-primary" @onclick="OnShowModalClick">Связаться</button>
         break;
-    case OrderStatus.Deleted:
+    case OrderStatuses.Deleted:
         <div class="d-inline alert alert-danger task-status-alert text-center=">Удален</div>
         break;
-    case OrderStatus.Completed:
+    case OrderStatuses.Completed:
         <div class="d-inline alert alert-success task-status-alert text-center">Завершен</div>
         break;
-    case OrderStatus.Created:
+    case OrderStatuses.Created:
         <div class="d-inline alert alert-warning task-status-alert text-center mb-2">Создан</div>
         <button class="btn btn-primary" @onclick="DeleteOrder">Отменить</button>
         break;

@@ -1,0 +1,21 @@
+﻿@using ConstellationOfDelicacies.Bll.Enums
+
+@switch (Status)
+{
+    case OrderStatuses.InProgress:
+        <div class="d-inline alert alert-info task-status-alert text-center mb-2">В работе</div>
+        break;
+    case OrderStatuses.Deleted:
+        <div class="d-inline alert alert-danger task-status-alert text-center=">Удален</div>
+        break;
+    case OrderStatuses.Completed:
+        <div class="d-inline alert alert-success task-status-alert text-center">Завершен</div>
+        break;
+}
+
+@code {
+
+    [Parameter]
+    public OrderStatuses Status { get; set; }
+
+}

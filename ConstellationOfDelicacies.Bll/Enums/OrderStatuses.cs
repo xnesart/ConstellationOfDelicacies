@@ -1,7 +1,7 @@
 ﻿
 namespace ConstellationOfDelicacies.Bll.Enums
 {
-    public enum OrderStatus
+    public enum OrderStatuses
     {
         Created = 1,
         InProgress = 2,

@@ -1,6 +1,7 @@
 ﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Enums
 
 <Modal @ref="modal" />
 
@@ -40,22 +41,29 @@
                     }
                 </div>
             </CardText>
-        </div>        
-        <div>
-            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="EditTask">
-                Изменить задачу
-            </Button>
-            <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" @onclick="EditWorkers">
-                Изменить сотрудников
-            </Button>
         </div>
-        
+        @if (Status == OrderStatuses.InProgress)
+        {
+           <div>
+                <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button"
+                        @onclick="EditTask">
+                    Изменить задачу
+                </Button>
+                <Button class="task-button" Color="ButtonColor.Primary" Type="ButtonType.Button" 
+                        @onclick="EditWorkers">
+                    Изменить сотрудников
+                </Button>
+            </div> 
+        }               
     </CardBody>
 </Card>
 
 @code {
     [Parameter, EditorRequired]
     public TasksOutputModel OrderTask { get; set; }
+
+    [Parameter]
+    public OrderStatuses Status { get; set; } 
 
     [Parameter]
     public Action UpdatePage { get; set; }
