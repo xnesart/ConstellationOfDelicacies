@@ -21,11 +21,11 @@
                     </CardSubTitle>
                 </div>
 
-                <div>
+                <div class="d-flex flex-wrap flex-row">
                     @foreach (var o in _orders)
                     {
-                        <div>
-                            <UserOrderCardTemplate Order="o" OnDeleteOrder="OnUpdatePage" />
+                        <div class="me-2">
+                            <UserOrderCardTemplate Order="o" OnUpdatePage="OnUpdatePage" />
                         </div>
                     }
                 </div>
@@ -74,6 +74,7 @@
     {
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetUsersOrders(_userId);
+        _orders.Reverse();
     }
 
     public void UpdatePage()

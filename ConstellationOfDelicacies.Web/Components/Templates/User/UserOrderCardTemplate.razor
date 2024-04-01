@@ -2,19 +2,21 @@
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 
-<Card>
-    <CardBody>
-        <CardTitle>Заказ: @Order!.Id</CardTitle>
+@rendermode InteractiveServer
+
+<Card Style="width: 450px;">
+    <CardBody Class="d-flex align-itmes-center flex-row justify-content-between">
         <div>
-            <p>Пожелания: @Order!.Comment</p>
-            <p>Адрес: @Order!.Address</p>
-            <p>Количество персон: @Order!.NumberOfPersons</p>
+            <CardTitle>Заказ: @Order!.Id</CardTitle>
+                <div>
+                    <p>Пожелания: @Order!.Comment</p>
+                <p>Адрес: @Order!.Address</p>
+                <p>Количество персон: @Order!.NumberOfPersons</p>
+            </div>
         </div>
-        <div>
-            @if (Order!.IsCompleted)
-            {
-                <UserOrderStatusTemplate Status="Order.Status" DeleteOrder="OnDeleteOrder"/>
-            }
+        
+        <div class="d-flex flex-column align-itmes-center justify-content-center">
+            <UserOrderStatusTemplate Status="Order.Status" DeleteOrder="OnDeleteOrder"/>
         </div>
     </CardBody>
 </Card>
@@ -25,11 +27,14 @@
     public OrdersOutputModel Order { get; set; }
 
     [Parameter]
-    public Action OnDeleteOrder { get; set; }
+    public Action OnUpdatePage { get; set; }
+
+    public Action OnDeleteOrder;
 
     protected override void OnInitialized()
     {
-        OnDeleteOrder += DeleteOrder;
+        OnDeleteOrder = DeleteOrder;
+        OnDeleteOrder += OnUpdatePage;
         base.OnInitialized();
     }
 

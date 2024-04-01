@@ -1,25 +1,25 @@
 ﻿@using ConstellationOfDelicacies.Bll.Enums
+@rendermode InteractiveServer
 
 @switch (Status)
 {
     case OrderStatus.InProgress:
-        <div class="alert alert-info task-status-alert">В работе</div>
+        <div class="d-inline alert alert-info task-status-alert">В работе</div>
         break;
     case OrderStatus.Deleted:
-        <div class="alert alert-danger task-status-alert">Удален</div>
+        <div class="d-inline alert alert-danger task-status-alert">Удален</div>
         break;
     case OrderStatus.Completed:
-        <div class="alert alert-success task-status-alert">Завершен</div>
+        <div class="d-inline alert alert-success task-status-alert">Завершен</div>
         break;
     case OrderStatus.Created:
-        <div>
-            <div class="alert alert-warning task-status-alert">Создан</div>
+       
+            <div class="d-inline alert alert-warning task-status-alert text-center mb-2">Создан</div>
             <button class="btn btn-primary" @onclick="DeleteOrder">Отменить</button>
-        </div>
         break;
 }
 
-@code {
+@code { 
 
     [Parameter]
     public OrderStatus Status { get; set; }
