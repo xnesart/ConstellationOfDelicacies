@@ -26,4 +26,7 @@ public interface IUserClient
     public UsersOutputModel GetUserByMail(string mail);
 
     public UsersOutputModel GetOrderUser(int orderId);
+
+    public UsersOutputModel GetOrderManager(int orderId);
+
 }
