@@ -8,18 +8,10 @@
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<PageTitle>Повара</PageTitle>
-
 <AuthorizeView Roles="Менеджер">
     <Authorized>
+        <PageTitle>Повара</PageTitle>
         <Modal @ref="modal" />
-
-        <div class="top-row top-row-manager manager-top-bar">
-            <a class="top-bar-link" href="/manager">Мои заявки</a>
-            <a class="top-bar-link" href="/applications">Все заявки</a>
-            <a class="top-bar-link current-page" href="/chiefs">Редактировать поваров</a>
-            <a class="top-bar-link" href="/waiters">Редактировать официантов</a>
-        </div>
 
         <div class="container">
             <div class="add-worker">
