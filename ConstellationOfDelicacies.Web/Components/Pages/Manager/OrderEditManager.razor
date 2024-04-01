@@ -1,8 +1,10 @@
 ﻿@page "/order{orderId:int}"
+@using ConstellationOfDelicacies.Bll.Enums
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Models.InputModels;
 @using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 @using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
 @inject NavigationManager navManager
@@ -10,10 +12,9 @@
 
 <PageTitle>Заказ</PageTitle>
 
-<AuthorizeView Roles="Менеджер">
+<AuthorizeView Roles="Менеджер" >
     <Authorized>
         <Modal @ref="modal" />
-
         <div>
             <OrderCardTemplate Order="_order" />
         </div>
@@ -23,9 +24,13 @@
                     <CardTitle>
                         <div class="order-tasks-header">
                             <h4>Задачи заказа</h4>
-                            <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="AddOrderTasks">
-                                Добавить задачу
-                            </Button>
+                            @if (_order.Status == OrderStatuses.InProgress)
+                            {
+                               <Button Type="ButtonType.Button" Color="ButtonColor.Primary" 
+                                        @onclick="AddOrderTasks">
+                                    Добавить задачу
+                               </Button> 
+                            }                            
                         </div>
                     </CardTitle>
                     <CardText>
@@ -38,7 +43,7 @@
                             <div class="order-tasks">
                                 @foreach (var t in _orderTasks)
                                 {
-                                    <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage" />
+                                    <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage" Status="_order.Status"/>
                                 }
                             </div>
                         }
@@ -47,14 +52,18 @@
             </Card>
         </div>
     </Authorized>
+
     <NotAuthorized>
         <HomeRedirect/>
     </NotAuthorized>
 </AuthorizeView>
 
-
-
 @code {
+    [CascadingParameter]
+    public Task<AuthenticationState> State { get; set; }
+
+    private List<Claim> claims = new List<Claim>();
+
     [Parameter]
     public int orderId { get; set; }
 
@@ -62,9 +71,11 @@
 
     private IOrderClient? _client;
     private ITaskClient? _taskClient;
+    private IUserClient? _userClient;
 
     private OrdersOutputModel _order;
     private List<TasksOutputModel>? _orderTasks;
+    private UsersOutputModel _manager;
 
     private Action OnUpdatePage;
 
@@ -73,19 +84,44 @@
         OnUpdatePage = UpdatePage;
     }
 
-    protected override void OnInitialized()
+    private async Task GetClaims()
+    {
+        var authState = await State;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            claims = user.Claims.ToList();
+            var userId = Int32.Parse(claims.Where(c => c.Type == "UserId").First().Value);
+
+            if (userId != _manager.Id)
+            {
+                navManager.NavigateTo("./");
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
     {
         _client = new OrderClient();
         _taskClient = new TaskClient();
+        _userClient = new UserClient();
 
         _order = _client.GetOrderById(orderId);
-        _orderTasks = _taskClient.GetAllOrderTasks(orderId);        
+        if(_order.Id != orderId)
+        {
+            navManager.NavigateTo("./");
+        }
 
-        base.OnInitialized();
+        _manager = _userClient.GetOrderManager(orderId);
+        await GetClaims();
+        
+        _orderTasks = _taskClient.GetAllOrderTasks(orderId);
     }
 
     public void UpdatePage()
     {
+        _order = _client.GetOrderById(orderId);
         _orderTasks = _taskClient.GetAllOrderTasks(orderId);
         StateHasChanged();
     }

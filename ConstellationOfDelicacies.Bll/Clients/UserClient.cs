@@ -124,6 +124,10 @@ public class UserClient : IUserClient
     public UsersOutputModel GetOrderManager(int orderId)
     {
         var user = _repository.GetOrderManager(orderId);
+        if (user == null) 
+        {
+            user = new UsersDto();
+        }
         var result = _mapper.Map<UsersOutputModel>(user);
 
         return result;
