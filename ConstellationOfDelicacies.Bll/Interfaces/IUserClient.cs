@@ -1,5 +1,6 @@
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
+using ConstellationOfDelicacies.Bll.Models.OutputModels;
 
 namespace ConstellationOfDelicacies.Bll.Interfaces;
 
@@ -21,9 +22,9 @@ public interface IUserClient
 
     public List<UsersOutputModel> GetUsersByProfile(int prId);
 
-    public bool CheckLoginRights(LoginInputModel Model);
+    public bool CheckLoginRights(LoginInputModel model);
 
-    public UsersOutputModel GetUserByMail(string mail);
+    public LoginOutputModel GetUserByMail(string mail);
 
     public UsersOutputModel GetOrderUser(int orderId);
 

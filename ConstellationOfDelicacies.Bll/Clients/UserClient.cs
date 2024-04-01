@@ -4,6 +4,7 @@ using ConstellationOfDelicacies.Bll.Interfaces;
 using ConstellationOfDelicacies.Bll.Mapping;
 using ConstellationOfDelicacies.Bll.Models;
 using ConstellationOfDelicacies.Bll.Models.InputModels;
+using ConstellationOfDelicacies.Bll.Models.OutputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.Repositories;
@@ -93,11 +94,11 @@ public class UserClient : IUserClient
         return result;
     }
 
-    public bool CheckLoginRights(LoginInputModel Model)
+    public bool CheckLoginRights(LoginInputModel model)
     {
         bool result = false;
-        var user = GetUserByMail(Model.Email);
-        if (user != null)
+        var user = GetUserByMail(model.Email);
+        if (user != null && model.Password == user.Password)
         {
             result = true;
         }
@@ -105,10 +106,10 @@ public class UserClient : IUserClient
         return result;
     }
 
-    public UsersOutputModel GetUserByMail(string mail)
+    public LoginOutputModel GetUserByMail(string mail)
     {
         var user = _repository.GetUserByMail(mail);
-        var result = _mapper.Map<UsersOutputModel>(user);
+        var result = _mapper.Map<LoginOutputModel>(user);
 
         return result;
     }
