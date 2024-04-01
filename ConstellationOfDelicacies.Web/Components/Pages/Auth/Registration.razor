@@ -5,6 +5,17 @@
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
+<Modal @ref="modal" title="Регистрация завершена" UseStaticBackdrop="true" CloseOnEscape="false" 
+            IsScrollable="true" IsVerticallyCentered="true">
+    <BodyTemplate>
+        <p>Вы успешно зарегистрировались!</p>
+        <p>Чтобы продолжить, войдите в аккаунт</p>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Закрыть</Button>
+    </FooterTemplate>
+</Modal>
+
 <Card>
     <CardBody>
         <div class="registration-container">
@@ -68,6 +79,9 @@
 @code {
     [SupplyParameterFromForm] 
     public RegistrationInputModel Model { get; set; }
+
+    private Modal modal = default!;
+
     private string _redirect { get; set; }
     private bool _mailCheck { get; set; }
 
@@ -97,11 +111,8 @@
         {
             UserClient userClient = new UserClient();
             userClient.AddUser(model);
-            _redirect = "/registrationComplete";
-            if (!string.IsNullOrEmpty(_redirect))
-            {
-                navManager.NavigateTo(_redirect);
-            }
+
+            OnShowModalClick();
         }
     }
 
@@ -113,6 +124,17 @@
         {
             _mailCheck = true;
         }
+    }
+
+    private async Task OnShowModalClick()
+    {
+        await modal.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+        navManager.NavigateTo("/login");
     }
 
 }
