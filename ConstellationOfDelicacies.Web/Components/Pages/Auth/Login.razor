@@ -7,43 +7,48 @@
 @using Microsoft.AspNetCore.Mvc
 @inject NavigationManager navManager
 
+<Card>
+    <CardBody>
+        <div class="login-form">
+            <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
+                <DataAnnotationsValidator />
 
-<div class="login-form">
-    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartLogin" FormName="LoginForm">
-        <div class="col-md-12">
-            <label for="login-mail" class="form-label">Введите электронную почту:</label>
-            <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail" 
-                       @bind-Value="Model.Email"/>
+                <div class="col-md-12">
+                    <label for="login-mail" class="form-label">Введите электронную почту:</label>
+                    <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail"
+                               @bind-Value="Model.Email" />
+                </div>
+                <div class="col-md-12">
+                    <label for="login-pass" class="form-label">Введите пароль:</label>
+                    <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
+                               @bind-Value="Model.Password" />
+                </div>
+                <div class="col-md-12" lass="col-12">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                    <a href="/registration" class="btn btn-warning">Зарегистрироваться</a>
+                </div>
+
+            </EditForm>
+            @if (_authenticationFailed)
+            {
+                <div class="alert alert-danger" role="alert">
+                    Аутентификация не удалась. Проверьте свои учетные данные и повторите попытку.
+                </div>
+            }
         </div>
-        <div class="col-md-12">
-            <label for="login-pass" class="form-label">Введите пароль:</label>
-            <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
-                       @bind-Value="Model.Password" />
-        </div>
-        <div class="col-md-12"lass="col-12">
-            <button type="submit" class="btn btn-primary">Войти</button>
-            <a href="/chiefs" class="btn btn-primary">Отмена</a>
-            <a href="/registration" class="btn btn-warning">Зарегистрироваться</a>
-        </div>
-        
-    </EditForm> 
-     @if (_authenticationFailed)
-    {
-        <div class="alert alert-danger" role="alert">
-            Аутентификация не удалась. Проверьте свои учетные данные и повторите попытку.
-        </div>
-    }
-</div>
+    </CardBody>    
+</Card>
 
 
 @code {
     [SupplyParameterFromForm]
     public LoginInputModel Model { get; set; }
-    private string _redirect { get; set; }
 
     [CascadingParameter]
     public HttpContext httpContext { get; set; }
+
     private bool _authenticationFailed = false;
+    private string _redirect { get; set; }
 
     public Login()
     {
@@ -74,7 +79,9 @@
             _authenticationFailed = true;
             return;
         }
- 
+
+        Model.Email = Model.Email.ToLower();
+
         RoleClient roleClient = new RoleClient();
         var role = roleClient.GetRoleByEmail(Model.Email);
         var userByEmail = userClient.GetUserByEmail(Model.Email);
@@ -86,43 +93,14 @@
                 new Claim("UserId", userByEmail.Id.ToString()),
                 new Claim(ClaimTypes.Role, role.Title)
             }; 
-
-            SetRedirect(role);
             
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var user = new ClaimsPrincipal(identity);
 
             await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
 
-            if (!string.IsNullOrEmpty(_redirect))
-            {
-                navManager.NavigateTo(_redirect);
-            }
-        }
-
-        //navManager.NavigateTo("./Ch");
-    }
-
-    public void SetRedirect(RolesOutputModel role)
-    {
-        if (role != null && role.Title != null)
-        {
-            if (role.Title == "Менеджер")
-            {
-                _redirect = "/manager";
-            }
-            else if (role.Title == "Сотрудник")
-            {
-                _redirect = "/";
-            }
-            else if (role.Title == "Пользователь")
-            {
-                _redirect = "/";
-            }
-            else
-            {
-                _authenticationFailed = true;
-            }
+            navManager.NavigateTo("./");            
         }
     }
+
 }

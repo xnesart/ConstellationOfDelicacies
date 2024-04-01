@@ -25,4 +25,6 @@ public interface IUserRepository
 
     public UsersDto GetOrderUser(int orderId);
 
+    public UsersDto GetOrderManager(int orderId);
+
 }

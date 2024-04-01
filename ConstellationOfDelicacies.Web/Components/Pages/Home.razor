@@ -14,7 +14,6 @@
     </NotAuthorized>
 </AuthorizeView>
 
-
 <AuthorizeView Roles="Пользователь">
     <Authorized >
         <HomeUser/>
@@ -23,12 +22,12 @@
 
 <AuthorizeView Roles="Менеджер">
     <Authorized>
-        <Manager/>
+        <ManagerOrders/>
     </Authorized>
 </AuthorizeView>
 
 <AuthorizeView Roles="Сотрудник">
     <Authorized>
-        
+        <WorkerDashboard/>
     </Authorized>
 </AuthorizeView>

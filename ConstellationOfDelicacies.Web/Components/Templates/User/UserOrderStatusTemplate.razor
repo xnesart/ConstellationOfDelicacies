@@ -1,30 +1,64 @@
-﻿@using ConstellationOfDelicacies.Bll.Enums
+﻿@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Enums
+@rendermode InteractiveServer
 
-@switch (Status)
+<Modal @ref="modal" title="Связь с менеджером" IsScrollable="true" IsVerticallyCentered="true">
+    <BodyTemplate>
+        <h3>Ваш менеджер: @_manager.FirstName @_manager.LastName</h3>
+        <p>Номер телефона: @_manager.Phone</p>
+        <p>Электронная почта: @_manager.Mail</p>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Закрыть</Button>
+    </FooterTemplate>
+</Modal>
+
+@switch (Order.Status)
 {
-    case OrderStatus.InProgress:
-        <div class="alert alert-info task-status-alert">В работе</div>
+    case OrderStatuses.InProgress:
+        <div class="d-inline alert alert-info task-status-alert text-center mb-2">В работе</div>
+        <button class="btn btn-primary" @onclick="OnShowModalClick">Связаться</button>
         break;
-    case OrderStatus.Deleted:
-        <div class="alert alert-danger task-status-alert">Удален</div>
+    case OrderStatuses.Deleted:
+        <div class="d-inline alert alert-danger task-status-alert text-center=">Удален</div>
         break;
-    case OrderStatus.Completed:
-        <div class="alert alert-success task-status-alert">Завершен</div>
+    case OrderStatuses.Completed:
+        <div class="d-inline alert alert-success task-status-alert text-center">Завершен</div>
         break;
-    case OrderStatus.Created:
-        <div>
-            <div class="alert alert-warning task-status-alert">Создан</div>
-            <button class="btn btn-primary" @onclick="DeleteOrder">Отменить</button>
-        </div>
+    case OrderStatuses.Created:
+        <div class="d-inline alert alert-warning task-status-alert text-center mb-2">Создан</div>
+        <button class="btn btn-primary" @onclick="DeleteOrder">Отменить</button>
         break;
 }
 
 @code {
 
     [Parameter]
-    public OrderStatus Status { get; set; }
+    public OrdersOutputModel Order { get; set; }
 
     [Parameter]
     public Action DeleteOrder { get; set; }
+
+    private Modal modal = default!;
+
+    private UsersOutputModel _manager;
+
+    public UserOrderStatusTemplate()
+    {
+        _manager = new UsersOutputModel();
+    }
+
+    private async Task OnShowModalClick()
+    {
+        IUserClient userClient = new UserClient();
+        _manager = userClient.GetOrderManager(Order.Id);
+        await modal.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+    }
 
 }

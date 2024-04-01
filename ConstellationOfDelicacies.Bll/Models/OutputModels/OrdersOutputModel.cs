@@ -12,7 +12,7 @@ public class OrdersOutputModel
 
     public bool IsDeleted { get; set; }
 
-    public OrderStatus Status { get; set; }
+    public OrderStatuses Status { get; set; }
 
     public string Comment { get; set; }
 

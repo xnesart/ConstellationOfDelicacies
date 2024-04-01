@@ -7,13 +7,11 @@ using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.Repositories;
 using System.Linq;
 
-Context context = SingletoneStorage.GetStorage().Storage;
+RegistrationInputModel model = new RegistrationInputModel() { Email = "DgHnnJJ" };
 
-TaskClient taskClient = new TaskClient();
-OrderClient orderClient = new OrderClient();
-UserClient userClient = new UserClient();
+model.Email.ToLower();
 
-UserRepository userRepository = new UserRepository();
+Console.WriteLine(model.Email);
 
 //UsersDto userDto = new UsersDto()
 //{

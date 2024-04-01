@@ -1,32 +1,42 @@
-@page "/ApplicationComponent"
+
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 @using ConstellationOfDelicacies.Web.Components.Templates.Manager
-@* @using ConstellationOfDelicacies.Bll.IManager *@
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
-<PageTitle>Мои заказы</PageTitle>
+@inject NavigationManager navManager
+@rendermode InteractiveServer
 
-@if (_orders.Count() == 0) {
-    <Card>
-        <CardBody>
-            <CardText>У вас еще нет заказов</CardText>
-        </CardBody>
-    </Card>
-} else
-{
-    <div>
-        @foreach (var o in _orders)
+<AuthorizeView Roles="Менеджер">
+    <Authorized>
+        <PageTitle>Мои заказы</PageTitle>
+
+        @if (_orders.Count() == 0)
+        {
+            <Card>
+                <CardBody>
+                    <CardText>У вас еще нет заказов</CardText>
+                </CardBody>
+            </Card>
+        }
+        else
         {
             <div>
-                <ManagerOrderCardTemplate Order="o"/>
+                @foreach (var o in _orders)
+                {
+                    <div>
+                        <ManagerOrderCardTemplate Order="o" />
+                    </div>
+                }
             </div>
         }
-    </div>
-}
-
-
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     [CascadingParameter]
@@ -38,7 +48,7 @@
 
     private int _managerId;
 
-    public MyApplications()
+    public ManagerOrders()
     {
         _orders = new List<OrdersOutputModel>();
     }
@@ -58,13 +68,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _managerId = 20;
-        //await GetClaimsPrincipalData();
+        await GetClaimsPrincipalData();
 
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetManagerOrders(_managerId);
 
         await base.OnInitializedAsync();
+
     }
 
 }

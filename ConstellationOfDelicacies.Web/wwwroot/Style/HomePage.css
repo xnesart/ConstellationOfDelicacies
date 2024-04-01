@@ -30,6 +30,11 @@
     left: 80%;
 }
 
+    .banner-button:hover {
+        color: #F1F5A8;
+        background-color: #9e2129;
+    }
+
 .home-page-menu {
     text-align: center;
     display: flex;

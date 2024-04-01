@@ -24,5 +24,11 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             var pr = _storage.Profiles.Where(p => p.Id == prId).Single();
             return pr;
         }
+
+        public decimal GetWorkersAverageCost(int spId)
+        {
+            var result = _storage.Profiles.Where(p => p.Specialization.Id == spId).Average(p => p.Cost);
+            return result;
+        }
     }
 }

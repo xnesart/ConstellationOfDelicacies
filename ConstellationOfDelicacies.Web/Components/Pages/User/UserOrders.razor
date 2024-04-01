@@ -1,4 +1,6 @@
-﻿@using ConstellationOfDelicacies.Web.Components.Templates.User
+﻿@page "/myorders"
+@using ConstellationOfDelicacies.Web.Components.Templates.User
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
 @using Microsoft.AspNetCore.Components.Authorization
@@ -6,27 +8,34 @@
 @using System
 @rendermode InteractiveServer
 
-<PageTitle>Мои заказы</PageTitle>
+<AuthorizeView Roles="Пользователь">
+    <Authorized>
+        <PageTitle>Мои заказы</PageTitle>
 
-<Card>
-    <CardBody>
-        <div>
-            <CardTitle>Мои заказы:</CardTitle>
-            <CardSubTitle Style="margin-bottom: 5px;">
-                Чтобы отменить заказ в работе, свяжитесь с менеджером
-            </CardSubTitle>
-        </div>
-        
-        <div>
-            @foreach (var o in _orders)
-            {
+        <Card>
+            <CardBody>
                 <div>
-                    <UserOrderCardTemplate Order="o" OnDeleteOrder="OnUpdatePage"/>
+                    <CardTitle>Мои заказы:</CardTitle>
+                    <CardSubTitle Style="margin-bottom: 5px;">
+                        Чтобы отменить заказ в работе, свяжитесь с менеджером
+                    </CardSubTitle>
                 </div>
-            }
-        </div>        
-    </CardBody>
-</Card>
+
+                <div class="d-flex flex-wrap flex-row">
+                    @foreach (var o in _orders)
+                    {
+                        <div class="me-2">
+                            <UserOrderCardTemplate Order="o" OnUpdatePage="OnUpdatePage" />
+                        </div>
+                    }
+                </div>
+            </CardBody>
+        </Card>
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private List<OrdersOutputModel> _orders;
@@ -63,6 +72,7 @@
     {
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetUsersOrders(_userId);
+        _orders.Reverse();
     }
 
     public void UpdatePage()

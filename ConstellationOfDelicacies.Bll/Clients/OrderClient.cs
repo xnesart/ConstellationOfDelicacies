@@ -53,7 +53,13 @@ namespace ConstellationOfDelicacies.Bll.Clients
         public OrdersOutputModel GetOrderById(int orderId)
         {
             OrdersDto order = _repository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                order = new OrdersDto();
+            }
             var result = _mapper.Map<OrdersOutputModel>(order);
+            GetOrderStatus(result);
 
             return result;
         }
@@ -100,19 +106,19 @@ namespace ConstellationOfDelicacies.Bll.Clients
         {
             if (model.IsDeleted)
             {
-                model.Status = OrderStatus.Deleted;
+                model.Status = OrderStatuses.Deleted;
             }
             else if (model.IsCompleted)
             {
-                model.Status = OrderStatus.Completed;
+                model.Status = OrderStatuses.Completed;
             }
             else if (model.Tasks.Any(t => t.Title == "Менеджер"))
             {
-                model.Status = OrderStatus.InProgress;
+                model.Status = OrderStatuses.InProgress;
             }
             else
             {
-                model.Status = OrderStatus.Created;
+                model.Status = OrderStatuses.Created;
             }
         }
 

@@ -1,0 +1,68 @@
+@page "/dashboard"
+@using ConstellationOfDelicacies.Bll.Clients
+@using Microsoft.AspNetCore.Components.Authorization
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@rendermode InteractiveServer
+
+<AuthorizeView Roles="Сотрудник">
+    <Authorized>
+        <PageTitle>Мои задачи</PageTitle>
+        <h3>Ваши задачи:</h3>
+        <Card>
+            <div class="container dashboard-container">
+                @if (_tasks.Count() != 0)
+                {
+                    <CardGroup Class="dashboard-cardgroup">
+                        @foreach (var task in _tasks)
+                        {
+                            <div class="worker-card">
+                                <DashBoardCardTemplate Task="@task" UserId="@UserId" />
+                            </div>
+                        }
+                    </CardGroup>
+                }
+                else
+                {
+                    <p>У вас еще нет задач</p>
+                }
+            </div>
+        </Card>
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    private List<TasksOutputModel> _tasks;
+    private List<OrdersOutputModel> _orders;
+    private int UserId;
+
+    public WorkerDashboard()
+    {
+        _tasks = new List<TasksOutputModel>();
+        _orders = new List<OrdersOutputModel>();
+    }    
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            UserId = int.Parse(user.FindFirst("UserId").Value);
+        }
+
+        GetTaskForWorker();
+    }
+    
+    private void GetTaskForWorker()
+    {
+        TaskClient client = new TaskClient();
+        _tasks = client.GetAllWorkerTasks(UserId);
+    }    
+
+}

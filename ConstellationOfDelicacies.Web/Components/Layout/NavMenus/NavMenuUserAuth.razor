@@ -2,7 +2,9 @@
 
 <div class="navmenu">
     <div class="navmenu-logo">
-        <a href="/"><img class="navmenu-logo-img" src="/Resources/logo.png" /></a>
+        <a href="/">
+            <img class="navmenu-logo-img" src="/Resources/logo.png" />
+        </a>
     </div>
     <nav class="navmenu-links">
         <div class="navmenu-link">
@@ -16,8 +18,18 @@
         </div>
     </nav>
     <div class="navmenu-user">
-        <img class="navmenu-icon" src="/Resources/icons/profile.svg" alt="Profile" />
-        <img class="navmenu-icon" src="/Resources/icons/menu.svg" alt="Menu" />
+        <a class="nav-link pe-0" href="">
+            <img class="navmenu-icon" src="/Resources/icons/profile.svg" alt="Profile" />
+        </a>
+
+        <a class="nav-link pe-1" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img class="navmenu-icon" src="/Resources/icons/menu.svg" alt="Menu" />
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/myorders">Мои заказы</a></li>
+            <li><a class="dropdown-item" href="">Редактировать профиль</a></li>
+            <li><a class="dropdown-item" href="/logout">Выйти</a></li>
+        </ul>
     </div>
 </div>
 

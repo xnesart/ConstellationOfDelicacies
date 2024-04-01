@@ -138,4 +138,12 @@ public class UserRepository : IUserRepository
             .Where(u => u.Tasks.Any(t => t.Title == "Пользователь" && t.Order.Id == orderId)).Single();
         return user;
     }
+
+    public UsersDto GetOrderManager(int orderId)
+    {
+        var user = _storage.Users
+            .Where(u => u.Tasks.Any(t => t.Title == "Менеджер" && t.Order.Id == orderId)).SingleOrDefault();
+
+        return user;
+    }
 }

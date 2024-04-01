@@ -8,5 +8,6 @@ public interface IProfileRepository
 
     public ProfilesDto GetProfileById(int prId);
 
+    public decimal GetWorkersAverageCost(int spId);
 }
 

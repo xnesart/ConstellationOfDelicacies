@@ -1,33 +1,43 @@
-@page "/applications"
+@page "/free_orders"
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Web.Components.Templates.Manager
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<PageTitle>Заявки заказов</PageTitle>
+<AuthorizeView Roles="Менеджер">
+    <Authorized>
+        <PageTitle>Свободные заказы</PageTitle>
 
-@if (_orders.Count() == 0)
-{
-    <Card>
-        <CardBody>
-            <CardText>Нет свободных заказов</CardText>
-        </CardBody>
-    </Card>
-} else
-{
-    <div>
-        @foreach (var o in _orders)
+        @if (_orders.Count() == 0)
+        {
+            <Card>
+                <CardBody>
+                    <CardText>Нет свободных заказов</CardText>
+                </CardBody>
+            </Card>
+        }
+        else
         {
             <div>
-                <FreeOrderCardTemplate ManagerId="_managerId" Order="o"/>
+                @foreach (var o in _orders)
+                {
+                    <div>
+                        <FreeOrderCardTemplate ManagerId="_managerId" Order="o" />
+                    </div>
+                }
             </div>
         }
-    </div>
-}
+
+    </Authorized>
+    <NotAuthorized>
+        <HomeRedirect/>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
 
@@ -40,7 +50,7 @@
 
     private int _managerId;
 
-    public Applications()
+    public FreeOrders()
     {
         _orders = new List<OrdersOutputModel>();
     }
@@ -60,8 +70,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _managerId = 20;
-        //await GetClaimsPrincipalData();
+        await GetClaimsPrincipalData();
 
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetFreeOrders();
@@ -70,9 +79,7 @@
     }
 
     protected override void OnAfterRender(bool firstRender)
-    {
-
-         
+    {         
         base.OnAfterRender(firstRender);
     }
 
