@@ -97,6 +97,7 @@
 
         Model.OrderDate = Model.OrderDateOnly.ToDateTime(Model.OrderTimeOnly);
         Model.UserId = UserId;
+        Model.TotalPrice = _approxCost;
 
         IOrderClient user = new OrderClient();
         user.AddUserOrder(Model);
