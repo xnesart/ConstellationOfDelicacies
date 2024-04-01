@@ -1,0 +1,109 @@
+﻿@rendermode InteractiveServer
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Enums
+
+<div class="registration-form">
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartRegistration" FormName="LoginForm">
+        <DataAnnotationsValidator />
+
+        <div class="col-md-12">
+            <label for="login-name" class="form-label">Введите имя:</label>
+            <InputText type="text" class="form-control" id="login-name" placeholder="Имя"
+                       @bind-Value="Model.Name" />
+        </div>
+        <div class="col-md-12">
+            <label for="login-middleName" class="form-label">Введите отчество:</label>
+            <InputText type="text" class="form-control" id="login-middleName" placeholder="Фамилия"
+                       @bind-Value="Model.MiddleName" />
+            <p class="order-form-note">*Если отсутствует, оставьте поле пустым</p>
+        </div>
+        <div class="col-md-12">
+            <label for="login-lastName" class="form-label">Введите фамилию:</label>
+            <InputText type="text" class="form-control" id="login-lastName" placeholder="Отчество"
+                       @bind-Value="Model.LastName" />
+        </div>
+        <div class="col-md-12">
+            <label for="login-mail" class="form-label">Введите электронную почту:</label>
+            <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail"
+                       @bind-Value="Model.Email" />
+        </div>
+        <div class="col-md-12">
+            <label for="login-phone" class="form-label">Введите телефон:</label>
+            <InputText type="phone" class="form-control" id="login-phone" placeholder="Телефон"
+                       @bind-Value="Model.Phone" pattern="8[0-9]{10}" />
+            <p class="order-form-note">*В формате: 81112223333</p>
+        </div>
+        <div class="col-md-12">
+            <label for="login-pass" class="form-label">Введите пароль:</label>
+            <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
+                       @bind-Value="Model.Password" />
+            <p class="order-form-note">*Минимум 4 символа</p>
+        </div>
+        <div class="col-md-12" lass="col-12">
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            <a href="/" class="btn btn-primary">Отмена</a>
+        </div>
+    </EditForm>
+
+    @if (_mailCheck)
+    {
+        <div class="alert alert-danger" role="alert">
+            Регистрация не удалась. Проверьте свои учетные данные и повторите попытку.
+        </div>
+    }
+</div>
+
+
+@code {
+
+    [SupplyParameterFromForm]
+    public RegistrationInputModel Model { get; set; }
+
+    [Parameter]
+    public Action RegistrationComplete { get; set; }
+
+    private bool _mailCheck { get; set; }
+
+    public RegistrationFormTemplate()
+    {
+        Model = new RegistrationInputModel();
+    }
+
+    private void StartRegistration()
+    {
+        UsersInputModel model = new UsersInputModel()
+            {
+                FirstName = Model.Name,
+                MiddleName = Model.MiddleName,
+                LastName = Model.LastName,
+                Mail = Model.Email.ToLower(),
+                Password = Model.Password,
+                Phone = Model.Phone,
+                Role = new RolesInputModel()
+                {
+                    Id = (int)Roles.User
+                }
+            };
+
+        MailCheck();
+        if (_mailCheck == false)
+        {
+            UserClient userClient = new UserClient();
+            userClient.AddUser(model);
+
+            RegistrationComplete();
+        }
+    }
+
+    private void MailCheck()
+    {
+        UserClient userClient = new UserClient();
+        var user = userClient.GetUserByEmail(Model.Email);
+        if (user != null && user.Mail == Model.Email)
+        {
+            _mailCheck = true;
+        }
+    }
+
+}

@@ -110,3 +110,8 @@
     border-radius: 5px;
     padding: 5px 10px;
 }
+
+    .navmenu-button:hover {
+        color: #F1F5A8;
+        background-color: #9e2129;
+    }
