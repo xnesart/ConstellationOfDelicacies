@@ -46,8 +46,6 @@ public class UserRepository : IUserRepository
 
     public void UpdateUser(UsersDto user)
     {
-        SetUserDto(user);
-
         var storageUser = GetUserById(user.Id);
 
         if (storageUser != null)
@@ -56,9 +54,6 @@ public class UserRepository : IUserRepository
             storageUser.LastName = user.LastName;
             storageUser.MiddleName = user.MiddleName;
             storageUser.Phone = user.Phone;
-            storageUser.Mail = user.Mail;
-            storageUser.Profile = user.Profile;
-            storageUser.Password = user.Password;
             
             _storage.Users.Update(storageUser);
             _storage.SaveChanges();

@@ -1,0 +1,81 @@
+﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@rendermode InteractiveServer
+
+<div>
+    @if (_isSubmited)
+    {
+        <div class="alert alert-success">
+            Сотрудник "Id @Model.Id" обновлен
+        </div>
+    }
+    <EditForm Model=@Model FormName="EditWorker">
+        <DataAnnotationsValidator />
+
+        <div class="col-md-12">
+            <label for="worker-firstname" class="form-label">Введите имя:</label>
+            <InputText class="form-control" @bind-Value="@Model.FirstName" id="worker-firstname"
+                       placeholder="Имя" />
+        </div>
+        <div class="col-md-12">
+            <label for="worker-lastname" class="form-label">Введите фамилию:</label>
+            <InputText class="form-control" @bind-Value="@Model.LastName" id="worker-lastname"
+                       placeholder="Фамилия" />
+        </div>
+        <div class="col-md-12">
+            <label for="worker-middlename" class="form-label">Введите отчество:</label>
+            <InputText class="form-control" @bind-Value="@Model.MiddleName" id="worker-middlename"
+                       placeholder="Отчество" />
+            <p class="order-form-note">*Если отсутствует, оставьте поле пустым</p>
+        </div>
+        <div class="col-md-12">
+            <label for="worker-phone" class="form-label">Введите номер телефона:</label>
+            <InputText type="tel" class="form-control" @bind-Value="@Model.Phone" id="worker-phone"
+                       placeholder="Номер телефона" pattern="8[0-9]{10}" />
+            <p class="order-form-note">*В формате: 81112223333</p>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary" @onclick="EditWorker">Изменить</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public UsersInputModel Model { get; set; }
+
+    [Parameter]
+    public UsersOutputModel Worker { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private bool _isSubmited;
+
+    public EditWorkerTemplate()
+    {
+        Model = new UsersInputModel();
+    }
+
+    protected override void OnInitialized()
+    {
+        Model.Id = Worker.Id;
+        Model.FirstName = Worker.FirstName;
+        Model.MiddleName = Worker.MiddleName;
+        Model.LastName = Worker.LastName;
+        Model.Phone = Worker.Phone;
+
+        base.OnInitialized();
+    }
+
+    private void EditWorker()
+    {
+        _isSubmited = true;
+
+        IUserClient userClient = new UserClient();
+        userClient.UpdateUser(Model);
+        UpdatePage();
+    }
+}
