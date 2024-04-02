@@ -27,8 +27,8 @@
             @if (Order.Status == OrderStatuses.InProgress)
             {
                 <div>
-                    <Button Color="ButtonColor.Primary">Завершить</Button>
-                    <Button Color="ButtonColor.Warning">Отменить</Button>
+                    <Button Color="ButtonColor.Primary" @onclick="CompleteOrder">Завершить</Button>
+                    <Button Color="ButtonColor.Warning" @onclick="DeleteOrder">Отменить</Button>
                 </div>                
             }            
         </div>
@@ -97,7 +97,8 @@
 
     private void CompleteOrder()
     {
-        
+        _orderClient.CompleteUserOrder(Order!.Id);
+        UpdatePage();
     }
 
 }
