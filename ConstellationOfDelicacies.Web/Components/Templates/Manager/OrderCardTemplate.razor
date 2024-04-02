@@ -4,6 +4,8 @@
 @using ConstellationOfDelicacies.Bll.Enums
 @rendermode InteractiveServer
 
+<Modal @ref="modal" />
+
 <Card>
     <CardBody Class="d-flex flex-row justify-content-between">
         <div>
@@ -17,6 +19,7 @@
                 <p><span class="order-tasks-title">Количество человек:</span> @Order!.NumberOfPersons</p>
                 <p><span class="order-tasks-title">Комментарий заказчика:</span> @Order!.Comment</p>
                 <p><span class="order-tasks-title">Адресс проведения:</span> @Order!.Address</p>
+                <p><span class="order-tasks-title">Дата:</span> @Order!.OrderDate</p>
             </CardText>
             <ul>
                 <li>Стоимость заказа: @Order!.TotalPrice</li>
@@ -24,6 +27,7 @@
         </div>
         <div class="d-flex flex-column align-items-center justify-content-between">
             <ManagerOrderStatusTemplate Status="Order.Status"/>
+            <Button Color="ButtonColor.Success" @onclick="EditOrder">Изменить</Button>
             @if (Order.Status == OrderStatuses.InProgress)
             {
                 <div>
@@ -38,10 +42,12 @@
 @code {
 
     [Parameter, EditorRequired]
-    public OrdersOutputModel? Order { get; set; }
+    public OrdersOutputModel Order { get; set; }
 
     [Parameter]
     public Action UpdatePage { get; set; }
+
+    private Modal modal = default!;
 
     private IOrderClient _orderClient;
 
@@ -99,6 +105,18 @@
     {
         _orderClient.CompleteUserOrder(Order!.Id);
         UpdatePage();
+    }
+
+    private async Task EditOrder()
+    {
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("Order", Order);
+        parameters.Add("UpdatePage", UpdatePage);
+
+        await modal.ShowAsync<EditOrderTemplate>(title: "Изменить заказ", parameters: parameters);
     }
 
 }
