@@ -55,6 +55,7 @@ public class UserRepository : IUserRepository
             storageUser.Phone = user.Phone;
             storageUser.Mail = user.Mail;
             storageUser.Profile = user.Profile;
+            storageUser.Password = user.Password;
             
             _storage.Users.Update(storageUser);
             _storage.SaveChanges();
@@ -135,14 +136,14 @@ public class UserRepository : IUserRepository
     public UsersDto GetOrderUser(int orderId)
     {
         var user = _storage.Users
-            .Where(u => u.Tasks.Any(t => t.Title == "Пользователь" && t.Order.Id == orderId)).Single();
+            .Where(u => u.Tasks.Any(t => t.Title == "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" && t.Order.Id == orderId)).Single();
         return user;
     }
 
     public UsersDto GetOrderManager(int orderId)
     {
         var user = _storage.Users
-            .Where(u => u.Tasks.Any(t => t.Title == "Менеджер" && t.Order.Id == orderId)).SingleOrDefault();
+            .Where(u => u.Tasks.Any(t => t.Title == "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" && t.Order.Id == orderId)).SingleOrDefault();
 
         return user;
     }

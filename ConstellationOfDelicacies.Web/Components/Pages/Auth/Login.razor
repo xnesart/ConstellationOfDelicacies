@@ -59,7 +59,8 @@
     {
         var claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.Role, "Менеджер")
+            new Claim(ClaimTypes.Role, "Менеджер"),
+            new Claim(ClaimTypes.Email, Model.Email)
         };
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
