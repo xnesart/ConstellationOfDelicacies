@@ -102,6 +102,8 @@
         IOrderClient client = new OrderClient();
         client.AddUserOrder(Model);
         _isSubmited = true;
+
+        Model = new OrderInputModel();
     }
 
     private void CountApproxCost(ChangeEventArgs e)

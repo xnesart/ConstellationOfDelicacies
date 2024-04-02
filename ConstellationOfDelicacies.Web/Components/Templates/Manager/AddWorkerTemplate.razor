@@ -6,10 +6,10 @@
 @rendermode InteractiveServer
 
 <div>
-    @if (isSubmited)
+    @if (_isSubmited)
     {
         <div class="alert alert-success">
-            Сотрудник "@Model.FirstName @Model.LastName" добавлен
+            Сотрудник "@_submitedName" добавлен
         </div>
     }
     <EditForm Model="@Model" class="row g-3" OnValidSubmit="@AddWorker" FormName="AddWorker">
@@ -75,7 +75,8 @@
     public Action UpdatePage { get; set; }
 
     private List<ProfilesOutputModel> _profiles;
-    private bool isSubmited;
+    private string _submitedName;
+    private bool _isSubmited;
 
     public AddWorkerTemplate()
     {
@@ -84,6 +85,8 @@
         Model.Profile = new ProfilesInputModel();
 
         _profiles = new List<ProfilesOutputModel>();
+
+        _submitedName = "";
     }
 
     protected override void OnInitialized()
@@ -99,10 +102,13 @@
     public void AddWorker()
     {
         UserClient userClient = new UserClient();
-
-        isSubmited = true;
-
         userClient.AddUser(Model);
+
+        _submitedName = $"{Model.FirstName} {Model.LastName}";
+        _isSubmited = true;
+
+        Model = new UsersInputModel();
+
         UpdatePage();
         StateHasChanged();
     }
