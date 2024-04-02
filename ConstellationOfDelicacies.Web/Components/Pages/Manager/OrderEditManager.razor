@@ -3,9 +3,10 @@
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Models.InputModels;
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
+@using ConstellationOfDelicacies.Web.Components.Templates.Manager
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
-@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
@@ -16,7 +17,7 @@
     <Authorized>
         <Modal @ref="modal" />
         <div>
-            <OrderCardTemplate Order="_order" />
+            <OrderCardTemplate Order="_order" UpdatePage="OnUpdatePage"/>
         </div>
         <div>
             <Card>
@@ -69,9 +70,9 @@
 
     private Modal modal = default!;
 
-    private IOrderClient? _client;
-    private ITaskClient? _taskClient;
-    private IUserClient? _userClient;
+    private IOrderClient _client;
+    private ITaskClient _taskClient;
+    private IUserClient _userClient;
 
     private OrdersOutputModel _order;
     private List<TasksOutputModel>? _orderTasks;
@@ -82,6 +83,13 @@
     public OrderEditManager()
     {
         OnUpdatePage = UpdatePage;
+
+        _client = new OrderClient();
+        _taskClient = new TaskClient();
+        _userClient = new UserClient();
+
+        _order = new OrdersOutputModel();
+        _manager = new UsersOutputModel();
     }
 
     private async Task GetClaims()
@@ -103,10 +111,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _client = new OrderClient();
-        _taskClient = new TaskClient();
-        _userClient = new UserClient();
-
         _order = _client.GetOrderById(orderId);
         if(_order.Id != orderId)
         {
@@ -115,12 +119,13 @@
 
         _manager = _userClient.GetOrderManager(orderId);
         await GetClaims();
-        
+
         _orderTasks = _taskClient.GetAllOrderTasks(orderId);
     }
 
     public void UpdatePage()
     {
+        _client.UpdateOrderPrice(orderId);
         _order = _client.GetOrderById(orderId);
         _orderTasks = _taskClient.GetAllOrderTasks(orderId);
         StateHasChanged();

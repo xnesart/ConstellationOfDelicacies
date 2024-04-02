@@ -16,6 +16,8 @@ public interface IOrderClient
 
     public void DeleteUserOrder(int orderId);
 
+    public void CompleteUserOrder(int orderId);
+
     public List<OrdersOutputModel> GetFreeOrders();
 
     public List<OrdersOutputModel> GetManagerOrders(int managerId);

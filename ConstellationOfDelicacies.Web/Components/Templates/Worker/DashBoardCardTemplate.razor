@@ -1,4 +1,5 @@
 @using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Enums
 
 <Card>
     <CardBody class="dashboard-card">
@@ -29,6 +30,6 @@
     private void GetOnWork()
     {
         TaskClient taskClient = new TaskClient();
-        taskClient.UpdateTaskStatus(Task.Id,2);
+        taskClient.UpdateTaskStatus((int)TaskStatuses.InProgress, Task.Id);
     }
 }

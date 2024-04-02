@@ -1,4 +1,6 @@
 ﻿@using ConstellationOfDelicacies.Web.Components.Templates.Manager
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Enums
 @rendermode InteractiveServer
 
@@ -25,8 +27,8 @@
             @if (Order.Status == OrderStatuses.InProgress)
             {
                 <div>
-                    <Button Color="ButtonColor.Primary">Завершить</Button>
-                    <Button Color="ButtonColor.Warning">Отменить</Button>
+                    <Button Color="ButtonColor.Primary" @onclick="CompleteOrder">Завершить</Button>
+                    <Button Color="ButtonColor.Warning" @onclick="DeleteOrder">Отменить</Button>
                 </div>                
             }            
         </div>
@@ -38,9 +40,19 @@
     [Parameter, EditorRequired]
     public OrdersOutputModel? Order { get; set; }
 
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private IOrderClient _orderClient;
+
     private string? _userName;
     private string? _userPhone;
     private string? _userMail;
+
+    public OrderCardTemplate()
+    {
+        _orderClient = new OrderClient();
+    }
 
     protected override void OnInitialized()
     {
@@ -76,4 +88,17 @@
         }
         base.OnAfterRender(firstRender);
     }
+
+    private void DeleteOrder()
+    {
+        _orderClient.DeleteUserOrder(Order!.Id);
+        UpdatePage();
+    }
+
+    private void CompleteOrder()
+    {
+        _orderClient.CompleteUserOrder(Order!.Id);
+        UpdatePage();
+    }
+
 }

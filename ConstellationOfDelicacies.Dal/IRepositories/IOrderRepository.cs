@@ -12,6 +12,8 @@ namespace ConstellationOfDelicacies.Dal.IRepositories
 
         public void DeleteOrder(int orderId);
 
+        public void CompleteOrder(int orderId);
+
         public List<OrdersDto> GetFreeOrders();
 
         public List<OrdersDto> GetAllManagerOrders(int managerId);

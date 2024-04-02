@@ -1,25 +1,30 @@
 ﻿@using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Enums
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @rendermode InteractiveServer
 @inject NavigationManager navManager
 
 <Card>
-    <CardBody Class="d-flex flex-row justify-content-between ">
+    <CardBody Class="d-flex flex-row justify-content-between">
         <div>
             <CardTitle>Заказ @Order!.Id</CardTitle>
             <CardSubTitle>Заказчик: @_userName</CardSubTitle>
-            <CardText>Пожелания: @Order!.Comment</CardText>
+            <CardText>
+                <p>Пожелания: @Order!.Comment</p>
+                <p>Количество персон: @Order!.NumberOfPersons</p>
+            </CardText>
         </div>
-        <div class="d-flex flex-row align-items-center">
-            <Button Style="margin-right: 10px;" Color="ButtonColor.Primary" @onclick="EditOrder">
-                Редактировать
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <ManagerOrderStatusTemplate Status="Order.Status"/>
+            <Button class="mt-1" Style="margin-right: 10px;" Color="ButtonColor.Primary" @onclick="EditOrder">
+                Посмотреть
             </Button>
         </div>
     </CardBody>
  </Card>
 
-    @code {
+@code {
 
     [Parameter]
     public OrdersOutputModel Order { get; set; }

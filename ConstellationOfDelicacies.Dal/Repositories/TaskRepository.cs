@@ -1,4 +1,5 @@
 ﻿using ConstellationOfDelicacies.Dal.Dtos;
+using ConstellationOfDelicacies.Dal.Enums;
 using ConstellationOfDelicacies.Dal.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -67,26 +68,22 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         public List<TasksDto> GetAllWorkerTasks(int userId)
         {
             List<TasksDto> result = new List<TasksDto>();
-            
-            // result = _storage.Tasks.Include(t=>t.Order).Include(t=>t.Users)
-            //     .Where(t=>!t.IsDeleted).Where(t => t.Order != null && !t.Order.IsDeleted && !t.Order.IsCompleted)
-            //.ToList();
-             result = _storage.Tasks.Include(t=>t.Status).Where(t=>t.Users.Any(u=>u.Id == userId) && !t.IsDeleted).Include(t=>t.Order).ToList();
+             result = _storage.Tasks.Include(t=>t.Status).Where(t=>t.Users.Any(u=>u.Id == userId) && !t.IsDeleted)
+                .Where(t => t.Status.Id != (int)TaskStatuses.Completed).Include(t=>t.Order).ToList();
             
             return result;
         }
 
-        public void UpdateTaskStatus(int id,int taskId)
+        public void UpdateTaskStatus(int statusId,int taskId)
         {
-            // var task = _storage.Tasks.FirstOrDefault(t => t.Id == taskId);
-            var task = _storage.Tasks.Where(t=>t.Id == id).FirstOrDefault();
+            var task = _storage.Tasks.Where(t=>t.Id == taskId).FirstOrDefault();
             if (task != null)
             {
-                // var status = _storage.TaskStatuses.FirstOrDefault(s => s.Id == id);
-                var status = _storage.TaskStatuses.Where(s=>s.Id == taskId).FirstOrDefault();
+                var status = _storage.TaskStatuses.Where(s=>s.Id == statusId).FirstOrDefault();
                 if (status != null)
                 {
                     task.Status = status;
+                    _storage.Tasks.Update(task);
                     _storage.SaveChanges();
                 }
             }

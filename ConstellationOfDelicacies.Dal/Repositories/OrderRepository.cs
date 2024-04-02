@@ -40,6 +40,19 @@ namespace ConstellationOfDelicacies.Dal.Repositories
             }          
         }
 
+        public void CompleteOrder(int orderId)
+        {
+            OrdersDto order = GetOrderById(orderId);
+
+            if (order != null)
+            {
+                order.IsCompleted = true;
+
+                _storage.Orders.Update(order);
+                _storage.SaveChanges();
+            }
+        }
+
         public void UpdateOrder(OrdersDto order)
         {
             OrdersDto storageOrder = GetOrderById(order.Id);

@@ -8,10 +8,14 @@ namespace ConstellationOfDelicacies.Bll.Interfaces
         public List<TasksOutputModel> GetAllOrderTasks(int orderId);
 
         public void AddOrderTask(TasksInputModel model);
+
         public List<TasksOutputModel> GetAllWorkerTasks(int userId);
-        public void UpdateTaskStatus(int id, int taskId);
+
+        public void UpdateTaskStatus(int statusId, int taskId);
 
         public void DeleteOrderTask(int taskId);
+
+        public void CompleteOrderTask(int taskId);
 
         public void AddTaskWorker(TasksInputModel model);
 
