@@ -88,6 +88,7 @@
         
 
         userClient.UpdateUser(userModel);
+        navManager.NavigateTo("./");  
 
     }
     
@@ -95,8 +96,7 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-
-        // Получаем значение клейма "email"
+        
         var userEmail = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
         _oldEmail = userEmail;
         return userEmail;
