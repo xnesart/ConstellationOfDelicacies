@@ -10,7 +10,10 @@
         <div>
             <CardTitle>Заказ @Order!.Id</CardTitle>
             <CardSubTitle>Заказчик: @_userName</CardSubTitle>
-            <CardText>Пожелания: @Order!.Comment</CardText>
+            <CardText>
+                <p>Пожелания: @Order!.Comment</p>
+                <p>Количество персон: @Order!.NumberOfPersons</p>
+            </CardText>
         </div>
         <div class="d-flex align-items-center">
             <Button Style="margin-right: 10px;" Color="ButtonColor.Primary" @onclick="AcceptOrder">
