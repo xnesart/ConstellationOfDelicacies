@@ -1,11 +1,10 @@
-
+@using ConstellationOfDelicacies.Web.Components.Templates.Manager
+@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Enums
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
-@using ConstellationOfDelicacies.Web.Components.Templates.Manager
-@using ConstellationOfDelicacies.Web.Components.Pages.Auth
 
 @inject NavigationManager navManager
 @rendermode InteractiveServer
@@ -26,7 +25,7 @@
         {
             <div class="mb-2">
                 <Button @onclick="AllOrders" Color="ButtonColor.Info">Все</Button>
-                <Button @onclick="InProgressOrders" Color="ButtonColor.Warning">В работе</Button>
+                <Button @onclick="InProgressOrders" Color="ButtonColor.Primary">В работе</Button>
                 <Button @onclick="CompletedOrders" Color="ButtonColor.Success">Завершенные</Button>
                 <Button @onclick="DeletedOrders" Color="ButtonColor.Danger">Удаленные</Button>
             </div>
