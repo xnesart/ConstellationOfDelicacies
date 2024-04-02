@@ -1,0 +1,126 @@
+﻿@using ConstellationOfDelicacies.Bll.Enums
+@using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
+@rendermode InteractiveServer
+
+<Modal @ref="modal" />
+
+<Card>
+    <CardBody>
+        <CardTitle>
+            <div class="d-flex justify-content-between mb-2">
+                <h4>Задачи заказа</h4>
+                <div>
+                    <Button @onclick="AllTasks" Color="ButtonColor.Info">Все</Button>
+                    <Button @onclick="CreatedTasks" Color="ButtonColor.Primary">Созданы</Button>
+                    <Button @onclick="InProgressTasks" Color="ButtonColor.Success">В работе</Button>
+                    <Button @onclick="NotAssignedTasks" Color="ButtonColor.Danger">Не назначены</Button>
+                </div>
+                @if (Order.Status == OrderStatuses.InProgress)
+                {
+                    <div>
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Primary"
+                                @onclick="AddOrderTasks">
+                            Добавить задачу
+                        </Button>
+                    </div>                    
+                }
+            </div>
+        </CardTitle>
+        <CardText>
+            @if (_orderTasks == null || _orderTasks.Count == 0)
+            {
+                <p class="order-tasks-side-text">Ещё нет назначенных задач</p>
+            }
+            else
+            {
+                <div class="order-tasks">
+                    @foreach (var t in _sortedTasks)
+                    {
+                        <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage" Status="Order.Status" />
+                    }
+                </div>
+            }
+        </CardText>
+    </CardBody>
+</Card>
+
+@code {
+
+    [Parameter]
+    public OrdersOutputModel Order { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    public Action OnUpdatePage;
+
+    private Modal modal = default!;
+
+    private List<TasksOutputModel> _orderTasks;
+    private List<TasksOutputModel> _sortedTasks;
+
+    private ITaskClient _taskClient;
+
+    public OrderTasksListTemplate()
+    {
+        _taskClient = new TaskClient();
+        _orderTasks = new List<TasksOutputModel>();
+        _sortedTasks = new List<TasksOutputModel>();
+
+        OnUpdatePage = UpdateTasks;
+    }
+
+    protected override void OnInitialized()
+    {
+        OnUpdatePage += UpdatePage;
+        UpdateTasks();
+
+        base.OnInitialized();
+    }
+
+    private async Task AddOrderTasks()
+    {
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("OrderId", Order.Id);
+        parameters.Add("UpdatePage", OnUpdatePage);
+
+        await modal.ShowAsync<AddTaskTemplate>(title: "Добавить задачу", parameters: parameters);
+    }
+
+    public void UpdateTasks()
+    {
+        _orderTasks = _taskClient.GetAllOrderTasks(Order.Id);
+        _orderTasks.Reverse();
+        _sortedTasks = _orderTasks;
+        StateHasChanged();
+    }
+
+    private void AllTasks()
+    {
+        _sortedTasks = _orderTasks;
+        StateHasChanged();
+    }
+
+    private void InProgressTasks()
+    {
+        _sortedTasks = _orderTasks.Where(t => t.Status.Id == (int)TaskStatuses.InProgress).ToList();
+        StateHasChanged();
+    }
+
+    private void CreatedTasks()
+    {
+        _sortedTasks = _orderTasks.Where(t => t.Status.Id == (int)TaskStatuses.Created).ToList();
+        StateHasChanged();
+    }
+
+    private void NotAssignedTasks()
+    {
+        _sortedTasks = _orderTasks.Where(t => t.Users.Count() == 0).ToList();
+        StateHasChanged();
+    }
+
+}

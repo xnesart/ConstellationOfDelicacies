@@ -16,7 +16,7 @@
         </div>
     }
 
-    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@AddOrder">
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@AddOrder" FormName="CreateOrder">
         <DataAnnotationsValidator />
 
         <div class="col-md-12">
@@ -99,9 +99,11 @@
         Model.UserId = UserId;
         Model.TotalPrice = _approxCost;
 
-        IOrderClient user = new OrderClient();
-        user.AddUserOrder(Model);
+        IOrderClient client = new OrderClient();
+        client.AddUserOrder(Model);
         _isSubmited = true;
+
+        Model = new OrderInputModel();
     }
 
     private void CountApproxCost(ChangeEventArgs e)

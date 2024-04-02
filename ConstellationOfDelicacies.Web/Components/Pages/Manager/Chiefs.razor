@@ -23,7 +23,7 @@
                 @foreach (var chief in _chiefs)
                 {
                     <div class="worker-card">
-                        <WorkerCardTemplate Worker="@chief" />
+                        <WorkerCardTemplate Worker="@chief" UpdatePage="OnUpdatePage"/>
                     </div>
                 }
             </CardGroup>
@@ -37,21 +37,25 @@
 
 
 @code {
+
     private Modal modal = default!;
+
+    public Action OnUpdatePage;
 
     private List<UsersOutputModel> _chiefs;
     private UserClient _client;
 
     public Chiefs()
     {
+        OnUpdatePage = UpdatePage;
         _client = new UserClient();
         _chiefs = new List<UsersOutputModel>();
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override void OnInitialized()
     {
         _chiefs = _client.GetAllChiefs();
-        base.OnAfterRender(firstRender);
+        base.OnInitialized();
     }
 
     private void RemoveChief(int id)
@@ -67,4 +71,11 @@
         modal.IsScrollable = true;
         await modal.ShowAsync<AddChiefTemplate>(title: "Добавить повара");
     }
+
+    public void UpdatePage()
+    {
+        _chiefs = _client.GetAllChiefs();
+        StateHasChanged();
+    }
+
 }

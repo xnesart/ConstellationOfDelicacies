@@ -1,0 +1,83 @@
+﻿@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Interfaces
+@using ConstellationOfDelicacies.Bll.Clients
+@rendermode InteractiveServer
+
+<div class="order-form">
+    @if (_isSubmited)
+    {
+        <div class="alert alert-success mb-2">
+            Заказ успешно изменен
+        </div>
+    }
+
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@EditOrder" FormName="EditOrder">
+        <DataAnnotationsValidator />
+
+        <div class="col-md-12">
+            <label for="order-date" class="form-label">Выберите дату:</label>
+            <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="Model.OrderDate" 
+                       id="order-date" class="form-control" />
+        </div>
+        <div class="col-md-12">
+            <label for="order-num-of-per" class="form-label">Введите количество персон:</label>
+            <InputNumber class="form-control" @bind-Value="Model.NumberOfPersons" id="order-num-of-per"/>
+        </div>
+        <div class="col-md-12">
+            <label for="order-address" class="form-label">Введите адрес:</label>
+            <InputText class="form-control" @bind-Value="Model.Address" id="order-address"
+                       placeholder="Адрес" />
+        </div>
+        <div class="col-md-12">
+            <label for="order-comment" class="form-label">Ваши пожелания:</label>
+            <InputText class="form-control" type="text" @bind-Value="Model.Comment" id="order-comment"
+                       placeholder="Пожелания" />
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Изменить</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public OrderInputModel Model { get; set; }
+
+    [Parameter]
+    public OrdersOutputModel Order { get; set; }
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private bool _isSubmited;
+
+    private DateOnly _minDate;
+    private DateOnly _maxDate;
+    private TimeOnly _minTime = new TimeOnly(6, 0);
+    private TimeOnly _maxTime = new TimeOnly(23, 0);
+
+    public EditOrderTemplate()
+    {
+        Model = new OrderInputModel();
+    }
+
+    protected override void OnInitialized()
+    {
+        Model.Id = Order.Id;
+        Model.OrderDate = Order.OrderDate;
+        Model.Comment = Order.Comment;
+        Model.Address = Order.Address;
+        Model.NumberOfPersons = Order.NumberOfPersons;
+        base.OnInitialized();
+    }
+
+    private void EditOrder()
+    {
+        IOrderClient client = new OrderClient();
+        client.UpdateUserOrder(Model);
+
+        _isSubmited = true;
+        UpdatePage();
+    }
+}

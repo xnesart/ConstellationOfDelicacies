@@ -8,7 +8,13 @@
     @if (_isSubmited)
     {
         <div class="alert alert-success">
-            Задача "@Model.Title" добавлена
+            Задача "@_submitedTitle" добавлена
+        </div>
+    }
+    @if (_isTitleInvalid)
+    {
+        <div class="alert alert-danger">
+            Недопустимое название задачи
         </div>
     }
     <EditForm class="row g-3" Model="@Model" FormName="AddTask" OnValidSubmit="AddTask">
@@ -75,9 +81,14 @@
     private bool _isPrDisabled = true;
     private bool _isWorkerDisabled = true;
     private bool _isSubmited;
+    private bool _isTitleInvalid;
+
+    private string _submitedTitle;
 
     public AddTaskTemplate()
     {
+        _submitedTitle = "";
+
         Model = new TasksInputModel();
         _profiles = new List<ProfilesOutputModel>();
         _workers = new List<UsersOutputModel>();
@@ -114,6 +125,13 @@
 
     public void AddTask()
     {
+        if(Model.Title == Roles.Manager.ToString() || Model.Title == Roles.User.ToString())
+        {
+            _isTitleInvalid = true;
+            return;
+        }
+        _isTitleInvalid = false;
+
         Model.Status = new TaskStatusesInputModel() { Id = (int)TaskStatuses.Created };
         Model.Profiles = [new ProfilesInputModel() { Id = Model.PrId }];
         if (Model.WorkerId != null) Model.Users = [new UsersInputModel() { Id = Model.WorkerId }];
@@ -121,12 +139,14 @@
         ITaskClient taskClient = new TaskClient();
         taskClient.AddOrderTask(Model);
 
+        _submitedTitle = Model.Title;
         _isSubmited = true;
 
         IOrderClient orderClient = new OrderClient();
         orderClient.UpdateOrderPrice(OrderId);
 
+        Model = new TasksInputModel();
+
         UpdatePage();
-        StateHasChanged();
     }
 }

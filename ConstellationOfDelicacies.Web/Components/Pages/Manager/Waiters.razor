@@ -21,7 +21,7 @@
             <CardGroup>
                 @foreach (var waiter in _waiters)
                 {
-                    <WorkerCardTemplate Worker="@waiter" />
+                    <WorkerCardTemplate Worker="@waiter" UpdatePage=OnUpdatePage/>
                 }
             </CardGroup>
         </div>
@@ -34,19 +34,22 @@
 @code {
     private Modal modal = default!;
 
+    public Action OnUpdatePage;
+
     private List<UsersOutputModel> _waiters;
     private UserClient _client;
 
     public Waiters()
     {
+        OnUpdatePage = UpdatePage;
         _client = new UserClient();
         _waiters = new List<UsersOutputModel>();
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override void OnInitialized()
     {
         _waiters = _client.GetAllWaiters();
-        base.OnAfterRender(firstRender);
+        base.OnInitialized();
     }
 
     private async Task ShowModal()
@@ -54,6 +57,12 @@
         modal.IsVerticallyCentered = true;
         modal.IsScrollable = true;
         await modal.ShowAsync<AddWaiterTemplate>(title: "Добавить официанта");
+    }
+
+    public void UpdatePage()
+    {
+        _waiters = _client.GetAllWaiters();
+        StateHasChanged();
     }
 
 }

@@ -3,6 +3,7 @@
 @using ConstellationOfDelicacies.Web.Components.Pages.Auth
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Enums
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 @using System
@@ -12,25 +13,42 @@
     <Authorized>
         <PageTitle>Мои заказы</PageTitle>
 
-        <Card>
-            <CardBody>
-                <div>
-                    <CardTitle>Мои заказы:</CardTitle>
-                    <CardSubTitle Style="margin-bottom: 5px;">
-                        Чтобы отменить заказ в работе, свяжитесь с менеджером
-                    </CardSubTitle>
-                </div>
+        @if (_orders.Count == 0)
+        {
+            <Card>
+                <CardBody>
+                    У вас еще нет заказов.
+                </CardBody>
+            </Card>
+        } else
+        {
+            <div class="mb-2">
+                <Button @onclick="AllOrders" Color="ButtonColor.Info">Все</Button>
+                <Button @onclick="CreatedOrders" Color="ButtonColor.Warning">Созданы</Button>
+                <Button @onclick="InProgressOrders" Color="ButtonColor.Primary">В работе</Button>
+                <Button @onclick="CompletedOrders" Color="ButtonColor.Success">Завершенные</Button>
+                <Button @onclick="DeletedOrders" Color="ButtonColor.Danger">Удаленные</Button>
+            </div>
+            <Card>
+                <CardBody>
+                    <div>
+                        <CardTitle>Мои заказы:</CardTitle>
+                        <CardSubTitle Style="margin-bottom: 5px;">
+                            Чтобы отменить заказ в работе, свяжитесь с менеджером
+                        </CardSubTitle>
+                    </div>
 
-                <div class="d-flex flex-wrap flex-row">
-                    @foreach (var o in _orders)
-                    {
-                        <div class="me-2">
-                            <UserOrderCardTemplate Order="o" OnUpdatePage="OnUpdatePage" />
-                        </div>
-                    }
-                </div>
-            </CardBody>
-        </Card>
+                    <div class="d-flex flex-wrap flex-row">
+                        @foreach (var o in _sortedOrders)
+                        {
+                            <div class="me-2">
+                                <UserOrderCardTemplate Order="o" OnUpdatePage="OnUpdatePage" />
+                            </div>
+                        }
+                    </div>
+                </CardBody>
+            </Card>
+        }
     </Authorized>
     <NotAuthorized>
         <HomeRedirect/>
@@ -38,7 +56,9 @@
 </AuthorizeView>
 
 @code {
+
     private List<OrdersOutputModel> _orders;
+    private List<OrdersOutputModel> _sortedOrders;
 
     [CascadingParameter]
     public Task<AuthenticationState> State { get; set; }
@@ -73,11 +93,42 @@
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetUsersOrders(_userId);
         _orders.Reverse();
+        _sortedOrders = _orders;
     }
 
     public void UpdatePage()
     {
         GetUserOrders();
+        StateHasChanged();
+    }
+
+    private void AllOrders()
+    {
+        _sortedOrders = _orders;
+        StateHasChanged();
+    }
+
+    private void CreatedOrders()
+    {
+        _sortedOrders = _orders.Where(o => o.Status == OrderStatuses.Created).ToList();
+        StateHasChanged();
+    }
+
+    private void InProgressOrders()
+    {
+        _sortedOrders = _orders.Where(o => o.Status == OrderStatuses.InProgress).ToList();
+        StateHasChanged();
+    }
+
+    private void DeletedOrders()
+    {
+        _sortedOrders = _orders.Where(o => o.Status == OrderStatuses.Deleted).ToList();
+        StateHasChanged();
+    }
+
+    private void CompletedOrders()
+    {
+        _sortedOrders = _orders.Where(o => o.Status == OrderStatuses.Completed).ToList();
         StateHasChanged();
     }
 

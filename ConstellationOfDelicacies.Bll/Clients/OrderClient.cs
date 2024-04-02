@@ -32,7 +32,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
             var userTask = new TasksInputModel() 
             {
                 Order = new OrderInputModel() { Id = orderId },
-                Title = "Пользователь",
+                Title = Roles.User.ToString(),
                 Users = [new UsersInputModel() { Id = order.UserId}]
             };
             _taskClient.AddOrderTask(userTask);
@@ -43,7 +43,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
             var managerTask = new TasksInputModel()
             {
                 Order = new OrderInputModel() { Id = order.Id },
-                Title = "Менеджер",
+                Title = Roles.Manager.ToString(),
                 Users = [new UsersInputModel() { Id = order.UserId }]
             };
 
@@ -129,7 +129,7 @@ namespace ConstellationOfDelicacies.Bll.Clients
             {
                 model.Status = OrderStatuses.Completed;
             }
-            else if (model.Tasks.Any(t => t.Title == "Менеджер"))
+            else if (model.Tasks.Any(t => t.Title == Roles.Manager.ToString()))
             {
                 model.Status = OrderStatuses.InProgress;
             }

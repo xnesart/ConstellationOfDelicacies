@@ -2,6 +2,8 @@
 @using ConstellationOfDelicacies.Bll.Clients
 @rendermode InteractiveServer
 
+<Modal @ref="modal" />
+
 <Card Style="width:300px; margin-right:10px; margin-bottom:10px">
     <CardBody>
         <CardTitle>Id: @Worker.Id </CardTitle>
@@ -12,37 +14,44 @@
             <p>Телефон: @Worker.Phone</p>
             <p>Почта: @Worker.Mail</p>
         </CardText>
+        <Button Color="ButtonColor.Primary" @onclick="EditWorker">Изменить</Button>
         <Button Color="ButtonColor.Primary" @onclick="() => RemoveWorker(Worker.Id)">Удалить</Button>
     </CardBody>
 </Card>
 
-
-@* <div class="chiefs-card">
-    <p class="chief-id">Id: @Worker.Id</p>
-    <p class="chief-name">Имя: @Worker.FirstName</p>
-    <p class="chief-lastName">Отчество: @Worker.MiddleName</p>
-    <p class="chief-middleName">Фамилия: @Worker.LastName</p>
-    <p class="chief-phone">Телефон: @Worker.Phone</p>
-    <p class="chief-mail">Почта: @Worker.Mail</p>
-    <a href="./chiefs/@Worker.Id" class="chief-edit-link">Редактировать</a>
-    <button @onclick="() => RemoveWorker(Worker.Id)" class="btn btn-primary" type="button">Удалить</button>
-</div> *@
-
 @code {
+
+    private Modal modal = default!;
 
     [Parameter, EditorRequired]
     public UsersOutputModel Worker { get; set; }
 
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
     private UserClient _client;
-    
+
     public WorkerCardTemplate()
     {
         _client = new UserClient();
     }
-    
+
     private void RemoveWorker(int wId)
     {
         _client.RemoveUser(wId);
-        StateHasChanged();
+        UpdatePage();
     }
+
+    private async Task EditWorker()
+    {
+        modal.IsVerticallyCentered = true;
+        modal.IsScrollable = true;
+
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("Worker", Worker);
+        parameters.Add("UpdatePage", UpdatePage);
+
+        await modal.ShowAsync<EditWorkerTemplate>(title: "Изменить сотрудника", parameters: parameters);
+    }
+
 }

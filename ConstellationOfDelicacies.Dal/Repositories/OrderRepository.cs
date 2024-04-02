@@ -1,5 +1,6 @@
 ﻿using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
+using ConstellationOfDelicacies.Dal.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConstellationOfDelicacies.Dal.Repositories
@@ -63,7 +64,6 @@ namespace ConstellationOfDelicacies.Dal.Repositories
                 storageOrder.OrderDate = order.OrderDate;
                 storageOrder.NumberOfPersons = order.NumberOfPersons;
                 storageOrder.Comment = order.Comment;
-                storageOrder.TotalPrice = order.TotalPrice;
 
                 _storage.Orders.Update(storageOrder);
                 _storage.SaveChanges();
@@ -73,7 +73,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         public List<OrdersDto> GetFreeOrders()
         {
             var orders = _storage.Orders
-                .Where(o => o.Tasks.All(t => t.Title != "Менеджер") && !o.IsDeleted)
+                .Where(o => o.Tasks.All(t => t.Title != Roles.Manager.ToString()) && !o.IsDeleted)
                 .Include(o => o.Tasks).ThenInclude(t => t.Users).ToList();
             return orders;
         }
@@ -81,14 +81,15 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         public List<OrdersDto> GetAllManagerOrders(int managerId)
         {
             var orders = _storage.Orders
-                .Where(o => o.Tasks!.Any(t => t.Title == "Менеджер" && t.Users!.Any(u => u.Id == managerId))).ToList();
+                .Where(o => o.Tasks!.Any(t => t.Title == Roles.Manager.ToString() && t.Users!.Any(u => u.Id == managerId)))
+                .Include(o => o.Tasks).ToList();
             return orders;
         }
 
         public List<OrdersDto> GetAllUsersOrders(int userId)
         {
             var orders = _storage.Orders
-                .Where(o => o.Tasks!.Any(t => t.Title == "Пользователь" && t.Users!.Any(u => u.Id == userId)))
+                .Where(o => o.Tasks!.Any(t => t.Title == Roles.User.ToString() && t.Users!.Any(u => u.Id == userId)))
                 .Include(o => o.Tasks).ThenInclude(t => t.Users).ToList();
             return orders;
         }
