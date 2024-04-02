@@ -1,6 +1,7 @@
 
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Enums
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 @using ConstellationOfDelicacies.Web.Components.Templates.Manager
@@ -23,8 +24,14 @@
         }
         else
         {
+            <div class="mb-2">
+                <Button @onclick="AllOrders" Color="ButtonColor.Info">Все</Button>
+                <Button @onclick="InProgressOrders" Color="ButtonColor.Warning">В работе</Button>
+                <Button @onclick="CompletedOrders" Color="ButtonColor.Success">Завершенные</Button>
+                <Button @onclick="DeletedOrders" Color="ButtonColor.Danger">Удаленные</Button>
+            </div>
             <div>
-                @foreach (var o in _orders)
+                @foreach (var o in _sortedOrders)
                 {
                     <div>
                         <ManagerOrderCardTemplate Order="o" />
@@ -45,6 +52,7 @@
     private List<Claim> claims = new List<Claim>();
 
     private List<OrdersOutputModel> _orders;
+    private List<OrdersOutputModel> _sortedOrders;
 
     private int _managerId;
 
@@ -72,9 +80,33 @@
 
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetManagerOrders(_managerId);
+        _sortedOrders = _orders;
 
         await base.OnInitializedAsync();
+    }
 
+    private void AllOrders()
+    {
+        _sortedOrders = _orders;
+        StateHasChanged();
+    }
+
+    private void InProgressOrders()
+    {
+        _sortedOrders = _orders.Where(o => o.Status == OrderStatuses.InProgress).ToList();
+        StateHasChanged();
+    }
+
+    private void DeletedOrders()
+    {
+        _sortedOrders = _orders.Where(o => o.Status == OrderStatuses.Deleted).ToList();
+        StateHasChanged();
+    }
+
+    private void CompletedOrders()
+    {
+        _sortedOrders = _orders.Where(o => o.Status == OrderStatuses.Completed).ToList();
+        StateHasChanged();
     }
 
 }
