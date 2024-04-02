@@ -11,6 +11,9 @@ public class UserRepository : IUserRepository
     private readonly IProfileRepository _profileRepository;
     private readonly IRoleRepository _roleRepository;
 
+    private string _userTask = "Пользователь";
+    private string _managerTask = "Менеджер";
+
     public UserRepository()
     {
         _storage = SingletoneStorage.GetStorage().Storage;
@@ -136,14 +139,14 @@ public class UserRepository : IUserRepository
     public UsersDto GetOrderUser(int orderId)
     {
         var user = _storage.Users
-            .Where(u => u.Tasks.Any(t => t.Title == "������������" && t.Order.Id == orderId)).Single();
+            .Where(u => u.Tasks.Any(t => t.Title == _userTask && t.Order.Id == orderId)).Single();
         return user;
     }
 
     public UsersDto GetOrderManager(int orderId)
     {
         var user = _storage.Users
-            .Where(u => u.Tasks.Any(t => t.Title == "��������" && t.Order.Id == orderId)).SingleOrDefault();
+            .Where(u => u.Tasks.Any(t => t.Title == _managerTask && t.Order.Id == orderId)).SingleOrDefault();
 
         return user;
     }
