@@ -122,11 +122,11 @@
         taskClient.AddOrderTask(Model);
 
         _isSubmited = true;
+        StateHasChanged();
 
         IOrderClient orderClient = new OrderClient();
         orderClient.UpdateOrderPrice(OrderId);
 
         UpdatePage();
-        StateHasChanged();
     }
 }

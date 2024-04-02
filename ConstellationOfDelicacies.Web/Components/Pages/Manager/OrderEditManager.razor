@@ -11,46 +11,15 @@
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<PageTitle>Заказ</PageTitle>
-
 <AuthorizeView Roles="Менеджер" >
     <Authorized>
-        <Modal @ref="modal" />
+        <PageTitle>Заказ</PageTitle>
+
         <div>
             <OrderCardTemplate Order="_order" UpdatePage="OnUpdatePage"/>
         </div>
         <div>
-            <Card>
-                <CardBody>
-                    <CardTitle>
-                        <div class="order-tasks-header">
-                            <h4>Задачи заказа</h4>
-                            @if (_order.Status == OrderStatuses.InProgress)
-                            {
-                               <Button Type="ButtonType.Button" Color="ButtonColor.Primary" 
-                                        @onclick="AddOrderTasks">
-                                    Добавить задачу
-                               </Button> 
-                            }                            
-                        </div>
-                    </CardTitle>
-                    <CardText>
-                        @if (_orderTasks == null || _orderTasks.Count == 0)
-                        {
-                            <p class="order-tasks-side-text">Ещё нет назначенных задач</p>
-                        }
-                        else
-                        {
-                            <div class="order-tasks">
-                                @foreach (var t in _orderTasks)
-                                {
-                                    <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage" Status="_order.Status"/>
-                                }
-                            </div>
-                        }
-                    </CardText>
-                </CardBody>
-            </Card>
+            <OrderTasksListTemplate Order="_order" UpdatePage="OnUpdatePage"/>
         </div>
     </Authorized>
 
@@ -68,14 +37,10 @@
     [Parameter]
     public int orderId { get; set; }
 
-    private Modal modal = default!;
-
     private IOrderClient _client;
-    private ITaskClient _taskClient;
     private IUserClient _userClient;
 
     private OrdersOutputModel _order;
-    private List<TasksOutputModel>? _orderTasks;
     private UsersOutputModel _manager;
 
     private Action OnUpdatePage;
@@ -85,7 +50,6 @@
         OnUpdatePage = UpdatePage;
 
         _client = new OrderClient();
-        _taskClient = new TaskClient();
         _userClient = new UserClient();
 
         _order = new OrdersOutputModel();
@@ -119,27 +83,12 @@
 
         _manager = _userClient.GetOrderManager(orderId);
         await GetClaims();
-
-        _orderTasks = _taskClient.GetAllOrderTasks(orderId);
     }
 
     public void UpdatePage()
     {
         _client.UpdateOrderPrice(orderId);
         _order = _client.GetOrderById(orderId);
-        _orderTasks = _taskClient.GetAllOrderTasks(orderId);
         StateHasChanged();
-    }
-
-    private async Task AddOrderTasks()
-    {
-        modal.IsVerticallyCentered = true;
-        modal.IsScrollable = true;
-
-        var parameters = new Dictionary<string, object>();
-        parameters.Add("OrderId", orderId);
-        parameters.Add("UpdatePage", OnUpdatePage);
-
-        await modal.ShowAsync<AddTaskTemplate>(title: "Добавить задачу", parameters: parameters);
-    }
+    }    
 }
