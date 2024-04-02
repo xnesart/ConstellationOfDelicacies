@@ -69,7 +69,7 @@
         } 
         else
         {
-            var user = Order.Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
+            var user = Order.Tasks.Where(t => t.Title == Roles.User.ToString()).Single().Users.First();
             _userName = $"{user.FirstName} {user.LastName}";
         }  
 
@@ -80,7 +80,7 @@
     {
         if (Order.Tasks != null)
         {
-            var user = Order.Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
+            var user = Order.Tasks.Where(t => t.Title == Roles.User.ToString()).Single().Users.First();
             _userName = $"{user.FirstName} {user.LastName}";
             _userPhone = user.Phone;
             _userMail = user.Mail;

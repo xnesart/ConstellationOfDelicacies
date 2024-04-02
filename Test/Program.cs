@@ -5,13 +5,14 @@ using ConstellationOfDelicacies.Bll.Models.InputModels;
 using ConstellationOfDelicacies.Dal;
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.Repositories;
+using ConstellationOfDelicacies.Bll.Enums;
 using System.Linq;
 
-RegistrationInputModel model = new RegistrationInputModel() { Email = "DgHnnJJ" };
+//RegistrationInputModel model = new RegistrationInputModel() { Email = "DgHnnJJ" };
 
-model.Email.ToLower();
+//model.Email.ToLower();
 
-Console.WriteLine(model.Email);
+Console.WriteLine(Roles.Manager.ToString());
 
 //UsersDto userDto = new UsersDto()
 //{

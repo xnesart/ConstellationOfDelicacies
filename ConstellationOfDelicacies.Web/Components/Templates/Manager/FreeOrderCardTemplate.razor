@@ -1,6 +1,7 @@
 ﻿@using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Interfaces
 @using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Enums
 @rendermode InteractiveServer
 @inject NavigationManager navManager
 
@@ -33,7 +34,7 @@
     {
         if (Order.Tasks != null)
         {
-            var user = Order.Tasks.Where(t => t.Title == "Пользователь").Single().Users.First();
+            var user = Order.Tasks.Where(t => t.Title == Roles.User.ToString()).Single().Users.First();
             _userName = $"{user.FirstName} {user.LastName}";
             StateHasChanged();
         }

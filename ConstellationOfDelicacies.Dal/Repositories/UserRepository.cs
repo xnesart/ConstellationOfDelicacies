@@ -1,7 +1,7 @@
 using ConstellationOfDelicacies.Dal.Dtos;
 using ConstellationOfDelicacies.Dal.IRepositories;
+using ConstellationOfDelicacies.Dal.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ConstellationOfDelicacies.Dal.Repositories;
 
@@ -10,9 +10,6 @@ public class UserRepository : IUserRepository
     private readonly Context _storage;
     private readonly IProfileRepository _profileRepository;
     private readonly IRoleRepository _roleRepository;
-
-    private string _userTask = "Пользователь";
-    private string _managerTask = "Менеджер";
 
     public UserRepository()
     {
@@ -134,14 +131,14 @@ public class UserRepository : IUserRepository
     public UsersDto GetOrderUser(int orderId)
     {
         var user = _storage.Users
-            .Where(u => u.Tasks.Any(t => t.Title == _userTask && t.Order.Id == orderId)).Single();
+            .Where(u => u.Tasks.Any(t => t.Title == Roles.User.ToString() && t.Order.Id == orderId)).Single();
         return user;
     }
 
     public UsersDto GetOrderManager(int orderId)
     {
         var user = _storage.Users
-            .Where(u => u.Tasks.Any(t => t.Title == _managerTask && t.Order.Id == orderId)).SingleOrDefault();
+            .Where(u => u.Tasks.Any(t => t.Title == Roles.Manager.ToString() && t.Order.Id == orderId)).SingleOrDefault();
 
         return user;
     }

@@ -58,7 +58,7 @@ namespace ConstellationOfDelicacies.Dal.Repositories
         {
             List<TasksDto> result = new List<TasksDto>();
             result = _storage.Tasks.Where(t => t.Order.Id == orderId && t.IsDeleted == false 
-                && t.Title != "Пользователь" && t.Title != "Менеджер" )
+                && t.Title != Roles.User.ToString() && t.Title != Roles.Manager.ToString())
                 .Include(t => t.Status).Include(t => t.Profiles)
                 .Include(t => t.Users!).ThenInclude(u => u.Profile).ToList();
                 

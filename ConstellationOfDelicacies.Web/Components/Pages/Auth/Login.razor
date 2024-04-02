@@ -55,22 +55,6 @@
         Model = new LoginInputModel();
     }
 
-    public async Task StartLoginTest()
-    {
-        var claims = new List<Claim>()
-        {
-            new Claim(ClaimTypes.Role, "Менеджер"),
-            new Claim(ClaimTypes.Email, Model.Email)
-        };
-
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var pr = new ClaimsPrincipal(identity);
-
-        await httpContext.SignInAsync(pr);
-
-        navManager.NavigateTo("./");
-    }
-
     public async Task StartLogin()
     {        
         UserClient userClient = new UserClient();
