@@ -53,16 +53,20 @@ namespace ConstellationOfDelicacies.Bll.Clients
             return result;
         }
 
-        public void UpdateTaskStatus(int id, int taskId)
+        public void UpdateTaskStatus(int statusId, int taskId)
         {
-            TaskRepository taskRepository = new TaskRepository();
-            taskRepository.UpdateTaskStatus(id,taskId);
+            _repository.UpdateTaskStatus(statusId, taskId);
         }
 
         public void AddTaskWorker(TasksInputModel model)
         {
             var taskDto = _mapper.Map<TasksDto>(model);
             _repository.AddTaskUser(taskDto);
+        }
+
+        public void CompleteOrderTask(int taskId)
+        {
+            UpdateTaskStatus((int)TaskStatuses.Completed, taskId);
         }
 
         public void DeleteTaskWorker(TasksInputModel model)

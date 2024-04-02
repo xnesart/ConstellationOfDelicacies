@@ -69,6 +69,17 @@ namespace ConstellationOfDelicacies.Bll.Clients
             _repository.DeleteOrder(orderId);
         }
 
+        public void CompleteUserOrder(int orderId)
+        {
+            _repository.CompleteOrder(orderId);
+            var orderTasks = _taskClient.GetAllOrderTasks(orderId);
+
+            foreach(var t in orderTasks)
+            {
+                _taskClient.CompleteOrderTask(t.Id);
+            }
+        }
+
         public List<OrdersOutputModel> GetFreeOrders()
         {
             var orders = _repository.GetFreeOrders();
