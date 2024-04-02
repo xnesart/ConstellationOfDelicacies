@@ -79,6 +79,7 @@
 
         IOrderClient orderClient = new OrderClient();
         _orders = orderClient.GetManagerOrders(_managerId);
+        _orders.Reverse();
         _sortedOrders = _orders;
 
         await base.OnInitializedAsync();

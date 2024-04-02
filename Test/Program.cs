@@ -8,11 +8,11 @@ using ConstellationOfDelicacies.Dal.Repositories;
 using ConstellationOfDelicacies.Bll.Enums;
 using System.Linq;
 
-//RegistrationInputModel model = new RegistrationInputModel() { Email = "DgHnnJJ" };
+OrderClient client = new OrderClient();
 
-//model.Email.ToLower();
+var a = client.GetManagerOrders(19);
 
-Console.WriteLine(Roles.Manager.ToString());
+Console.WriteLine();
 
 //UsersDto userDto = new UsersDto()
 //{

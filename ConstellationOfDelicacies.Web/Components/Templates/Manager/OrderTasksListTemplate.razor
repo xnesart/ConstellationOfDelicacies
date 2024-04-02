@@ -8,14 +8,22 @@
 <Card>
     <CardBody>
         <CardTitle>
-            <div class="order-tasks-header">
+            <div class="d-flex justify-content-between mb-2">
                 <h4>Задачи заказа</h4>
+                <div>
+                    <Button @onclick="AllTasks" Color="ButtonColor.Info">Все</Button>
+                    <Button @onclick="CreatedTasks" Color="ButtonColor.Primary">Созданы</Button>
+                    <Button @onclick="InProgressTasks" Color="ButtonColor.Success">В работе</Button>
+                    <Button @onclick="NotAssignedTasks" Color="ButtonColor.Danger">Не назначены</Button>
+                </div>
                 @if (Order.Status == OrderStatuses.InProgress)
                 {
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary"
-                            @onclick="AddOrderTasks">
-                        Добавить задачу
-                    </Button>
+                    <div>
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Primary"
+                                @onclick="AddOrderTasks">
+                            Добавить задачу
+                        </Button>
+                    </div>                    
                 }
             </div>
         </CardTitle>
@@ -29,7 +37,7 @@
                 <div class="order-tasks">
                     @foreach (var t in _sortedTasks)
                     {
-                        <OrderTaskTemplate OrderTask="t" UpdatePage="UpdatePage" Status="Order.Status" />
+                        <OrderTaskTemplate OrderTask="t" UpdatePage="OnUpdatePage" Status="Order.Status" />
                     }
                 </div>
             }
@@ -66,9 +74,8 @@
     protected override void OnInitialized()
     {
         OnUpdatePage += UpdatePage;
+        UpdateTasks();
 
-        _orderTasks = _taskClient.GetAllOrderTasks(Order.Id);
-        _sortedTasks = _orderTasks;
         base.OnInitialized();
     }
 
@@ -87,7 +94,32 @@
     public void UpdateTasks()
     {
         _orderTasks = _taskClient.GetAllOrderTasks(Order.Id);
+        _orderTasks.Reverse();
         _sortedTasks = _orderTasks;
+        StateHasChanged();
+    }
+
+    private void AllTasks()
+    {
+        _sortedTasks = _orderTasks;
+        StateHasChanged();
+    }
+
+    private void InProgressTasks()
+    {
+        _sortedTasks = _orderTasks.Where(t => t.Status.Id == (int)TaskStatuses.InProgress).ToList();
+        StateHasChanged();
+    }
+
+    private void CreatedTasks()
+    {
+        _sortedTasks = _orderTasks.Where(t => t.Status.Id == (int)TaskStatuses.Created).ToList();
+        StateHasChanged();
+    }
+
+    private void NotAssignedTasks()
+    {
+        _sortedTasks = _orderTasks.Where(t => t.Users.Count() == 0).ToList();
         StateHasChanged();
     }
 
