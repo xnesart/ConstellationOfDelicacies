@@ -1,0 +1,104 @@
+@page "/account"
+@using Microsoft.AspNetCore.Components.Authorization
+@using ConstellationOfDelicacies.Bll.Models.InputModels
+@using ConstellationOfDelicacies.Bll.Clients
+@using System.Security.Claims
+@inject NavigationManager navManager
+@rendermode InteractiveServer
+
+<h3>AccountEdit</h3>
+<div class="login-form">
+    <EditForm class="row g-3" Model="@Model" OnValidSubmit="@SaveChanges" FormName="LoginForm">
+        <DataAnnotationsValidator/>
+
+        <div class="col-md-12">
+            <label for="login-name" class="form-label">Введите имя:</label>
+            <InputText type="text" class="form-control" id="login-name" placeholder="Имя"
+                       @bind-Value="Model.FirstName"/>
+        </div>
+        <div class="col-md-12">
+            <label for="login-lastName" class="form-label">Введите фамилию:</label>
+            <InputText type="text" class="form-control" id="login-lastName" placeholder="Фамилия"
+                       @bind-Value="Model.LastName"/>
+        </div>
+        <div class="col-md-12">
+            <label for="login-middleName" class="form-label">Введите отчество:</label>
+            <InputText type="text" class="form-control" id="login-middleName" placeholder="Отчество"
+                       @bind-Value="Model.MiddleName"/>
+        </div>   
+        <div class="col-md-12">
+            <label for="login-phone" class="form-label">Введите телефон:</label>
+            <InputText type="text" class="form-control" id="login-phone" placeholder="Телефон"
+                       @bind-Value="Model.Phone"/>
+        </div>
+        <div class="col-md-12">
+            <label for="login-mail" class="form-label">Введите электронную почту:</label>
+            <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail"
+                       @bind-Value="Model.Mail"/>
+        </div>
+        <div class="col-md-12">
+            <label for="login-pass" class="form-label">Введите пароль:</label>
+            <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
+                       @bind-Value="Model.Password"/>
+        </div>
+        <div class="col-md-12" lass="col-12">
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            <a href="/registration" class="btn btn-warning">Зарегистрироваться</a>
+        </div>
+
+    </EditForm>
+
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public AccountEditInputModel Model { get; set; }
+    [Inject]
+    protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    
+    private string _oldEmail;
+
+    public AccountEdit()
+    {
+        Model = new AccountEditInputModel();
+    }
+    
+    public void SaveChanges()
+    {
+        GetUserEmailFromClaims();
+        UserClient userClient = new UserClient();
+        var user = userClient.GetUserByEmail(_oldEmail);
+        RolesInputModel roleInput = new RolesInputModel()
+        {
+            Id = user.Role.Id,
+            Title = user.Role.Title
+        };
+  
+        UsersInputModel userModel = new UsersInputModel()
+        {
+            Id=user.Id,
+            FirstName = Model.FirstName,
+            LastName = Model.LastName,
+            MiddleName = Model.MiddleName,
+            Phone = Model.Phone,
+            Mail = Model.Mail,
+            Password = Model.Password,
+            Role = roleInput
+        };
+        
+
+        userClient.UpdateUser(userModel);
+
+    }
+    
+    private async Task<string> GetUserEmailFromClaims()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        // Получаем значение клейма "email"
+        var userEmail = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
+        _oldEmail = userEmail;
+        return userEmail;
+    }
+}
