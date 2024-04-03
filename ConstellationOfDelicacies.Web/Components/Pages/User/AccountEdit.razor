@@ -44,10 +44,11 @@
     public AccountEditInputModel Model { get; set; }
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-
-    public UserClient UserClient { get; set; } = new UserClient();
     
-    private string _oldEmail;
+    public UserClient UserClient { get; set; } = new UserClient();
+
+    private int _userId;
+
 
     public AccountEdit()
     {
@@ -56,8 +57,8 @@
     
     protected override void OnInitialized()
     {
-        GetUserEmailFromClaims();
-        var user = UserClient.GetAllUsers().Where(u => u.Mail == _oldEmail).FirstOrDefault();
+        GetUserIdFromClaims();
+        var user = UserClient.GetAllUsers().Where(u => u.Id == _userId).FirstOrDefault();
         Model.FirstName = user.FirstName;
         Model.LastName = user.LastName;
         Model.MiddleName = user.MiddleName;
@@ -67,7 +68,7 @@
     
     public void SaveChanges()
     {
-        var user = UserClient.GetUserByEmail(_oldEmail);
+        var user = UserClient.GetAllUsers().Where(u => u.Id == _userId).FirstOrDefault();
         RolesInputModel roleInput = new RolesInputModel()
         {
             Id = user.Role.Id,
@@ -86,19 +87,16 @@
             Role = roleInput
         };
         
-
         UserClient.UpdateUser(userModel);
         navManager.NavigateTo("./");  
-
     }
     
-    private async Task<string> GetUserEmailFromClaims()
+    private async void GetUserIdFromClaims()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         
-        var userEmail = user.FindFirst(c => c.Type == ClaimTypes.Email)?.Value;
-        _oldEmail = userEmail;
-        return userEmail;
+        var userId = user.FindFirst(c => c.Type == "UserId")?.Value;
+        _userId = int.Parse(userId);
     }
 }
