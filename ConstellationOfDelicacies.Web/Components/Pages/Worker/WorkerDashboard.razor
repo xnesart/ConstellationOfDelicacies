@@ -69,11 +69,13 @@
     private void GetTaskForWorker()
     {
         _tasks = _client.GetAllWorkerTasks(UserId);
+        _tasks.Reverse();
     }    
 
     public void UpdatePage()
     {
         GetTaskForWorker();
+        StateHasChanged();
     }
 
 }
