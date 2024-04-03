@@ -1,4 +1,5 @@
 @using ConstellationOfDelicacies.Bll.Clients
+@using ConstellationOfDelicacies.Bll.Interfaces
 @using Microsoft.AspNetCore.Components.Authorization
 @using ConstellationOfDelicacies.Web.Components.Pages.Auth
 @using ConstellationOfDelicacies.Web.Components.Templates.Worker
@@ -10,14 +11,14 @@
         <PageTitle>Мои задачи</PageTitle>
         <h3>Ваши задачи:</h3>
         <Card>
-            <div class="container dashboard-container">
+            <CardBody class="container dashboard-container">
                 @if (_tasks.Count() != 0)
                 {
                     <CardGroup Class="dashboard-cardgroup">
                         @foreach (var task in _tasks)
                         {
                             <div class="worker-card">
-                                <DashBoardCardTemplate Task="@task" UserId="@UserId" />
+                                <DashBoardCardTemplate Task="@task" UserId="@UserId" UpdatePage="OnUpdatePage"/>
                             </div>
                         }
                     </CardGroup>
@@ -26,7 +27,7 @@
                 {
                     <p>У вас еще нет задач</p>
                 }
-            </div>
+            </CardBody>
         </Card>
     </Authorized>
     <NotAuthorized>
@@ -35,13 +36,19 @@
 </AuthorizeView>
 
 @code {
+    private ITaskClient _client;
 
     private List<TasksOutputModel> _tasks;
     private List<OrdersOutputModel> _orders;
     private int UserId;
 
+    public Action OnUpdatePage;
+
     public WorkerDashboard()
     {
+        OnUpdatePage = UpdatePage;
+
+        _client = new TaskClient();
         _tasks = new List<TasksOutputModel>();
         _orders = new List<OrdersOutputModel>();
     }    
@@ -58,11 +65,17 @@
 
         GetTaskForWorker();
     }
-    
+
     private void GetTaskForWorker()
     {
-        TaskClient client = new TaskClient();
-        _tasks = client.GetAllWorkerTasks(UserId);
+        _tasks = _client.GetAllWorkerTasks(UserId);
+        _tasks.Reverse();
     }    
+
+    public void UpdatePage()
+    {
+        GetTaskForWorker();
+        StateHasChanged();
+    }
 
 }

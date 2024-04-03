@@ -4,13 +4,13 @@
 <Card>
     <CardBody class="dashboard-card">
         <CardTitle><span class="order-tasks-title">Заказ</span></CardTitle>
-        <CardSubTitle class="order-tasks-side-text mb-2">Заказчик: @Task?.Users?.FirstOrDefault()?.FirstName</CardSubTitle>
         <CardText>
             <p><span class="order-tasks-title">Что надо сделать</span> @Task!.Title</p>
+            <p><span class="order-tasks-title">Дата заказа:</span> @_orderDate</p>
         </CardText>
-        @if (Task.Status.Id == 1)
+        @if (Task.Status.Id == (int)TaskStatuses.Created)
         {
-            <button type="submit" class="btn btn-primary" onclick="@GetOnWork">Взять в работу</button>
+            <button type="submit" class="btn btn-primary" @onclick="GetOnWork">Взять в работу</button>
         }
         else
         {
@@ -22,14 +22,33 @@
 @code {
     [Parameter, EditorRequired]
     public TasksOutputModel? Task { get; set; }
-    
+
     [Parameter]
     public int UserId { get; set; }
-    private string? _userName;
+
+    [Parameter]
+    public Action UpdatePage { get; set; }
+
+    private string? _orderDate;
+    private TaskClient _taskClient;
+
+    public DashBoardCardTemplate()
+    {
+        _taskClient = new TaskClient();
+    }
+
+    protected override void OnInitialized()
+    {
+        IOrderClient orderClient = new OrderClient();
+        _orderDate = orderClient.GetOrderById(Task!.Order.Id).OrderDate.ToString();
+
+        base.OnInitialized();
+    }
 
     private void GetOnWork()
     {
-        TaskClient taskClient = new TaskClient();
-        taskClient.UpdateTaskStatus((int)TaskStatuses.InProgress, Task.Id);
+        _taskClient.UpdateTaskStatus((int)TaskStatuses.InProgress, Task.Id);
+
+        UpdatePage();
     }
 }
