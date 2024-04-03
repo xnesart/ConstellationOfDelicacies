@@ -9,12 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstellationOfDelicacies.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConstellationOfDelicacies.Dal", "ConstellationOfDelicacies.Dal\ConstellationOfDelicacies.Dal.csproj", "{FCBCDE27-A1DF-4A39-B40A-19407A277EB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{7E7F3AAE-525E-4917-A6D0-9E9C6077729F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{86B7E354-0214-4D10-B9C8-72FE4268F6B1} = {86B7E354-0214-4D10-B9C8-72FE4268F6B1}
-		{FCBCDE27-A1DF-4A39-B40A-19407A277EB1} = {FCBCDE27-A1DF-4A39-B40A-19407A277EB1}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,10 +27,6 @@ Global
 		{FCBCDE27-A1DF-4A39-B40A-19407A277EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCBCDE27-A1DF-4A39-B40A-19407A277EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCBCDE27-A1DF-4A39-B40A-19407A277EB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7E7F3AAE-525E-4917-A6D0-9E9C6077729F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E7F3AAE-525E-4917-A6D0-9E9C6077729F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E7F3AAE-525E-4917-A6D0-9E9C6077729F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E7F3AAE-525E-4917-A6D0-9E9C6077729F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
