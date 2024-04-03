@@ -42,6 +42,12 @@ public class UserClient : IUserClient
 
         _repository.UpdateUser(usersDto);
     }
+    public void UpdateUserWithEmail(UsersInputModel model)
+    {
+        var usersDto = _mapper.Map<UsersDto>(model);
+
+        _repository.UpdateUserWithEmail(usersDto);
+    }
 
     public void UpdateUserPassword(UsersInputModel model)
     {
