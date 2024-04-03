@@ -31,16 +31,6 @@
             <InputText type="text" class="form-control" id="login-phone" placeholder="Телефон"
                        @bind-Value="Model.Phone"/>
         </div>
-        <div class="col-md-12">
-            <label for="login-mail" class="form-label">Введите электронную почту:</label>
-            <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail"
-                       @bind-Value="Model.Mail"/>
-        </div>
-        <div class="col-md-12">
-            <label for="login-pass" class="form-label">Введите пароль:</label>
-            <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
-                       @bind-Value="Model.Password"/>
-        </div>
         <div class="col-md-12" lass="col-12">
             <button type="submit" class="btn btn-primary">Сохранить изменения</button>
         </div>
@@ -54,6 +44,8 @@
     public AccountEditInputModel Model { get; set; }
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    public UserClient UserClient { get; set; } = new UserClient();
     
     private string _oldEmail;
 
@@ -62,11 +54,20 @@
         Model = new AccountEditInputModel();
     }
     
-    public void SaveChanges()
+    protected override void OnInitialized()
     {
         GetUserEmailFromClaims();
-        UserClient userClient = new UserClient();
-        var user = userClient.GetUserByEmail(_oldEmail);
+        var user = UserClient.GetAllUsers().Where(u => u.Mail == _oldEmail).FirstOrDefault();
+        Model.FirstName = user.FirstName;
+        Model.LastName = user.LastName;
+        Model.MiddleName = user.MiddleName;
+        Model.Phone = user.Phone;
+        base.OnInitialized();
+    }
+    
+    public void SaveChanges()
+    {
+        var user = UserClient.GetUserByEmail(_oldEmail);
         RolesInputModel roleInput = new RolesInputModel()
         {
             Id = user.Role.Id,
@@ -86,7 +87,7 @@
         };
         
 
-        userClient.UpdateUser(userModel);
+        UserClient.UpdateUser(userModel);
         navManager.NavigateTo("./");  
 
     }
