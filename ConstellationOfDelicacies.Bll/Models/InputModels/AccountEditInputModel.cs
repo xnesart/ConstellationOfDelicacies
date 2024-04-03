@@ -14,4 +14,5 @@ public class AccountEditInputModel
     public string? NewMail { get; set; }
     
     public string? Password { get; set; }
+    public string? NewPassword { get; set; }
 }

@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
-@using System.Security.Claims
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
@@ -24,20 +23,62 @@
             <label for="login-middleName" class="form-label">Введите отчество:</label>
             <InputText type="text" class="form-control" id="login-middleName" placeholder="Отчество"
                        @bind-Value="Model.MiddleName"/>
-        </div>   
+        </div>
         <div class="col-md-12">
             <label for="login-phone" class="form-label">Введите телефон:</label>
             <InputText type="text" class="form-control" id="login-phone" placeholder="Телефон"
                        @bind-Value="Model.Phone"/>
         </div>
         <div class="col-md-12" lass="col-12">
-            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-        </div>    
-        <div class="col-md-12" lass="col-12">
             <a href="/edit-mail" class="btn btn-primary">Изменить почту</a>
-        </div> 
+        </div>
+        <div class="col-md-6" lass="col-6">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Изменить пароль
+            </button>
+        </div>
         <div class="col-md-12" lass="col-12">
-            <a href="/edit-password" class="btn btn-primary">Изменить пароль</a>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </div>
+
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Изменить пароль</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <label for="login-mail" class="form-label">Введите старый пароль:</label>
+                            <InputText type="text" class="form-control" id="login-mail" placeholder="старый пароль"
+                                       @bind-Value="Model.Password"/>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="login-new-mail" class="form-label">Введите новый пароль:</label>
+                            <InputText type="text" class="form-control" id="login-new-mail" placeholder="новый пароль"
+                                       @bind-Value="Model.NewPassword"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="button" onclick="@SaveNewPassword" class="btn btn-primary">Сохранить изменения</button>
+                    </div>
+                    @if (!_isPasswordTrue)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            Вы указали некорректный пароль
+                        </div>
+                    }
+                    @if (_isPasswordChanged)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            Изменения применены
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
     </EditForm>
 </div>
@@ -45,30 +86,33 @@
 @code {
     [SupplyParameterFromForm]
     public AccountEditInputModel Model { get; set; }
+    
     [Inject]
     protected AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-    
-    public UserClient UserClient { get; set; } = new UserClient();
+
+    private UserClient UserClient { get; set; } = new UserClient();
 
     private int _userId;
+    private bool _isPasswordTrue = true;
+    private bool _isPasswordChanged = false;
 
 
     public AccountEdit()
     {
         Model = new AccountEditInputModel();
     }
-    
+
     protected override void OnInitialized()
     {
         GetUserIdFromClaims();
-        var user = UserClient.GetAllUsers().Where(u => u.Id == _userId).FirstOrDefault();
+        var user = UserClient.GetAllUsers().FirstOrDefault(u => u.Id == _userId);
         Model.FirstName = user.FirstName;
         Model.LastName = user.LastName;
         Model.MiddleName = user.MiddleName;
         Model.Phone = user.Phone;
         base.OnInitialized();
     }
-    
+
     public void SaveChanges()
     {
         var user = UserClient.GetAllUsers().Where(u => u.Id == _userId).FirstOrDefault();
@@ -77,10 +121,10 @@
             Id = user.Role.Id,
             Title = user.Role.Title
         };
-  
+
         UsersInputModel userModel = new UsersInputModel()
         {
-            Id=user.Id,
+            Id = user.Id,
             FirstName = Model.FirstName,
             LastName = Model.LastName,
             MiddleName = Model.MiddleName,
@@ -89,16 +133,61 @@
             Password = Model.Password,
             Role = roleInput
         };
-        
+
         UserClient.UpdateUser(userModel);
-        navManager.NavigateTo("./");  
+        navManager.NavigateTo("./");
     }
-    
+
+    private void SaveNewPassword()
+    {
+        PassworCheck();
+
+        if (_isPasswordTrue)
+        {
+            var user = UserClient.GetAllUsers().FirstOrDefault(u => u.Id == _userId);
+            RolesInputModel roleInput = new RolesInputModel()
+            {
+                Id = user.Role.Id,
+                Title = user.Role.Title
+            };
+
+            UsersInputModel userModel = new UsersInputModel()
+            {
+                Id = user.Id,
+                FirstName = Model.FirstName,
+                LastName = Model.LastName,
+                MiddleName = Model.MiddleName,
+                Phone = Model.Phone,
+                Mail = Model.Mail,
+                Password = Model.NewPassword,
+                Role = roleInput
+            };
+
+            UserClient.UpdateUserPassword(userModel);
+            _isPasswordChanged = true;
+        }
+
+        StateHasChanged();
+    }
+
+    private void PassworCheck()
+    {
+        var user = UserClient.GetAllUsers().Where(u => u.Id == _userId).FirstOrDefault();
+        if (user.Password != Model.Password)
+        {
+            _isPasswordTrue = false;
+        }
+        else
+        {
+            _isPasswordTrue = true;
+        }
+    }
+
     private async void GetUserIdFromClaims()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        
+
         var userId = user.FindFirst(c => c.Type == "UserId")?.Value;
         _userId = int.Parse(userId);
     }
