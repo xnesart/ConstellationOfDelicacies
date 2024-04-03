@@ -6,7 +6,7 @@
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<h3>AccountEdit</h3>
+<h3>Редактирование Ваших данных</h3>
 <div class="login-form">
     <EditForm class="row g-3" Model="@Model" OnValidSubmit="@SaveChanges" FormName="LoginForm">
         <DataAnnotationsValidator/>
@@ -35,6 +35,9 @@
         </div>    
         <div class="col-md-12" lass="col-12">
             <a href="/edit-mail" class="btn btn-primary">Изменить почту</a>
+        </div> 
+        <div class="col-md-12" lass="col-12">
+            <a href="/edit-password" class="btn btn-primary">Изменить пароль</a>
         </div>
     </EditForm>
 </div>
