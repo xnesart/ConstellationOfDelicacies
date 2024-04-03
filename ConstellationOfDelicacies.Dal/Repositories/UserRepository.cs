@@ -55,6 +55,23 @@ public class UserRepository : IUserRepository
             _storage.Users.Update(storageUser);
             _storage.SaveChanges();
         }        
+    }  
+    
+    public void UpdateUserWithEmail(UsersDto user)
+    {
+        var storageUser = GetUserById(user.Id);
+
+        if (storageUser != null)
+        {
+            storageUser.FirstName = user.FirstName;
+            storageUser.LastName = user.LastName;
+            storageUser.MiddleName = user.MiddleName;
+            storageUser.Phone = user.Phone;
+            storageUser.Mail = user.Mail;
+            
+            _storage.Users.Update(storageUser);
+            _storage.SaveChanges();
+        }        
     }
 
     public void UpdateUserPassword(UsersDto user)

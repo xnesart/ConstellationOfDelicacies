@@ -10,7 +10,6 @@
 <div class="login-form">
     <EditForm class="row g-3" Model="@Model" OnValidSubmit="@SaveChanges" FormName="LoginForm">
         <DataAnnotationsValidator/>
-
         <div class="col-md-12">
             <label for="login-name" class="form-label">Введите имя:</label>
             <InputText type="text" class="form-control" id="login-name" placeholder="Имя"
@@ -33,10 +32,11 @@
         </div>
         <div class="col-md-12" lass="col-12">
             <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </div>    
+        <div class="col-md-12" lass="col-12">
+            <a href="/edit-mail" class="btn btn-primary">Изменить почту</a>
         </div>
-
     </EditForm>
-
 </div>
 
 @code {

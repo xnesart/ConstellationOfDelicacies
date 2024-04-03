@@ -11,6 +11,7 @@ public interface IUserClient
     public void RemoveUser(int id);
 
     public void UpdateUser(UsersInputModel model);
+    public void UpdateUserWithEmail(UsersInputModel model);
 
     public void UpdateUserPassword(UsersInputModel model);
 
