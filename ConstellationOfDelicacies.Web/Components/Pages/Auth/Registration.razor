@@ -2,106 +2,68 @@
 @using ConstellationOfDelicacies.Bll.Models.InputModels
 @using ConstellationOfDelicacies.Bll.Clients
 @using ConstellationOfDelicacies.Bll.Enums
+@using Microsoft.AspNetCore.Components.Authorization
+@using ConstellationOfDelicacies.Web.Components.Templates.User
+
 @inject NavigationManager navManager
 @rendermode InteractiveServer
 
-<div class="registration-container">
-    <h3>Регистрация</h3>
+<AuthorizeView Roles="Менеджер, Сотрудник, Пользователь">
+    <Authorized>
+        <HomeRedirect/>
+    </Authorized>
 
-    <div class="registration-form">
-        <EditForm class="row g-3" Model="@Model" OnValidSubmit="@StartRegistration" FormName="LoginForm">
-            <div class="col-md-12">
-                <label for="login-name" class="form-label">Введите имя:</label>
-                <InputText type="text" class="form-control" id="login-name" placeholder="Имя"
-                           @bind-Value="Model.Name"/>
-            </div>
-            <div class="col-md-12">
-                <label for="login-middleName" class="form-label">Введите фамилию:</label>
-                <InputText type="text" class="form-control" id="login-middleName" placeholder="Фамилия"
-                           @bind-Value="Model.MiddleName"/>
-            </div>
-            <div class="col-md-12">
-                <label for="login-lastName" class="form-label">Введите отчество:</label>
-                <InputText type="text" class="form-control" id="login-lastName" placeholder="Отчество"
-                           @bind-Value="Model.LastName"/>
-            </div>
-            <div class="col-md-12">
-                <label for="login-mail" class="form-label">Введите электронную почту:</label>
-                <InputText type="email" class="form-control" id="login-mail" placeholder="E-mail"
-                           @bind-Value="Model.Email"/>
-            </div>
-            <div class="col-md-12">
-                <label for="login-phone" class="form-label">Введите телефон:</label>
-                <InputText type="phone" class="form-control" id="login-phone" placeholder="Телефон"
-                           @bind-Value="Model.Phone"/>
-            </div>
-            <div class="col-md-12">
-                <label for="login-pass" class="form-label">Введите пароль:</label>
-                <InputText type="password" class="form-control" id="login-pass" placeholder="Пароль"
-                           @bind-Value="Model.Password"/>
-            </div>
-            <div class="col-md-12"lass="col-12">
-                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
-                <a href="/" class="btn btn-primary">Отмена</a>
-            </div>
-        </EditForm>
-        @if (_mailCheck)
-        {
-            <div class="alert alert-danger" role="alert">
-                Регистрация не удалась. Проверьте свои учетные данные и повторите попытку.
-            </div>
-        }
-    </div>
-</div>
+    <NotAuthorized>
+        <Modal @ref="modal" title="Регистрация завершена" UseStaticBackdrop="true" CloseOnEscape="false"
+               IsScrollable="true" IsVerticallyCentered="true">
+            <BodyTemplate>
+                <p>Вы успешно зарегистрировались!</p>
+                <p>Чтобы продолжить, войдите в аккаунт</p>
+            </BodyTemplate>
+            <FooterTemplate>
+                <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Закрыть</Button>
+            </FooterTemplate>
+        </Modal>
 
+        <Card>
+            <CardBody>
+                <PageTitle>Регистрация</PageTitle>
+
+                <div class="registration-container">
+                    <h3>Регистрация</h3>
+
+                    <RegistrationFormTemplate RegistrationComplete="OnFormSubmit"/>
+                </div>
+            </CardBody>
+        </Card>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
-    [SupplyParameterFromForm] 
-    public RegistrationInputModel Model { get; set; }
-    private string _redirect { get; set; }
-    private bool _mailCheck { get; set; }
+
+    private Modal modal = default!;
+
+    public Action OnFormSubmit;
 
     public Registration()
     {
-        Model = new RegistrationInputModel();
+        OnFormSubmit = RegistrationComplete;
     }
 
-    private void StartRegistration()
+    public void RegistrationComplete()
     {
-        UsersInputModel model = new UsersInputModel()
-        {
-            FirstName = Model.Name,
-            MiddleName = Model.MiddleName,
-            LastName = Model.LastName,
-            Mail = Model.Email,
-            Password = Model.Password,
-            Phone = Model.Phone,
-            Role = new RolesInputModel()
-            {
-                Id = (int)Roles.User
-            }
-        };
-
-        MailCheck();
-        if (_mailCheck == false)
-        {
-            UserClient userClient = new UserClient();
-            userClient.AddUser(model);
-            _redirect = "/registrationComplete";
-            if (!string.IsNullOrEmpty(_redirect))
-            {
-                navManager.NavigateTo(_redirect);
-            }
-        }
+        OnShowModalClick();
     }
 
-    private void MailCheck()
+    private async Task OnShowModalClick()
     {
-        UserClient userClient = new UserClient();
-        var user = userClient.GetUserByEmail(Model.Email);
-        if (user != null && user.Mail == Model.Email)
-        {
-            _mailCheck = true;
-        }
+        await modal.ShowAsync();
     }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+        navManager.NavigateTo("/login");
+    }
+
 }
